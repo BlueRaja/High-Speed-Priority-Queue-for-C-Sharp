@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace Priority_Queue
 {
-    public sealed class BinaryHeapQueue<T> : IPriorityQueue<T>
+    public sealed class HeapPriorityQueue<T> : IPriorityQueue<T>
         where T : class, IPriorityQueueNode
     {
         private int _numNodes;
@@ -16,7 +16,7 @@ namespace Priority_Queue
         /// Instantiate a new Priority Queue
         /// </summary>
         /// <param name="maxNodes">The max nodes ever allowed to be enqueued (going over this will cause an exception)</param>
-        public BinaryHeapQueue(int maxNodes)
+        public HeapPriorityQueue(int maxNodes)
         {
             _numNodes = 0;
             _nodes = new T[maxNodes];

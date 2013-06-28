@@ -4,7 +4,7 @@ using Priority_Queue;
 namespace Priority_Queue_Tests
 {
     [TestFixture]
-    public class BinaryHeapQueueTests
+    public class HeapPriorityQueueTests
     {
         private class Node : IPriorityQueueNode
         {
@@ -38,7 +38,7 @@ namespace Priority_Queue_Tests
             Node node4 = new Node(4);
             Node node5 = new Node(5);
 
-            BinaryHeapQueue<Node> queue = new BinaryHeapQueue<Node>(5);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(5);
             Enqueue(queue, node2);
             Enqueue(queue, node5);
             Enqueue(queue, node1);
@@ -61,7 +61,7 @@ namespace Priority_Queue_Tests
             Node node4 = new Node(4);
             Node node5 = new Node(5);
 
-            BinaryHeapQueue<Node> queue = new BinaryHeapQueue<Node>(5);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(5);
             Enqueue(queue, node1);
             Enqueue(queue, node2);
             Enqueue(queue, node3);
@@ -84,7 +84,7 @@ namespace Priority_Queue_Tests
             Node node4 = new Node(4);
             Node node5 = new Node(5);
 
-            BinaryHeapQueue<Node> queue = new BinaryHeapQueue<Node>(5);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(5);
             Enqueue(queue, node5);
             Enqueue(queue, node4);
             Enqueue(queue, node3);
@@ -107,7 +107,7 @@ namespace Priority_Queue_Tests
             Node node4 = new Node(4);
             Node node5 = new Node(5);
 
-            BinaryHeapQueue<Node> queue = new BinaryHeapQueue<Node>(5);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(5);
             Enqueue(queue, node2);
             Enqueue(queue, node5);
             Enqueue(queue, node1);
@@ -142,7 +142,7 @@ namespace Priority_Queue_Tests
             Node node4 = new Node(4);
             Node node5 = new Node(5);
 
-            BinaryHeapQueue<Node> queue = new BinaryHeapQueue<Node>(5);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(5);
             Enqueue(queue, node2);
             Enqueue(queue, node5);
             Enqueue(queue, node1);
@@ -183,7 +183,7 @@ namespace Priority_Queue_Tests
             Node node4 = new Node(4);
             Node node5 = new Node(5);
 
-            BinaryHeapQueue<Node> queue = new BinaryHeapQueue<Node>(5);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(5);
             Enqueue(queue, node2);
             Enqueue(queue, node5);
             queue.Clear();
@@ -205,7 +205,7 @@ namespace Priority_Queue_Tests
             Node node4 = new Node(1);
             Node node5 = new Node(1);
 
-            BinaryHeapQueue<Node> queue = new BinaryHeapQueue<Node>(5);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(5);
             Enqueue(queue, node1);
             Enqueue(queue, node2);
             Enqueue(queue, node3);
@@ -248,7 +248,7 @@ namespace Priority_Queue_Tests
             Node node54 = new Node(5);
             Node node55 = new Node(5);
 
-            BinaryHeapQueue<Node> queue = new BinaryHeapQueue<Node>(25);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(25);
             Enqueue(queue, node31);
             Enqueue(queue, node51);
             Enqueue(queue, node52);
@@ -302,13 +302,13 @@ namespace Priority_Queue_Tests
             Assert.AreEqual(node55, Dequeue(queue));
         }
 
-        private void Enqueue(BinaryHeapQueue<Node> queue, Node node)
+        private void Enqueue(HeapPriorityQueue<Node> queue, Node node)
         {
             queue.Enqueue(node);
             Assert.IsTrue(queue.IsValidQueue());
         }
 
-        private Node Dequeue(BinaryHeapQueue<Node> queue)
+        private Node Dequeue(HeapPriorityQueue<Node> queue)
         {
             Node returnMe = queue.Dequeue();
             Assert.IsTrue(queue.IsValidQueue());

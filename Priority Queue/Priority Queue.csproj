@@ -49,7 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BinaryHeapQueue.cs" />
+    <Compile Include="HeapPriorityQueue.cs" />
     <Compile Include="IPriorityQueue.cs" />
     <Compile Include="IPriorityQueueNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
