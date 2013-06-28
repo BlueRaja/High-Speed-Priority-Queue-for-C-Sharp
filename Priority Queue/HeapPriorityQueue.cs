@@ -5,6 +5,11 @@ using System.Runtime.CompilerServices;
 
 namespace Priority_Queue
 {
+    /// <summary>
+    /// An implementation of a min-Priority Queue using a heap.  Has O(1) .Contains()!
+    /// See https://bitbucket.org/BlueRaja/high-speed-priority-queue-for-c/wiki/Getting%20Started for more information
+    /// </summary>
+    /// <typeparam name="T">The values in the queue.  Must implement the IPriorityQueueNode interface</typeparam>
     public sealed class HeapPriorityQueue<T> : IPriorityQueue<T>
         where T : class, IPriorityQueueNode
     {
