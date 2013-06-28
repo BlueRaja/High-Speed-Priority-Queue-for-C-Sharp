@@ -12,6 +12,10 @@ namespace Priority_Queue
         private readonly T[] _nodes;
         private long _numNodesEverEnqueued;
 
+        /// <summary>
+        /// Instantiate a new Priority Queue
+        /// </summary>
+        /// <param name="maxNodes">The max nodes ever allowed to be enqueued (going over this will cause an exception)</param>
         public BinaryHeapQueue(int maxNodes)
         {
             _numNodes = 0;
@@ -20,7 +24,7 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Returns the number of nodes in the queue
+        /// Returns the number of nodes in the queue.  O(1)
         /// </summary>
         public int Count
         {
@@ -31,7 +35,7 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Removes every node from the queue
+        /// Removes every node from the queue.  O(n) (So, don't do this often!)
         /// </summary>
         #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -44,10 +48,8 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Returns (in O(1)!) whether the given node is in the queue
+        /// Returns (in O(1)!) whether the given node is in the queue.  O(1)
         /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
         #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         #endif
@@ -57,9 +59,8 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Enqueue a node - priority must be set beforehand
+        /// Enqueue a node - .Priority must be set beforehand!  O(log n)
         /// </summary>
-        /// <param name="node"></param>
         #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         #endif
@@ -69,11 +70,6 @@ namespace Priority_Queue
             node.QueueIndex = _numNodes++;
             node.InsertionIndex = _numNodesEverEnqueued++;
             CascadeUp(_nodes[_numNodes - 1]);
-
-            #if DEBUG
-            if (!IsValidQueue())
-                throw new ArgumentException("Queue is invalid!");
-            #endif
         }
 
         #if NET_VERSION_4_5
@@ -163,23 +159,17 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Removes the head of the queue (node with highest priority), and returns it
+        /// Removes the head of the queue (node with highest priority; ties are broken by order of insertion), and returns it.  O(log n)
         /// </summary>
         public T Dequeue()
         {
             T returnMe = _nodes[0];
             Remove(returnMe);
-
-            #if DEBUG
-            if (!IsValidQueue())
-                throw new ArgumentException("Queue is invalid!");
-            #endif
-
             return returnMe;
         }
 
         /// <summary>
-        /// Returns the head of the queue
+        /// Returns the head of the queue, without removing it (use Dequeue() for that).  O(1)
         /// </summary>
         public T First
         {
@@ -190,7 +180,9 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Update the nodes position in the queue after its priority has changed
+        /// This method must be called on a node every time its priority changes while it is in the queue.  
+        /// <b>Forgetting to call this method will result in a corrupted queue!</b>
+        /// O(log n)
         /// </summary>
         public void UpdatedPriority(T node)
         {
@@ -207,15 +199,10 @@ namespace Priority_Queue
                 //Note that CascadeDown will be called if parentNode == node (that is, node is the root)
                 CascadeDown(node);
             }
-
-            #if DEBUG
-            if (!IsValidQueue())
-                throw new ArgumentException("Queue is invalid!");
-            #endif
         }
 
         /// <summary>
-        /// Removes a node from the queue.  Note that the node does not need to be the head of the queue
+        /// Removes a node from the queue.  Note that the node does not need to be the head of the queue.  O(log n)
         /// </summary>
         public void Remove(T node)
         {
@@ -244,11 +231,6 @@ namespace Priority_Queue
                 //Now bubble formerLastNode (which is no longer the last node) up or down as appropriate
                 UpdatedPriority(formerLastNode);
             }
-
-            #if DEBUG
-            if (!IsValidQueue())
-                throw new ArgumentException("Queue is invalid!");
-            #endif
         }
 
         public IEnumerator<T> GetEnumerator()
@@ -262,7 +244,10 @@ namespace Priority_Queue
             return GetEnumerator();
         }
 
-        //Checks to make sure the queue is still in a valid state.  Used for debugging
+        /// <summary>
+        /// <b>Should not be called in production code.</b>
+        /// Checks to make sure the queue is still in a valid state.  Used for testing/debugging the queue.
+        /// </summary>
         public bool IsValidQueue()
         {
             for(int i = 0; i < _nodes.Length; i++)
