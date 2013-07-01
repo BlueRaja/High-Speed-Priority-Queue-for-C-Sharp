@@ -40,6 +40,18 @@ namespace Priority_Queue
         }
 
         /// <summary>
+        /// Returns the maximum number of items that can be enqueued at once in this queue.  Once you hit this number (ie. once Count == MaxSize),
+        /// attempting to enqueue another item will throw an exception.  O(1)
+        /// </summary>
+        public int MaxSize
+        {
+            get
+            {
+                return _nodes.Length;
+            }
+        }
+
+        /// <summary>
         /// Removes every node from the queue.  O(n) (So, don't do this often!)
         /// </summary>
         #if NET_VERSION_4_5
@@ -75,6 +87,17 @@ namespace Priority_Queue
             node.QueueIndex = _numNodes++;
             node.InsertionIndex = _numNodesEverEnqueued++;
             CascadeUp(_nodes[_numNodes - 1]);
+        }
+
+        /// <summary>
+        /// Enqueues all nodes given, in the order they're enumerated in  O(m log n)
+        /// </summary>
+        public void Enqueue(IEnumerable<T> nodes)
+        {
+            foreach (T node in nodes)
+            {
+                Enqueue(node);
+            }
         }
 
         #if NET_VERSION_4_5

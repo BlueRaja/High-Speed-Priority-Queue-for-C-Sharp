@@ -13,9 +13,11 @@ namespace Priority_Queue
         void Remove(T node);
         void UpdatedPriority(T node);
         void Enqueue(T node);
+        void Enqueue(IEnumerable<T> nodes);
         T Dequeue();
         T First { get; }
         int Count { get; }
+        int MaxSize { get; }
         void Clear();
         bool Contains(T node);
     }
