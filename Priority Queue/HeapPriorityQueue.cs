@@ -24,7 +24,7 @@ namespace Priority_Queue
         public HeapPriorityQueue(int maxNodes)
         {
             _numNodes = 0;
-            _nodes = new T[maxNodes];
+            _nodes = new T[maxNodes + 1];
             _numNodesEverEnqueued = 0;
         }
 
@@ -47,19 +47,19 @@ namespace Priority_Queue
         {
             get
             {
-                return _nodes.Length;
+                return _nodes.Length - 1;
             }
         }
 
         /// <summary>
         /// Removes every node from the queue.  O(n) (So, don't do this often!)
         /// </summary>
-        #if NET_VERSION_4_5
+#if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        #endif
+#endif
         public void Clear()
         {
-            for(int i = 0; i < _nodes.Length; i++)
+            for(int i = 1; i < _nodes.Length; i++)
                 _nodes[i] = null;
             _numNodes = 0;
         }
@@ -67,9 +67,9 @@ namespace Priority_Queue
         /// <summary>
         /// Returns (in O(1)!) whether the given node is in the queue.  O(1)
         /// </summary>
-        #if NET_VERSION_4_5
+#if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        #endif
+#endif
         public bool Contains(T node)
         {
             return (_nodes[node.QueueIndex] == node);
@@ -78,15 +78,16 @@ namespace Priority_Queue
         /// <summary>
         /// Enqueue a node - .Priority must be set beforehand!  O(log n)
         /// </summary>
-        #if NET_VERSION_4_5
+#if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        #endif
+#endif
         public void Enqueue(T node)
         {
+            _numNodes++;
             _nodes[_numNodes] = node;
-            node.QueueIndex = _numNodes++;
+            node.QueueIndex = _numNodes;
             node.InsertionIndex = _numNodesEverEnqueued++;
-            CascadeUp(_nodes[_numNodes - 1]);
+            CascadeUp(_nodes[_numNodes]);
         }
 
         /// <summary>
@@ -94,15 +95,15 @@ namespace Priority_Queue
         /// </summary>
         public void Enqueue(IEnumerable<T> nodes)
         {
-            foreach (T node in nodes)
+            foreach(T node in nodes)
             {
                 Enqueue(node);
             }
         }
 
-        #if NET_VERSION_4_5
+#if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        #endif
+#endif
         private void Swap(T node1, T node2)
         {
             //Swap the nodes
@@ -119,8 +120,8 @@ namespace Priority_Queue
         private void CascadeUp(T node)
         {
             //aka Heapify-up
-            int parent = (node.QueueIndex - 1) / 2;
-            while(parent >= 0 && node.QueueIndex != 0)
+            int parent = node.QueueIndex / 2;
+            while(parent >= 1 && node.QueueIndex != 1)
             {
                 T parentNode = _nodes[parent];
                 if(HasHigherPriority(parentNode, node))
@@ -129,13 +130,13 @@ namespace Priority_Queue
                 //Node has lower priority value, so move it up the heap
                 Swap(node, parentNode);
 
-                parent = (node.QueueIndex - 1) / 2;
+                parent = node.QueueIndex / 2;
             }
         }
 
-        #if NET_VERSION_4_5
+#if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        #endif
+#endif
         private void CascadeDown(T node)
         {
             //aka Heapify-down
@@ -144,10 +145,10 @@ namespace Priority_Queue
             {
                 newParent = node;
 
-                int childLeftIndex = 2 * node.QueueIndex + 1;
+                int childLeftIndex = 2 * node.QueueIndex;
 
                 //Check if the left-child is higher-priority than the current node
-                if(childLeftIndex < _numNodes)
+                if(childLeftIndex <= _numNodes)
                 {
                     T childLeft = _nodes[childLeftIndex];
                     if(HasHigherPriority(childLeft, newParent))
@@ -157,7 +158,7 @@ namespace Priority_Queue
 
                     //Check if the right-child is higher-priority than either the current node or the left child
                     int childRightIndex = childLeftIndex + 1;
-                    if(childRightIndex < _numNodes)
+                    if(childRightIndex <= _numNodes)
                     {
                         T childRight = _nodes[childRightIndex];
                         if(HasHigherPriority(childRight, newParent))
@@ -177,9 +178,9 @@ namespace Priority_Queue
         /// Returns true if 'higher' has higher priority than 'lower', false otherwise.
         /// Note that calling HasHigherPriority(node, node) (ie. both arguments the same node) will return false
         /// </summary>
-        #if NET_VERSION_4_5
+#if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        #endif
+#endif
         private bool HasHigherPriority(T higher, T lower)
         {
             return (higher.Priority < lower.Priority ||
@@ -191,7 +192,7 @@ namespace Priority_Queue
         /// </summary>
         public T Dequeue()
         {
-            T returnMe = _nodes[0];
+            T returnMe = _nodes[1];
             Remove(returnMe);
             return returnMe;
         }
@@ -203,7 +204,7 @@ namespace Priority_Queue
         {
             get
             {
-                return _nodes[0];
+                return _nodes[1];
             }
         }
 
@@ -215,10 +216,10 @@ namespace Priority_Queue
         public void UpdatedPriority(T node)
         {
             //Bubble the updated node up or down as appropriate
-            int parentIndex = (node.QueueIndex - 1) / 2;
+            int parentIndex = node.QueueIndex / 2;
             T parentNode = _nodes[parentIndex];
 
-            if(HasHigherPriority(node, parentNode))
+            if(parentIndex > 0 && HasHigherPriority(node, parentNode))
             {
                 CascadeUp(node);
             }
@@ -236,15 +237,15 @@ namespace Priority_Queue
         {
             if(_numNodes <= 1)
             {
-                _nodes[0] = null;
+                _nodes[1] = null;
                 _numNodes = 0;
                 return;
             }
 
             //Make sure the node is the last node in the queue
             bool wasSwapped = false;
-            T formerLastNode = _nodes[_numNodes - 1];
-            if(node.QueueIndex != _numNodes - 1)
+            T formerLastNode = _nodes[_numNodes];
+            if(node.QueueIndex != _numNodes)
             {
                 //Swap the node with the last node
                 Swap(node, formerLastNode);
@@ -263,7 +264,7 @@ namespace Priority_Queue
 
         public IEnumerator<T> GetEnumerator()
         {
-            for(int i = 0; i < _numNodes; i++)
+            for(int i = 1; i <= _numNodes; i++)
                 yield return _nodes[i];
         }
 
@@ -278,11 +279,11 @@ namespace Priority_Queue
         /// </summary>
         public bool IsValidQueue()
         {
-            for(int i = 0; i < _nodes.Length; i++)
+            for(int i = 1; i < _nodes.Length; i++)
             {
                 if(_nodes[i] != null)
                 {
-                    int childLeftIndex = 2 * i + 1;
+                    int childLeftIndex = 2 * i;
                     if(childLeftIndex < _nodes.Length && _nodes[childLeftIndex] != null && HasHigherPriority(_nodes[childLeftIndex], _nodes[i]))
                         return false;
 
