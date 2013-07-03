@@ -6,16 +6,12 @@ namespace Priority_Queue_Tests
     [TestFixture]
     public class HeapPriorityQueueTests
     {
-        private class Node : IPriorityQueueNode
+        private class Node : PriorityQueueNode
         {
             public Node(int priority)
             {
                 Priority = priority;
             }
-
-            public int QueueIndex { get; set; }
-            public double Priority { get; private set;  }
-            public long InsertionIndex { get; set; }
         }
 
         [Test]
@@ -304,7 +300,7 @@ namespace Priority_Queue_Tests
 
         private void Enqueue(HeapPriorityQueue<Node> queue, Node node)
         {
-            queue.Enqueue(node);
+            queue.Enqueue(node, node.Priority);
             Assert.IsTrue(queue.IsValidQueue());
         }
 

@@ -11,9 +11,8 @@ namespace Priority_Queue
         where T : PriorityQueueNode
     {
         void Remove(T node);
-        void UpdatedPriority(T node);
-        void Enqueue(T node);
-        void Enqueue(IEnumerable<T> nodes);
+        void UpdatePriority(T node, double priority);
+        void Enqueue(T node, double priority);
         T Dequeue();
         T First { get; }
         int Count { get; }

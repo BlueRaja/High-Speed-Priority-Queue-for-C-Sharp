@@ -80,24 +80,14 @@ namespace Priority_Queue
         #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         #endif
-        public void Enqueue(T node)
+        public void Enqueue(T node, double priority)
         {
+            node.Priority = priority;
             _numNodes++;
             _nodes[_numNodes] = node;
             node.QueueIndex = _numNodes;
             node.InsertionIndex = _numNodesEverEnqueued++;
             CascadeUp(_nodes[_numNodes]);
-        }
-
-        /// <summary>
-        /// Enqueues all nodes given, in the order they're enumerated in  O(m log n)
-        /// </summary>
-        public void Enqueue(IEnumerable<T> nodes)
-        {
-            foreach(T node in nodes)
-            {
-                Enqueue(node);
-            }
         }
 
         #if NET_VERSION_4_5
@@ -232,7 +222,16 @@ namespace Priority_Queue
         /// <b>Forgetting to call this method will result in a corrupted queue!</b>
         /// O(log n)
         /// </summary>
-        public void UpdatedPriority(T node)
+        #if NET_VERSION_4_5
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        #endif
+        public void UpdatePriority(T node, double priority)
+        {
+            node.Priority = priority;
+            OnNodeUpdated(node);
+        }
+
+        private void OnNodeUpdated(T node)
         {
             //Bubble the updated node up or down as appropriate
             int parentIndex = node.QueueIndex / 2;
@@ -277,7 +276,7 @@ namespace Priority_Queue
             if(wasSwapped)
             {
                 //Now bubble formerLastNode (which is no longer the last node) up or down as appropriate
-                UpdatedPriority(formerLastNode);
+                OnNodeUpdated(formerLastNode);
             }
         }
 
