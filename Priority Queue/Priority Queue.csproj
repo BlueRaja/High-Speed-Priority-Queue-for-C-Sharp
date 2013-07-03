@@ -49,8 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HeapPriorityQueueUpdated2.cs" />
-    <Compile Include="HeapPriorityQueueUpdated.cs" />
     <Compile Include="HeapPriorityQueue.cs" />
     <Compile Include="IPriorityQueue.cs" />
     <Compile Include="PriorityQueueNode.cs" />
