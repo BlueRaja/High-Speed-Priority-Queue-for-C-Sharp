@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -54,9 +53,9 @@ namespace Priority_Queue
         /// <summary>
         /// Removes every node from the queue.  O(n) (So, don't do this often!)
         /// </summary>
-#if NET_VERSION_4_5
+        #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
+        #endif
         public void Clear()
         {
             for(int i = 1; i < _nodes.Length; i++)
@@ -67,9 +66,9 @@ namespace Priority_Queue
         /// <summary>
         /// Returns (in O(1)!) whether the given node is in the queue.  O(1)
         /// </summary>
-#if NET_VERSION_4_5
+        #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
+        #endif
         public bool Contains(T node)
         {
             return (_nodes[node.QueueIndex] == node);
@@ -78,9 +77,9 @@ namespace Priority_Queue
         /// <summary>
         /// Enqueue a node - .Priority must be set beforehand!  O(log n)
         /// </summary>
-#if NET_VERSION_4_5
+        #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
+        #endif
         public void Enqueue(T node)
         {
             _numNodes++;
@@ -101,9 +100,9 @@ namespace Priority_Queue
             }
         }
 
-#if NET_VERSION_4_5
+        #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
+        #endif
         private void Swap(T node1, T node2)
         {
             //Swap the nodes
@@ -134,9 +133,9 @@ namespace Priority_Queue
             }
         }
 
-#if NET_VERSION_4_5
+        #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
+        #endif
         private void CascadeDown(T node)
         {
             //aka Heapify-down
@@ -198,9 +197,9 @@ namespace Priority_Queue
         /// Returns true if 'higher' has higher priority than 'lower', false otherwise.
         /// Note that calling HasHigherPriority(node, node) (ie. both arguments the same node) will return false
         /// </summary>
-#if NET_VERSION_4_5
+        #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
+        #endif
         private bool HasHigherPriority(T higher, T lower)
         {
             return (higher.Priority < lower.Priority ||
