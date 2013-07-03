@@ -121,14 +121,14 @@ namespace Priority_Queue
         {
             //aka Heapify-up
             int parent = node.QueueIndex / 2;
-            while(parent >= 1 && node.QueueIndex != 1)
+            while(parent >= 1)
             {
                 T parentNode = _nodes[parent];
                 if(HasHigherPriority(parentNode, node))
                     break;
 
                 //Node has lower priority value, so move it up the heap
-                Swap(node, parentNode);
+                Swap(node, parentNode); //For some reason, this is faster with Swap() rather than (less..?) individual operations, like in CascadeDown()
 
                 parent = node.QueueIndex / 2;
             }
@@ -141,37 +141,57 @@ namespace Priority_Queue
         {
             //aka Heapify-down
             T newParent;
-            do
+            int finalQueueIndex = node.QueueIndex;
+            while(true)
             {
                 newParent = node;
-
-                int childLeftIndex = 2 * node.QueueIndex;
+                int childLeftIndex = 2 * finalQueueIndex;
 
                 //Check if the left-child is higher-priority than the current node
-                if(childLeftIndex <= _numNodes)
+                if(childLeftIndex > _numNodes)
                 {
-                    T childLeft = _nodes[childLeftIndex];
-                    if(HasHigherPriority(childLeft, newParent))
-                    {
-                        newParent = childLeft;
-                    }
-
-                    //Check if the right-child is higher-priority than either the current node or the left child
-                    int childRightIndex = childLeftIndex + 1;
-                    if(childRightIndex <= _numNodes)
-                    {
-                        T childRight = _nodes[childRightIndex];
-                        if(HasHigherPriority(childRight, newParent))
-                        {
-                            newParent = childRight;
-                        }
-                    }
-
-                    //If either of the children has higher (smaller) priority, swap and continue cascading
-                    if(newParent != node)
-                        Swap(newParent, node);
+                    //This could be placed outside the loop, but then we'd have to check newParent != node twice
+                    node.QueueIndex = finalQueueIndex;
+                    _nodes[finalQueueIndex] = node;
+                    break;
                 }
-            } while(newParent != node);
+
+                T childLeft = _nodes[childLeftIndex];
+                if(HasHigherPriority(childLeft, newParent))
+                {
+                    newParent = childLeft;
+                }
+
+                //Check if the right-child is higher-priority than either the current node or the left child
+                int childRightIndex = childLeftIndex + 1;
+                if(childRightIndex <= _numNodes)
+                {
+                    T childRight = _nodes[childRightIndex];
+                    if(HasHigherPriority(childRight, newParent))
+                    {
+                        newParent = childRight;
+                    }
+                }
+
+                //If either of the children has higher (smaller) priority, swap and continue cascading
+                if(newParent != node)
+                {
+                    //Move new parent to its new index.  node will be moved once, at the end
+                    //Doing it this way is one less assignment operation than calling Swap()
+                    _nodes[finalQueueIndex] = newParent;
+
+                    int temp = newParent.QueueIndex;
+                    newParent.QueueIndex = finalQueueIndex;
+                    finalQueueIndex = temp;
+                }
+                else
+                {
+                    //See note above
+                    node.QueueIndex = finalQueueIndex;
+                    _nodes[finalQueueIndex] = node;
+                    break;
+                }
+            }
         }
 
         /// <summary>
