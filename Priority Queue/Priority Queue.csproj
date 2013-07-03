@@ -49,9 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HeapPriorityQueueUpdated2.cs" />
+    <Compile Include="HeapPriorityQueueUpdated.cs" />
     <Compile Include="HeapPriorityQueue.cs" />
     <Compile Include="IPriorityQueue.cs" />
-    <Compile Include="IPriorityQueueNode.cs" />
+    <Compile Include="PriorityQueueNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

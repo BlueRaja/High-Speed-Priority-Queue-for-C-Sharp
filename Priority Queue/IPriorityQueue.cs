@@ -8,7 +8,7 @@ namespace Priority_Queue
     /// (theoretically?) optimize method calls from concrete-types slightly better.
     /// </summary>
     public interface IPriorityQueue<T> : IEnumerable<T>
-        where T : IPriorityQueueNode
+        where T : PriorityQueueNode
     {
         void Remove(T node);
         void UpdatedPriority(T node);
