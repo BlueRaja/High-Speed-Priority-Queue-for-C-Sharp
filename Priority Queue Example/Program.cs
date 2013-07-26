@@ -22,7 +22,7 @@ namespace Priority_Queue_Example
             //First, we create the priority queue.  We'll specify a max of 10 users in the queue
             HeapPriorityQueue<User> priorityQueue = new HeapPriorityQueue<User>(MAX_USERS_IN_QUEUE);
 
-            //Next, we'll create 5 users to enqueue (the priority is set in the constructor)
+            //Next, we'll create 5 users to enqueue
             User user1 = new User("1 - Jason");
             User user2 = new User("2 - Tyler");
             User user3 = new User("3 - Valerie");
