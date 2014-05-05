@@ -253,6 +253,10 @@ namespace Priority_Queue
         /// </summary>
         public void Remove(T node)
         {
+            if (!Contains(node)) {
+              return;
+            }
+            
             if(_numNodes <= 1)
             {
                 _nodes[1] = null;
