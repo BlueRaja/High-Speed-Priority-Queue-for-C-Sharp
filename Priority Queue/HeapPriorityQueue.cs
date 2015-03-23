@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -58,8 +59,7 @@ namespace Priority_Queue
         #endif
         public void Clear()
         {
-            for(int i = 1; i < _nodes.Length; i++)
-                _nodes[i] = null;
+            Array.Clear(_nodes, 1, _numNodes);
             _numNodes = 0;
         }
 
