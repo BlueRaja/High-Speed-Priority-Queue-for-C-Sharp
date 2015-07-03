@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Priority_Queue;
 
 namespace Priority_Queue_Tests
@@ -297,6 +298,131 @@ namespace Priority_Queue_Tests
             Assert.AreEqual(node54, Dequeue(queue));
             Assert.AreEqual(node55, Dequeue(queue));
         }
+
+        #region Debug build only tests
+        #if DEBUG
+        [Test]
+        public void TestDebugEnqueueThrowsOnFullQueue()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            Node node4 = new Node(4);
+
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(3);
+            Enqueue(queue, node1);
+            Enqueue(queue, node2);
+            Enqueue(queue, node3);
+            Assert.Throws<InvalidOperationException>(() => queue.Enqueue(node4, 4));
+        }
+
+        [Test]
+        public void TestDebugDequeueThrowsOnEmptyQueue()
+        {
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(3);
+            Assert.Throws<InvalidOperationException>(() => queue.Dequeue());
+        }
+
+        [Test]
+        public void TestDebugDequeueThrowsOnEmptyQueue2()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(3);
+
+            Enqueue(queue, node1);
+            Enqueue(queue, node2);
+
+            Dequeue(queue);
+            Dequeue(queue);
+
+            Assert.Throws<InvalidOperationException>(() => queue.Dequeue());
+        }
+
+        [Test]
+        public void TestDebugDequeueThrowsOnCorruptedQueue()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(3);
+
+            Enqueue(queue, node1);
+            Enqueue(queue, node2);
+
+            node1.Priority = 3; //Don't ever do this! (use queue.UpdatePriority(node1, 3) instead)
+
+            Assert.Throws<InvalidOperationException>(() => queue.Dequeue());
+        }
+
+        [Test]
+        public void TestDebugRemoveThrowsOnNodeNotInQueue()
+        {
+            Node node = new Node(1);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(3);
+
+            Assert.Throws<InvalidOperationException>(() => queue.Remove(node));
+        }
+
+        [Test]
+        public void TestDebugRemoveThrowsOnNodeNotInQueue2()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(3);
+
+            Enqueue(queue, node1);
+
+            Assert.Throws<InvalidOperationException>(() => queue.Remove(node2));
+        }
+
+        [Test]
+        public void TestDebugRemoveThrowsOnNodeNotInQueue3()
+        {
+            Node node = new Node(1);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(3);
+
+            Enqueue(queue, node);
+
+            Dequeue(queue);
+
+            Assert.Throws<InvalidOperationException>(() => queue.Remove(node));
+        }
+
+        [Test]
+        public void TestDebugUpdatePriorityThrowsOnNodeNotInQueue()
+        {
+            Node node = new Node(1);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(3);
+
+            Assert.Throws<InvalidOperationException>(() => queue.UpdatePriority(node, 2));
+        }
+
+        [Test]
+        public void TestDebugUpdatePriorityThrowsOnNodeNotInQueue2()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(3);
+
+            Enqueue(queue, node1);
+
+            Assert.Throws<InvalidOperationException>(() => queue.UpdatePriority(node2, 3));
+        }
+
+        [Test]
+        public void TestDebugUpdatePriorityThrowsOnNodeNotInQueue3()
+        {
+            Node node = new Node(1);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(3);
+
+            Enqueue(queue, node);
+
+            Dequeue(queue);
+
+            Assert.Throws<InvalidOperationException>(() => queue.UpdatePriority(node, 2));
+        }
+        #endif
+        #endregion
 
         private void Enqueue(HeapPriorityQueue<Node> queue, Node node)
         {

@@ -75,13 +75,22 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Enqueue a node - .Priority must be set beforehand!  O(log n)
+        /// Enqueue a node
+        /// If the queue is full, the result is undefined
+        /// O(log n)
         /// </summary>
         #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         #endif
         public void Enqueue(T node, double priority)
         {
+            #if DEBUG
+            if(_numNodes >= _nodes.Length - 1)
+            {
+                throw new InvalidOperationException("Queue is full - node cannot be added: " + node);
+            }
+            #endif
+
             node.Priority = priority;
             _numNodes++;
             _nodes[_numNodes] = node;
@@ -197,10 +206,24 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Removes the head of the queue (node with highest priority; ties are broken by order of insertion), and returns it.  O(log n)
+        /// Removes the head of the queue (node with highest priority; ties are broken by order of insertion), and returns it.
+        /// If queue is empty, result is undefined
+        /// O(log n)
         /// </summary>
         public T Dequeue()
         {
+            #if DEBUG
+            if(_numNodes <= 0)
+            {
+                throw new InvalidOperationException("Cannot call Dequeue() on an empty queue");
+            }
+
+            if(!IsValidQueue())
+            {
+                throw new InvalidOperationException("Queue has been corrupted (Did you update a node priority manually instead of calling UpdatePriority()?)");
+            }
+            #endif
+
             T returnMe = _nodes[1];
             Remove(returnMe);
             return returnMe;
@@ -220,6 +243,7 @@ namespace Priority_Queue
         /// <summary>
         /// This method must be called on a node every time its priority changes while it is in the queue.  
         /// <b>Forgetting to call this method will result in a corrupted queue!</b>
+        /// Calling this method on a node not in the queue results in undefined behavior
         /// O(log n)
         /// </summary>
         #if NET_VERSION_4_5
@@ -227,6 +251,13 @@ namespace Priority_Queue
         #endif
         public void UpdatePriority(T node, double priority)
         {
+            #if DEBUG
+            if(!Contains(node))
+            {
+                throw new InvalidOperationException("Cannot call UpdatePriority() on a node which is not enqueued: " + node);
+            }
+            #endif
+
             node.Priority = priority;
             OnNodeUpdated(node);
         }
@@ -249,14 +280,19 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Removes a node from the queue.  Note that the node does not need to be the head of the queue.  O(log n)
+        /// Removes a node from the queue.  The node does not need to be the head of the queue.  
+        /// If the node is not in the queue, the result is undefined.  If unsure, check Contains() first
+        /// O(log n)
         /// </summary>
         public void Remove(T node)
         {
-            if (!Contains(node)) {
-              return;
+            #if DEBUG
+            if(!Contains(node))
+            {
+                throw new InvalidOperationException("Cannot call Remove() on a node which is not enqueued: " + node);
             }
-            
+            #endif
+
             if(_numNodes <= 1)
             {
                 _nodes[1] = null;
