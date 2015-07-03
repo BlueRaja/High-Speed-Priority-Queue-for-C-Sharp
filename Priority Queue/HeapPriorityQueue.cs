@@ -84,6 +84,7 @@ namespace Priority_Queue
         /// <summary>
         /// Enqueue a node
         /// If the queue is full, the result is undefined
+        /// If the node is already enqueued, the result is undefined
         /// O(log n)
         /// </summary>
         #if NET_VERSION_4_5
@@ -95,6 +96,10 @@ namespace Priority_Queue
             if(_numNodes >= _nodes.Length - 1)
             {
                 throw new InvalidOperationException("Queue is full - node cannot be added: " + node);
+            }
+            if(Contains(node))
+            {
+                throw new InvalidOperationException("Node is already enqueued: " + node);
             }
             #endif
 

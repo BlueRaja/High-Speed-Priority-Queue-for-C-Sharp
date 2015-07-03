@@ -101,7 +101,7 @@ namespace Priority_Queue_Tests
         }
 
         [Test]
-        public void TestResizQueueBecomesFull()
+        public void TestResizeQueueBecomesFull()
         {
             Node node1 = new Node(1);
             Node node2 = new Node(2);
@@ -120,6 +120,20 @@ namespace Priority_Queue_Tests
             Assert.AreEqual(1, queue.Count);
             Assert.AreEqual(node3, Dequeue(queue));
             Assert.AreEqual(0, queue.Count);
+        }
+
+        [Test]
+        public void TestEnqueueWorksWithTwoNodesWithSamePriority()
+        {
+            Node node11 = new Node(1);
+            Node node12 = new Node(1);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(3);
+
+            Enqueue(queue, node11);
+            Enqueue(queue, node12);
+
+            Assert.AreEqual(node11, Dequeue(queue));
+            Assert.AreEqual(node12, Dequeue(queue));
         }
 
         [Test]
@@ -411,6 +425,17 @@ namespace Priority_Queue_Tests
             Enqueue(queue, node2);
             Enqueue(queue, node3);
             Assert.Throws<InvalidOperationException>(() => queue.Enqueue(node4, 4));
+        }
+
+        [Test]
+        public void TestDebugEnqueueThrowsOnAlreadyEnqueuedNode()
+        {
+            Node node = new Node(1);
+
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(3);
+            Enqueue(queue, node);
+
+            Assert.Throws<InvalidOperationException>(() => queue.Enqueue(node, 1));
         }
 
         [Test]
