@@ -78,6 +78,13 @@ namespace Priority_Queue
         #endif
         public bool Contains(T node)
         {
+            #if DEBUG
+            if(node.QueueIndex < 0 || node.QueueIndex >= _nodes.Length)
+            {
+                throw new InvalidOperationException("node.QueueIndex has been corrupted. Did you change it manually? Or add this node to another queue?");
+            }
+            #endif
+
             return (_nodes[node.QueueIndex] == node);
         }
 
@@ -232,7 +239,8 @@ namespace Priority_Queue
 
             if(!IsValidQueue())
             {
-                throw new InvalidOperationException("Queue has been corrupted (Did you update a node priority manually instead of calling UpdatePriority()?)");
+                throw new InvalidOperationException("Queue has been corrupted (Did you update a node priority manually instead of calling UpdatePriority()?" +
+                                                    "Or add the same node to two different queues?)");
             }
             #endif
 

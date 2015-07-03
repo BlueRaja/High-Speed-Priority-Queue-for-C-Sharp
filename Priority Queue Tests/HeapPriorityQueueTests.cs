@@ -596,6 +596,62 @@ namespace Priority_Queue_Tests
 
             Assert.Throws<InvalidOperationException>(() => queue.Resize(2));
         }
+
+        [Test]
+        public void TestDebugContainsOutOfBoundsCloseTo0()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(5);
+
+            Enqueue(queue, node1);
+
+            node1.QueueIndex = node2.QueueIndex = -1;
+            Assert.Throws<InvalidOperationException>(() => queue.Contains(node1));
+            Assert.Throws<InvalidOperationException>(() => queue.Contains(node2));
+        }
+
+        [Test]
+        public void TestDebugContainsOutOfBoundsVeryNegative()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(5);
+
+            Enqueue(queue, node1);
+
+            node1.QueueIndex = node2.QueueIndex = int.MinValue;
+            Assert.Throws<InvalidOperationException>(() => queue.Contains(node1));
+            Assert.Throws<InvalidOperationException>(() => queue.Contains(node2));
+        }
+
+        [Test]
+        public void TestDebugContainsOutOfBoundsAboveMaxSize()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(5);
+
+            Enqueue(queue, node1);
+
+            node1.QueueIndex = node2.QueueIndex = 6;
+            Assert.Throws<InvalidOperationException>(() => queue.Contains(node1));
+            Assert.Throws<InvalidOperationException>(() => queue.Contains(node2));
+        }
+
+        [Test]
+        public void TestDebugContainsOutOfBoundsVeryLarge()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(5);
+
+            Enqueue(queue, node1);
+
+            node1.QueueIndex = node2.QueueIndex = int.MaxValue;
+            Assert.Throws<InvalidOperationException>(() => queue.Contains(node1));
+            Assert.Throws<InvalidOperationException>(() => queue.Contains(node2));
+        }
         #endif
         #endregion
 

@@ -5,9 +5,7 @@
         /// <summary>
         /// The Priority to insert this node at.  Must be set BEFORE adding a node to the queue
         /// </summary>
-        public double Priority { get;
-            set; 
-        }
+        public double Priority { get; set; }
 
         /// <summary>
         /// <b>Used by the priority queue - do not edit this value.</b>
