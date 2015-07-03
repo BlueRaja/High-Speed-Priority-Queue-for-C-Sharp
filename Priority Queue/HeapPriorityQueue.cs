@@ -7,7 +7,7 @@ namespace Priority_Queue
 {
     /// <summary>
     /// An implementation of a min-Priority Queue using a heap.  Has O(1) .Contains()!
-    /// See https://bitbucket.org/BlueRaja/high-speed-priority-queue-for-c/wiki/Getting%20Started for more information
+    /// See https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp/wiki/Getting-Started for more information
     /// </summary>
     /// <typeparam name="T">The values in the queue.  Must implement the PriorityQueueNode interface</typeparam>
     public sealed class HeapPriorityQueue<T> : IPriorityQueue<T>
@@ -20,7 +20,7 @@ namespace Priority_Queue
         /// <summary>
         /// Instantiate a new Priority Queue
         /// </summary>
-        /// <param name="maxNodes">The max nodes ever allowed to be enqueued (going over this will cause an exception)</param>
+        /// <param name="maxNodes">The max nodes ever allowed to be enqueued (going over this will cause undefined behavior)</param>
         public HeapPriorityQueue(int maxNodes)
         {
             _numNodes = 0;
@@ -41,7 +41,7 @@ namespace Priority_Queue
 
         /// <summary>
         /// Returns the maximum number of items that can be enqueued at once in this queue.  Once you hit this number (ie. once Count == MaxSize),
-        /// attempting to enqueue another item will throw an exception.  O(1)
+        /// attempting to enqueue another item will cause undefined behavior.  O(1)
         /// </summary>
         public int MaxSize
         {
