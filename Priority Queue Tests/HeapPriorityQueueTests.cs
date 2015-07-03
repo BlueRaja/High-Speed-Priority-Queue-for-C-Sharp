@@ -27,6 +27,102 @@ namespace Priority_Queue_Tests
         }
 
         [Test]
+        public void TestMaxNodes()
+        {
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(100);
+            Assert.AreEqual(100, queue.MaxSize);
+        }
+
+        [Test]
+        public void TestCount()
+        {
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(100);
+            Assert.AreEqual(0, queue.Count);
+
+            Enqueue(queue, new Node(1));
+            Assert.AreEqual(1, queue.Count);
+
+            Dequeue(queue);
+            Assert.AreEqual(0, queue.Count);
+        }
+
+        [Test]
+        public void TestResizeEmptyQueue()
+        {
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(5);
+
+            queue.Resize(10);
+            Assert.AreEqual(0, queue.Count);
+            Assert.AreEqual(10, queue.MaxSize);
+
+            queue.Resize(3);
+            Assert.AreEqual(0, queue.Count);
+            Assert.AreEqual(3, queue.MaxSize);
+        }
+
+        [Test]
+        public void TestResizeCopiesNodes()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(5);
+
+            Enqueue(queue, node1);
+            Enqueue(queue, node2);
+
+            queue.Resize(10);
+            Assert.AreEqual(2, queue.Count);
+            Assert.AreEqual(node1, Dequeue(queue));
+            Assert.AreEqual(1, queue.Count);
+            Assert.AreEqual(node2, Dequeue(queue));
+            Assert.AreEqual(0, queue.Count);
+        }
+
+        [Test]
+        public void TestResizeQueueWasFull()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(3);
+
+            Enqueue(queue, node1);
+            Enqueue(queue, node2);
+            Enqueue(queue, node3);
+
+            queue.Resize(10);
+            Assert.AreEqual(3, queue.Count);
+            Assert.AreEqual(node1, Dequeue(queue));
+            Assert.AreEqual(2, queue.Count);
+            Assert.AreEqual(node2, Dequeue(queue));
+            Assert.AreEqual(1, queue.Count);
+            Assert.AreEqual(node3, Dequeue(queue));
+            Assert.AreEqual(0, queue.Count);
+        }
+
+        [Test]
+        public void TestResizQueueBecomesFull()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(10);
+
+            Enqueue(queue, node1);
+            Enqueue(queue, node2);
+            Enqueue(queue, node3);
+
+            queue.Resize(3);
+            Assert.AreEqual(3, queue.Count);
+            Assert.AreEqual(node1, Dequeue(queue));
+            Assert.AreEqual(2, queue.Count);
+            Assert.AreEqual(node2, Dequeue(queue));
+            Assert.AreEqual(1, queue.Count);
+            Assert.AreEqual(node3, Dequeue(queue));
+            Assert.AreEqual(0, queue.Count);
+        }
+
+        [Test]
         public void TestSimpleQueue()
         {
             Node node1 = new Node(1);
@@ -191,6 +287,7 @@ namespace Priority_Queue_Tests
             Assert.AreEqual(node1, Dequeue(queue));
             Assert.AreEqual(node3, Dequeue(queue));
             Assert.AreEqual(node4, Dequeue(queue));
+            Assert.AreEqual(0, queue.Count);
         }
 
         [Test]
@@ -421,6 +518,29 @@ namespace Priority_Queue_Tests
 
             Assert.Throws<InvalidOperationException>(() => queue.UpdatePriority(node, 2));
         }
+
+        [Test]
+        public void TestDebugResizeThrowsOn0SizeQueue()
+        {
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(3);
+
+            Assert.Throws<InvalidOperationException>(() => queue.Resize(0));
+        }
+
+        [Test]
+        public void TestDebugResizeSizeTooSmall()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(5);
+
+            Enqueue(queue, node1);
+            Enqueue(queue, node2);
+            Enqueue(queue, node3);
+
+            Assert.Throws<InvalidOperationException>(() => queue.Resize(2));
+        }
         #endif
         #endregion
 
@@ -438,3 +558,4 @@ namespace Priority_Queue_Tests
         }
     }
 }
+

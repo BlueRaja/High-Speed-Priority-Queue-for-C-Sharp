@@ -14,7 +14,7 @@ namespace Priority_Queue
         where T : PriorityQueueNode
     {
         private int _numNodes;
-        private readonly T[] _nodes;
+        private T[] _nodes;
         private long _numNodesEverEnqueued;
 
         /// <summary>
@@ -23,6 +23,13 @@ namespace Priority_Queue
         /// <param name="maxNodes">The max nodes ever allowed to be enqueued (going over this will cause undefined behavior)</param>
         public HeapPriorityQueue(int maxNodes)
         {
+            #if DEBUG
+            if (maxNodes <= 0)
+            {
+                throw new InvalidOperationException("New queue size cannot be smaller than 1");
+            }
+            #endif
+
             _numNodes = 0;
             _nodes = new T[maxNodes + 1];
             _numNodesEverEnqueued = 0;
@@ -227,6 +234,34 @@ namespace Priority_Queue
             T returnMe = _nodes[1];
             Remove(returnMe);
             return returnMe;
+        }
+
+        /// <summary>
+        /// Resize the queue so it can accept more nodes.  All currently enqueued nodes are remain.
+        /// Attempting to decrease the queue size to a size too small to hold the existing nodes results in undefined behavior
+        /// O(n)
+        /// </summary>
+        public void Resize(int maxNodes)
+        {
+            #if DEBUG
+            if (maxNodes <= 0)
+            {
+                throw new InvalidOperationException("Queue size cannot be smaller than 1");
+            }
+
+            if (maxNodes < _numNodes)
+            {
+                throw new InvalidOperationException("Called Resize(" + maxNodes + "), but current queue contains " + _numNodes + " nodes");
+            }
+            #endif
+
+            T[] newArray = new T[maxNodes + 1];
+            int highestIndexToCopy = Math.Min(maxNodes, _numNodes);
+            for (int i = 1; i <= highestIndexToCopy; i++)
+            {
+                newArray[i] = _nodes[i];
+            }
+            _nodes = newArray;
         }
 
         /// <summary>

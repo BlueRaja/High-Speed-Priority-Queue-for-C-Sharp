@@ -19,5 +19,6 @@ namespace Priority_Queue
         int MaxSize { get; }
         void Clear();
         bool Contains(T node);
+        void Resize(int maxNodes);
     }
 }
