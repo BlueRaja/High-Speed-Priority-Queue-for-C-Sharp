@@ -47,6 +47,36 @@ namespace Priority_Queue_Tests
         }
 
         [Test]
+        public void TestFirst()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(5);
+
+            Enqueue(queue, node1);
+            Enqueue(queue, node2);
+
+            Assert.AreEqual(node1, queue.First);
+            Assert.AreEqual(node1, Dequeue(queue));
+            Assert.AreEqual(node2, queue.First);
+        }
+
+        [Test]
+        public void TestFirstIsNullOnEmptyQueue()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(5);
+
+            Assert.AreEqual(null, queue.First);
+
+            Enqueue(queue, node1);
+            Dequeue(queue);
+
+            Assert.AreEqual(null, queue.First);
+        }
+
+        [Test]
         public void TestResizeEmptyQueue()
         {
             HeapPriorityQueue<Node> queue = new HeapPriorityQueue<Node>(5);

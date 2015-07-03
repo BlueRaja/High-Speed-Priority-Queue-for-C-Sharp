@@ -270,7 +270,9 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Returns the head of the queue, without removing it (use Dequeue() for that).  O(1)
+        /// Returns the head of the queue, without removing it (use Dequeue() for that).
+        /// Returns null if the queue is empty
+        /// O(1)
         /// </summary>
         public T First
         {
