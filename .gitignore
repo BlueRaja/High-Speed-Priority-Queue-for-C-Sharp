@@ -4,5 +4,6 @@
 /Priority Queue Tests/obj
 /Priority Queue Example/bin
 /Priority Queue Example/obj
-/*.user
-/*.suo
+*.user
+*.suo
+/packages/
