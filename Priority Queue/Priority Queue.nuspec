@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>OptimizedPriorityQueue</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>BlueRaja</authors>
+    <owners>BlueRaja</owners>
+    <licenseUrl>https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Initial publishing onto NuGet</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>C# priority-queue pathfinding optimized</tags>
+  </metadata>
+  <files>
+    <file src="bin\Release\net20\Priority Queue.dll" target="lib\net20\Priority Queue.dll" />
+    <file src="bin\Release\net20\Priority Queue.pdb" target="lib\net20\Priority Queue.pdb" />
+    <file src="bin\Release\net45\Priority Queue.dll" target="lib\net45\Priority Queue.dll" />
+    <file src="bin\Release\net45\Priority Queue.pdb" target="lib\net45\Priority Queue.pdb" />
+  </files>
+</package>

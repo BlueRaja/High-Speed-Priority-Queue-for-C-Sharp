@@ -7,3 +7,4 @@
 *.user
 *.suo
 /packages/
+/Priority Queue/*.nupkg
