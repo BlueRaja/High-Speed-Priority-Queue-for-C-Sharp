@@ -10,7 +10,7 @@ namespace Priority_Queue
     /// See https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp/wiki/Getting-Started for more information
     /// </summary>
     /// <typeparam name="T">The values in the queue.  Must implement the PriorityQueueNode interface</typeparam>
-    public sealed class HeapPriorityQueue<T> : IPriorityQueue<T>
+    public sealed class FastPriorityQueue<T> : IPriorityQueue<T>
         where T : PriorityQueueNode
     {
         private int _numNodes;
@@ -21,7 +21,7 @@ namespace Priority_Queue
         /// Instantiate a new Priority Queue
         /// </summary>
         /// <param name="maxNodes">The max nodes ever allowed to be enqueued (going over this will cause undefined behavior)</param>
-        public HeapPriorityQueue(int maxNodes)
+        public FastPriorityQueue(int maxNodes)
         {
             #if DEBUG
             if (maxNodes <= 0)
@@ -36,7 +36,8 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Returns the number of nodes in the queue.  O(1)
+        /// Returns the number of nodes in the queue.
+        /// O(1)
         /// </summary>
         public int Count
         {
@@ -59,7 +60,8 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Removes every node from the queue.  O(n) (So, don't do this often!)
+        /// Removes every node from the queue.
+        /// O(n) (So, don't do this often!)
         /// </summary>
         #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -89,9 +91,9 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Enqueue a node
-        /// If the queue is full, the result is undefined
-        /// If the node is already enqueued, the result is undefined
+        /// Enqueue a node to the priority queue.  Lower values are placed in front. Ties are broken by first-in-first-out.
+        /// If the queue is full, the result is undefined.
+        /// If the node is already enqueued, the result is undefined.
         /// O(log n)
         /// </summary>
         #if NET_VERSION_4_5
@@ -225,7 +227,7 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Removes the head of the queue (node with highest priority; ties are broken by order of insertion), and returns it.
+        /// Removes the head of the queue (node with minimum priority; ties are broken by order of insertion), and returns it.
         /// If queue is empty, result is undefined
         /// O(log n)
         /// </summary>

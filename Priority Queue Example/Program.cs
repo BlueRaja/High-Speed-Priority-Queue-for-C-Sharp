@@ -20,7 +20,7 @@ namespace Priority_Queue_Example
         static void Main(string[] args)
         {
             //First, we create the priority queue.  We'll specify a max of 10 users in the queue
-            HeapPriorityQueue<User> priorityQueue = new HeapPriorityQueue<User>(MAX_USERS_IN_QUEUE);
+            FastPriorityQueue<User> priorityQueue = new FastPriorityQueue<User>(MAX_USERS_IN_QUEUE);
 
             //Next, we'll create 5 users to enqueue
             User user1 = new User("1 - Jason");
