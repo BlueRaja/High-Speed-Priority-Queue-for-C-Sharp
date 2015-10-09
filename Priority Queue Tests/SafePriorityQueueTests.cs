@@ -33,6 +33,27 @@ namespace Priority_Queue_Tests
                 Assert.AreEqual(i, node.Priority);
             }
         }
+
+        [Test]
+        public void TestDequeueThrowsOnEmptyQueue()
+        {
+            Assert.Throws<InvalidOperationException>(() => Queue.Dequeue());
+        }
+
+        [Test]
+        public void TestDequeueThrowsOnEmptyQueue2()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+
+            Enqueue(node1);
+            Enqueue(node2);
+
+            Dequeue();
+            Dequeue();
+
+            Assert.Throws<InvalidOperationException>(() => Queue.Dequeue());
+        }
     }
 }
 

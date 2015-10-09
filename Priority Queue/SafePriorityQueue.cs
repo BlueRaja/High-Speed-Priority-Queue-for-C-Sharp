@@ -94,9 +94,13 @@ namespace Priority_Queue
         /// </summary>
         public T Dequeue()
         {
-            //TODO: Exception
             lock(_queue)
             {
+                if(_queue.Count <= 0)
+                {
+                    throw new InvalidOperationException("Cannot call Dequeue() on an empty queue");
+                }
+
                 SafeNode node =_queue.Dequeue();
                 return node.Data;
             }
