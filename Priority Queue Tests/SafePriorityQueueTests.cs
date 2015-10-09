@@ -24,7 +24,7 @@ namespace Priority_Queue_Tests
             for(int i = 0; i < 1000; i++)
             {
                 Enqueue(new Node(i));
-                Assert.AreEqual(i+1, Queue.Count);
+                Assert.AreEqual(i + 1, Queue.Count);
             }
 
             for(int i = 0; i < 1000; i++)
@@ -157,6 +157,14 @@ namespace Priority_Queue_Tests
 
             Assert.AreEqual(0, Queue.Count);
             Assert.IsFalse(Queue.Contains(null));
+        }
+
+        [Test]
+        public void TestRemoveThrowsOnNodeNotInQueue()
+        {
+            Node node = new Node(1);
+
+            Assert.Throws<InvalidOperationException>(() => Queue.Remove(node));
         }
     }
 }

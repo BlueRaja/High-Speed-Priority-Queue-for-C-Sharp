@@ -137,11 +137,17 @@ namespace Priority_Queue
         /// </summary>
         public void Remove(T node)
         {
-            //TODO: Exception
             lock(_queue)
             {
-                SafeNode removeMe = _queue.First(o => o.Data.Equals(node));
-                _queue.Remove(removeMe);
+                try
+                {
+                    SafeNode removeMe = _queue.First(o => o.Data.Equals(node));
+                    _queue.Remove(removeMe);
+                }
+                catch(InvalidOperationException ex)
+                {
+                    throw new InvalidOperationException("Cannot call Remove() on a node which is not enqueued: " + node, ex);
+                }
             }
         }
 
