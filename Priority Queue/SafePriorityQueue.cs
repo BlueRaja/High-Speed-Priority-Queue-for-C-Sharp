@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace Priority_Queue
 {
-    //TODO: Make sure we're doing at least all the same checks as FastPriorityQueue does in DEBUG mode
     public sealed class SafePriorityQueue<T> : IPriorityQueue<T>
     {
         private class SafeNode : PriorityQueueNode
@@ -135,18 +134,18 @@ namespace Priority_Queue
         /// If multiple copies of the item are enqueued, only the first one is removed. 
         /// O(n)
         /// </summary>
-        public void Remove(T node)
+        public void Remove(T item)
         {
             lock(_queue)
             {
                 try
                 {
-                    SafeNode removeMe = _queue.First(o => o.Data.Equals(node));
+                    SafeNode removeMe = _queue.First(o => o.Data.Equals(item));
                     _queue.Remove(removeMe);
                 }
                 catch(InvalidOperationException ex)
                 {
-                    throw new InvalidOperationException("Cannot call Remove() on a node which is not enqueued: " + node, ex);
+                    throw new InvalidOperationException("Cannot call Remove() on a node which is not enqueued: " + item, ex);
                 }
             }
         }
@@ -161,11 +160,17 @@ namespace Priority_Queue
         /// </summary>
         public void UpdatePriority(T item, double priority)
         {
-            //TODO: Exception
             lock (_queue)
             {
-                SafeNode updateMe = _queue.First(o => o.Data.Equals(item));
-                _queue.UpdatePriority(updateMe, priority);
+                try
+                {
+                    SafeNode updateMe = _queue.First(o => o.Data.Equals(item));
+                    _queue.UpdatePriority(updateMe, priority);
+                }
+                catch(InvalidOperationException ex)
+                {
+                    throw new InvalidOperationException("Cannot call UpdatePriority() on a node which is not enqueued: " + item, ex);
+                }
             }
         }
 

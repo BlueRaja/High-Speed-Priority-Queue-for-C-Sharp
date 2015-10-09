@@ -166,5 +166,13 @@ namespace Priority_Queue_Tests
 
             Assert.Throws<InvalidOperationException>(() => Queue.Remove(node));
         }
+
+        [Test]
+        public void TestUpdatePriorityThrowsOnNodeNotInQueue()
+        {
+            Node node = new Node(1);
+
+            Assert.Throws<InvalidOperationException>(() => Queue.UpdatePriority(node, 2));
+        }
     }
 }
