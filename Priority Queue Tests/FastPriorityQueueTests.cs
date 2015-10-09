@@ -154,6 +154,27 @@ namespace Priority_Queue_Tests
         }
 
         [Test]
+        public void TestDebugFirstThrowsOnEmptyQueue()
+        {
+            Assert.Throws<InvalidOperationException>(() => { var a = Queue.First; });
+        }
+
+        [Test]
+        public void TestDebugFirstThrowsOnEmptyQueue2()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+
+            Enqueue(node1);
+            Enqueue(node2);
+
+            Dequeue();
+            Dequeue();
+
+            Assert.Throws<InvalidOperationException>(() => { var a = Queue.First; });
+        }
+
+        [Test]
         public void TestDebugDequeueThrowsOnCorruptedQueue()
         {
             Node node1 = new Node(1);

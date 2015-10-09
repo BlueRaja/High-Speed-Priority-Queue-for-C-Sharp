@@ -281,13 +281,20 @@ namespace Priority_Queue
 
         /// <summary>
         /// Returns the head of the queue, without removing it (use Dequeue() for that).
-        /// Returns null if the queue is empty
+        /// If the queue is empty, behavior is undefined.
         /// O(1)
         /// </summary>
         public T First
         {
             get
             {
+                #if DEBUG
+                if(_numNodes <= 0)
+                {
+                    throw new InvalidOperationException("Cannot call .First on an empty queue");
+                }
+                #endif
+
                 return _nodes[1];
             }
         }

@@ -81,19 +81,6 @@ namespace Priority_Queue_Tests
         }
 
         [Test]
-        public void TestFirstIsNullOnEmptyQueue()
-        {
-            Node node1 = new Node(1);
-
-            Assert.AreEqual(null, Queue.First);
-
-            Enqueue(node1);
-            Dequeue();
-
-            Assert.AreEqual(null, Queue.First);
-        }
-
-        [Test]
         public void TestEnQueueWorksWithTwoNodesWithSamePriority()
         {
             Node node11 = new Node(1);

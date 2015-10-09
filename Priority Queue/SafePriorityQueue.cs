@@ -9,7 +9,6 @@ namespace Priority_Queue
 {
     //TODO: Test enqueueing multiple copies of the same item
     //TODO: Make sure we're doing at least all the same checks as FastPriorityQueue does in DEBUG mode
-    //TODO: Make .First not return null (for both SafePriorityQueue and FastPriorityQueue)
     public sealed class SafePriorityQueue<T> : IPriorityQueue<T>
     {
         private class SafeNode : PriorityQueueNode
@@ -48,15 +47,20 @@ namespace Priority_Queue
 
         /// <summary>
         /// Returns the head of the queue, without removing it (use Dequeue() for that).
+        /// Throws an exception when the queue is empty.
         /// O(1)
         /// </summary>
         public T First
         {
-            //TODO: Figure out what we want to do if queue is empty
             get
             {
                 lock(_queue)
                 {
+                    if(_queue.Count <= 0)
+                    {
+                        throw new InvalidOperationException("Cannot call .First on an empty queue");
+                    }
+
                     SafeNode first = _queue.First;
                     return (first != null ? first.Data : default(T));
                 }
