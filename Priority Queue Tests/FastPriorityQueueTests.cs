@@ -270,6 +270,15 @@ namespace Priority_Queue_Tests
         }
 
         [Test]
+        public void TestDebugNullParametersThrow()
+        {
+            Assert.Throws<ArgumentNullException>(() => Queue.Contains(null));
+            Assert.Throws<ArgumentNullException>(() => Queue.Enqueue(null, 1));
+            Assert.Throws<ArgumentNullException>(() => Queue.Remove(null));
+            Assert.Throws<ArgumentNullException>(() => Queue.UpdatePriority(null, 1));
+        }
+
+        [Test]
         public void TestDebugContainsOutOfBoundsCloseTo0()
         {
             Node node1 = new Node(1);

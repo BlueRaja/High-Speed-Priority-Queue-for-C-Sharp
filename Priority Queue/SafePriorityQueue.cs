@@ -86,7 +86,8 @@ namespace Priority_Queue
         {
             lock(_queue)
             {
-                return _queue.Any(o => o.Data.Equals(item));
+                var comparer = EqualityComparer<T>.Default;
+                return _queue.Any(o => comparer.Equals(o.Data, item));
             }
         }
 

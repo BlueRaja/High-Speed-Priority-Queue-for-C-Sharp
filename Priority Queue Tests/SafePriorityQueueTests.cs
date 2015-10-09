@@ -143,6 +143,20 @@ namespace Priority_Queue_Tests
             Assert.AreEqual(node3, Dequeue());
             Assert.AreEqual(node3, Dequeue());
         }
+
+        [Test]
+        public void TestEnqueuingNull()
+        {
+            Queue.Enqueue(null, 1);
+            Assert.AreEqual(1, Queue.Count);
+            Assert.AreEqual(null, Queue.First);
+            Assert.IsTrue(Queue.Contains(null));
+            Assert.IsFalse(Queue.Contains(new Node(1)));
+
+            Assert.AreEqual(null, Dequeue());
+
+            Assert.AreEqual(0, Queue.Count);
+            Assert.IsFalse(Queue.Contains(null));
+        }
     }
 }
-

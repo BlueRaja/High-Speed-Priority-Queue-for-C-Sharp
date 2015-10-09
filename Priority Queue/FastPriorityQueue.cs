@@ -81,6 +81,10 @@ namespace Priority_Queue
         public bool Contains(T node)
         {
             #if DEBUG
+            if(node == null)
+            {
+                throw new ArgumentNullException("node");
+            }
             if(node.QueueIndex < 0 || node.QueueIndex >= _nodes.Length)
             {
                 throw new InvalidOperationException("node.QueueIndex has been corrupted. Did you change it manually? Or add this node to another queue?");
@@ -102,6 +106,10 @@ namespace Priority_Queue
         public void Enqueue(T node, double priority)
         {
             #if DEBUG
+            if(node == null)
+            {
+                throw new ArgumentNullException("node");
+            }
             if(_numNodes >= _nodes.Length - 1)
             {
                 throw new InvalidOperationException("Queue is full - node cannot be added: " + node);
@@ -311,6 +319,10 @@ namespace Priority_Queue
         public void UpdatePriority(T node, double priority)
         {
             #if DEBUG
+            if(node == null)
+            {
+                throw new ArgumentNullException("node");
+            }
             if(!Contains(node))
             {
                 throw new InvalidOperationException("Cannot call UpdatePriority() on a node which is not enqueued: " + node);
@@ -346,6 +358,10 @@ namespace Priority_Queue
         public void Remove(T node)
         {
             #if DEBUG
+            if(node == null)
+            {
+                throw new ArgumentNullException("node");
+            }
             if(!Contains(node))
             {
                 throw new InvalidOperationException("Cannot call Remove() on a node which is not enqueued: " + node);
