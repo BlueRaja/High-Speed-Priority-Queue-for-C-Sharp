@@ -75,6 +75,74 @@ namespace Priority_Queue_Tests
 
             Assert.Throws<InvalidOperationException>(() => { var a = Queue.First; });
         }
+
+        [Test]
+        public void TestEnqueueRemovesOneCopyOfItem()
+        {
+            Node node = new Node(1);
+
+            Enqueue(node);
+            Enqueue(node);
+
+            Assert.AreEqual(2, Queue.Count);
+            Assert.IsTrue(Queue.Contains(node));
+
+            Queue.Remove(node);
+
+            Assert.AreEqual(1, Queue.Count);
+            Assert.IsTrue(Queue.Contains(node));
+
+            Queue.Remove(node);
+
+            Assert.AreEqual(0, Queue.Count);
+            Assert.IsFalse(Queue.Contains(node));
+        }
+
+        [Test]
+        public void TestEnqueueRemovesFirstCopyOfItem()
+        {
+            Node node11 = new Node(1);
+            Node node12 = new Node(1);
+
+            Enqueue(node11);
+            Enqueue(node12);
+            Enqueue(node11);
+
+            Assert.AreEqual(node11, Queue.First);
+
+            Queue.Remove(node11);
+
+            Assert.AreEqual(node12, Dequeue());
+            Assert.AreEqual(node11, Dequeue());
+            Assert.AreEqual(0, Queue.Count);
+        }
+
+        [Test]
+        public void TestMultipleCopiesOfSameItem()
+        {
+            Node node1 = new Node(1);
+            Node node21 = new Node(2);
+            Node node22 = new Node(2);
+            Node node3 = new Node(3);
+
+            Enqueue(node1);
+            Enqueue(node21);
+            Enqueue(node22);
+            Enqueue(node21);
+            Enqueue(node22);
+            Enqueue(node3);
+            Enqueue(node3);
+            Enqueue(node1);
+
+            Assert.AreEqual(node1, Dequeue());
+            Assert.AreEqual(node1, Dequeue());
+            Assert.AreEqual(node21, Dequeue());
+            Assert.AreEqual(node22, Dequeue());
+            Assert.AreEqual(node21, Dequeue());
+            Assert.AreEqual(node22, Dequeue());
+            Assert.AreEqual(node3, Dequeue());
+            Assert.AreEqual(node3, Dequeue());
+        }
     }
 }
 

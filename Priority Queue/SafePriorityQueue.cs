@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace Priority_Queue
 {
-    //TODO: Test enqueueing multiple copies of the same item
     //TODO: Make sure we're doing at least all the same checks as FastPriorityQueue does in DEBUG mode
     public sealed class SafePriorityQueue<T> : IPriorityQueue<T>
     {
