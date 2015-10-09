@@ -345,31 +345,22 @@ namespace Priority_Queue
             }
             #endif
 
-            if(_numNodes <= 1)
+            //If the node is already the last node, we can remove it immediately
+            if(node.QueueIndex == _numNodes)
             {
-                _nodes[1] = null;
-                _numNodes = 0;
+                _nodes[_numNodes] = null;
+                _numNodes--;
                 return;
             }
 
-            //Make sure the node is the last node in the queue
-            bool wasSwapped = false;
+            //Swap the node with the last node
             T formerLastNode = _nodes[_numNodes];
-            if(node.QueueIndex != _numNodes)
-            {
-                //Swap the node with the last node
-                Swap(node, formerLastNode);
-                wasSwapped = true;
-            }
-
+            Swap(node, formerLastNode);
+            _nodes[_numNodes] = null;
             _numNodes--;
-            _nodes[node.QueueIndex] = null;
 
-            if(wasSwapped)
-            {
-                //Now bubble formerLastNode (which is no longer the last node) up or down as appropriate
-                OnNodeUpdated(formerLastNode);
-            }
+            //Now bubble formerLastNode (which is no longer the last node) up or down as appropriate
+            OnNodeUpdated(formerLastNode);
         }
 
         public IEnumerator<T> GetEnumerator()
