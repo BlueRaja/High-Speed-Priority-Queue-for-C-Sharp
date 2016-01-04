@@ -195,13 +195,17 @@ namespace Priority_Queue
 
         public IEnumerator<T> GetEnumerator()
         {
+            List<T> queueData = new List<T>();
             lock (_queue)
             {
-                foreach (var node in _queue)
+                //Copy to a separate list because we don't want to 'yield return' inside a lock
+                foreach(var node in _queue)
                 {
-                    yield return node.Data;
+                    queueData.Add(node.Data);
                 }
             }
+
+            return queueData.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
