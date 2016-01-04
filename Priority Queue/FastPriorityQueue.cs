@@ -9,9 +9,9 @@ namespace Priority_Queue
     /// An implementation of a min-Priority Queue using a heap.  Has O(1) .Contains()!
     /// See https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp/wiki/Getting-Started for more information
     /// </summary>
-    /// <typeparam name="T">The values in the queue.  Must implement the PriorityQueueNode interface</typeparam>
-    public sealed class HeapPriorityQueue<T> : IPriorityQueue<T>
-        where T : PriorityQueueNode
+    /// <typeparam name="T">The values in the queue.  Must extend the FastPriorityQueueNode class</typeparam>
+    public sealed class FastPriorityQueue<T> : IPriorityQueue<T>
+        where T : FastPriorityQueueNode
     {
         private int _numNodes;
         private T[] _nodes;
@@ -21,7 +21,7 @@ namespace Priority_Queue
         /// Instantiate a new Priority Queue
         /// </summary>
         /// <param name="maxNodes">The max nodes ever allowed to be enqueued (going over this will cause undefined behavior)</param>
-        public HeapPriorityQueue(int maxNodes)
+        public FastPriorityQueue(int maxNodes)
         {
             #if DEBUG
             if (maxNodes <= 0)
@@ -36,7 +36,8 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Returns the number of nodes in the queue.  O(1)
+        /// Returns the number of nodes in the queue.
+        /// O(1)
         /// </summary>
         public int Count
         {
@@ -59,7 +60,8 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Removes every node from the queue.  O(n) (So, don't do this often!)
+        /// Removes every node from the queue.
+        /// O(n) (So, don't do this often!)
         /// </summary>
         #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -79,6 +81,10 @@ namespace Priority_Queue
         public bool Contains(T node)
         {
             #if DEBUG
+            if(node == null)
+            {
+                throw new ArgumentNullException("node");
+            }
             if(node.QueueIndex < 0 || node.QueueIndex >= _nodes.Length)
             {
                 throw new InvalidOperationException("node.QueueIndex has been corrupted. Did you change it manually? Or add this node to another queue?");
@@ -89,9 +95,9 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Enqueue a node
-        /// If the queue is full, the result is undefined
-        /// If the node is already enqueued, the result is undefined
+        /// Enqueue a node to the priority queue.  Lower values are placed in front. Ties are broken by first-in-first-out.
+        /// If the queue is full, the result is undefined.
+        /// If the node is already enqueued, the result is undefined.
         /// O(log n)
         /// </summary>
         #if NET_VERSION_4_5
@@ -100,6 +106,10 @@ namespace Priority_Queue
         public void Enqueue(T node, double priority)
         {
             #if DEBUG
+            if(node == null)
+            {
+                throw new ArgumentNullException("node");
+            }
             if(_numNodes >= _nodes.Length - 1)
             {
                 throw new InvalidOperationException("Queue is full - node cannot be added: " + node);
@@ -225,7 +235,7 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Removes the head of the queue (node with highest priority; ties are broken by order of insertion), and returns it.
+        /// Removes the head of the queue (node with minimum priority; ties are broken by order of insertion), and returns it.
         /// If queue is empty, result is undefined
         /// O(log n)
         /// </summary>
@@ -279,13 +289,20 @@ namespace Priority_Queue
 
         /// <summary>
         /// Returns the head of the queue, without removing it (use Dequeue() for that).
-        /// Returns null if the queue is empty
+        /// If the queue is empty, behavior is undefined.
         /// O(1)
         /// </summary>
         public T First
         {
             get
             {
+                #if DEBUG
+                if(_numNodes <= 0)
+                {
+                    throw new InvalidOperationException("Cannot call .First on an empty queue");
+                }
+                #endif
+
                 return _nodes[1];
             }
         }
@@ -302,6 +319,10 @@ namespace Priority_Queue
         public void UpdatePriority(T node, double priority)
         {
             #if DEBUG
+            if(node == null)
+            {
+                throw new ArgumentNullException("node");
+            }
             if(!Contains(node))
             {
                 throw new InvalidOperationException("Cannot call UpdatePriority() on a node which is not enqueued: " + node);
@@ -337,37 +358,32 @@ namespace Priority_Queue
         public void Remove(T node)
         {
             #if DEBUG
+            if(node == null)
+            {
+                throw new ArgumentNullException("node");
+            }
             if(!Contains(node))
             {
                 throw new InvalidOperationException("Cannot call Remove() on a node which is not enqueued: " + node);
             }
             #endif
 
-            if(_numNodes <= 1)
+            //If the node is already the last node, we can remove it immediately
+            if(node.QueueIndex == _numNodes)
             {
-                _nodes[1] = null;
-                _numNodes = 0;
+                _nodes[_numNodes] = null;
+                _numNodes--;
                 return;
             }
 
-            //Make sure the node is the last node in the queue
-            bool wasSwapped = false;
+            //Swap the node with the last node
             T formerLastNode = _nodes[_numNodes];
-            if(node.QueueIndex != _numNodes)
-            {
-                //Swap the node with the last node
-                Swap(node, formerLastNode);
-                wasSwapped = true;
-            }
-
+            Swap(node, formerLastNode);
+            _nodes[_numNodes] = null;
             _numNodes--;
-            _nodes[node.QueueIndex] = null;
 
-            if(wasSwapped)
-            {
-                //Now bubble formerLastNode (which is no longer the last node) up or down as appropriate
-                OnNodeUpdated(formerLastNode);
-            }
+            //Now bubble formerLastNode (which is no longer the last node) up or down as appropriate
+            OnNodeUpdated(formerLastNode);
         }
 
         public IEnumerator<T> GetEnumerator()

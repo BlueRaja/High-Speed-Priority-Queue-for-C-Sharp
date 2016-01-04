@@ -14,6 +14,11 @@
 
 **Yes!**  See the [license page](https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp/wiki/License) for more details.
 
-### How do I use the priority queue? ###
+### Getting Started ###
 
-Check out the [Getting Started](https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp/wiki/Getting-Started) page for a quick tutorial.  Or, take a look at the [Priority Queue Example](https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp/blob/master/Priority%20Queue%20Example/Program.cs) project in the repository.
+This project contains two priority queue implementations - one that's super-fast _(without thread-safety, safety checks, etc)_, and one that's easy/safe to use.
+
+See the [Getting Started](https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp/wiki/Getting-Started) page, or decide what type of queue you want:
+
+* [I want a PriorityQueue that's easy to use](https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp/wiki/Using-the-SimplePriorityQueue)
+* [I want a PriorityQueue that's as _fast_ as possible](https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp/wiki/Using-the-FastPriorityQueue)
