@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Priority_Queue
 {
@@ -25,6 +22,22 @@ namespace Priority_Queue
         public SafePriorityQueue()
         {
             _queue = new FastPriorityQueue<SafeNode>(INITIAL_QUEUE_SIZE);
+        }
+
+        /// <summary>
+        /// Given an item of type T, returns the exist SafeNode in the queue
+        /// </summary>
+        private SafeNode GetExistingNode(T item)
+        {
+            var comparer = EqualityComparer<T>.Default;
+            foreach(var node in _queue)
+            {
+                if(comparer.Equals(node.Data, item))
+                {
+                    return node;
+                }
+            }
+            throw new InvalidOperationException("Item cannot be found in queue: " + item);
         }
 
         /// <summary>
@@ -86,7 +99,14 @@ namespace Priority_Queue
             lock(_queue)
             {
                 var comparer = EqualityComparer<T>.Default;
-                return _queue.Any(o => comparer.Equals(o.Data, item));
+                foreach (var node in _queue)
+                {
+                    if (comparer.Equals(node.Data, item))
+                    {
+                        return true;
+                    }
+                }
+                return false;
             }
         }
 
@@ -140,8 +160,7 @@ namespace Priority_Queue
             {
                 try
                 {
-                    SafeNode removeMe = _queue.First(o => o.Data.Equals(item));
-                    _queue.Remove(removeMe);
+                    _queue.Remove(GetExistingNode(item));
                 }
                 catch(InvalidOperationException ex)
                 {
@@ -164,7 +183,7 @@ namespace Priority_Queue
             {
                 try
                 {
-                    SafeNode updateMe = _queue.First(o => o.Data.Equals(item));
+                    SafeNode updateMe = GetExistingNode(item);
                     _queue.UpdatePriority(updateMe, priority);
                 }
                 catch(InvalidOperationException ex)
@@ -178,7 +197,10 @@ namespace Priority_Queue
         {
             lock (_queue)
             {
-                return _queue.Select(o => o.Data).ToList().GetEnumerator();
+                foreach (var node in _queue)
+                {
+                    yield return node.Data;
+                }
             }
         }
 
