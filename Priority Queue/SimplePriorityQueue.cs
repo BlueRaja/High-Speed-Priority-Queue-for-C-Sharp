@@ -6,7 +6,7 @@ namespace Priority_Queue
 {
     public sealed class SimplePriorityQueue<T> : IPriorityQueue<T>
     {
-        private class SimpleNode : PriorityQueueNode
+        private class SimpleNode : FastPriorityQueueNode
         {
             public T Data { get; private set; }
 

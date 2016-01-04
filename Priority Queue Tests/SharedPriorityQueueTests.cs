@@ -4,7 +4,7 @@ using Priority_Queue;
 
 namespace Priority_Queue_Tests
 {
-    public class Node : PriorityQueueNode
+    public class Node : FastPriorityQueueNode
     {
         public Node(int priority)
         {

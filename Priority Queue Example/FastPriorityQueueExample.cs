@@ -10,7 +10,7 @@ namespace Priority_Queue_Example
     public static class FastPriorityQueueExample
     {
         //The class to be enqueued.
-        public class User : PriorityQueueNode
+        public class User : FastPriorityQueueNode
         {
             public string Name { get; private set; }
             public User(string name)

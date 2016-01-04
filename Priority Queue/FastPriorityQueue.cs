@@ -9,9 +9,9 @@ namespace Priority_Queue
     /// An implementation of a min-Priority Queue using a heap.  Has O(1) .Contains()!
     /// See https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp/wiki/Getting-Started for more information
     /// </summary>
-    /// <typeparam name="T">The values in the queue.  Must implement the PriorityQueueNode interface</typeparam>
+    /// <typeparam name="T">The values in the queue.  Must extend the FastPriorityQueueNode class</typeparam>
     public sealed class FastPriorityQueue<T> : IPriorityQueue<T>
-        where T : PriorityQueueNode
+        where T : FastPriorityQueueNode
     {
         private int _numNodes;
         private T[] _nodes;
