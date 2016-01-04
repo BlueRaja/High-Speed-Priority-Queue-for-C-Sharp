@@ -4,30 +4,30 @@ using System.Collections.Generic;
 
 namespace Priority_Queue
 {
-    public sealed class SafePriorityQueue<T> : IPriorityQueue<T>
+    public sealed class SimplePriorityQueue<T> : IPriorityQueue<T>
     {
-        private class SafeNode : PriorityQueueNode
+        private class SimpleNode : PriorityQueueNode
         {
             public T Data { get; private set; }
 
-            public SafeNode(T data)
+            public SimpleNode(T data)
             {
                 Data = data;
             }
         }
 
         private const int INITIAL_QUEUE_SIZE = 10;
-        private readonly FastPriorityQueue<SafeNode> _queue;
+        private readonly FastPriorityQueue<SimpleNode> _queue;
 
-        public SafePriorityQueue()
+        public SimplePriorityQueue()
         {
-            _queue = new FastPriorityQueue<SafeNode>(INITIAL_QUEUE_SIZE);
+            _queue = new FastPriorityQueue<SimpleNode>(INITIAL_QUEUE_SIZE);
         }
 
         /// <summary>
-        /// Given an item of type T, returns the exist SafeNode in the queue
+        /// Given an item of type T, returns the exist SimpleNode in the queue
         /// </summary>
-        private SafeNode GetExistingNode(T item)
+        private SimpleNode GetExistingNode(T item)
         {
             var comparer = EqualityComparer<T>.Default;
             foreach(var node in _queue)
@@ -72,7 +72,7 @@ namespace Priority_Queue
                         throw new InvalidOperationException("Cannot call .First on an empty queue");
                     }
 
-                    SafeNode first = _queue.First;
+                    SimpleNode first = _queue.First;
                     return (first != null ? first.Data : default(T));
                 }
             }
@@ -124,7 +124,7 @@ namespace Priority_Queue
                     throw new InvalidOperationException("Cannot call Dequeue() on an empty queue");
                 }
 
-                SafeNode node =_queue.Dequeue();
+                SimpleNode node =_queue.Dequeue();
                 return node.Data;
             }
         }
@@ -139,7 +139,7 @@ namespace Priority_Queue
         {
             lock(_queue)
             {
-                SafeNode node = new SafeNode(item);
+                SimpleNode node = new SimpleNode(item);
                 if(_queue.Count == _queue.MaxSize)
                 {
                     _queue.Resize(_queue.MaxSize*2 + 1);
@@ -183,7 +183,7 @@ namespace Priority_Queue
             {
                 try
                 {
-                    SafeNode updateMe = GetExistingNode(item);
+                    SimpleNode updateMe = GetExistingNode(item);
                     _queue.UpdatePriority(updateMe, priority);
                 }
                 catch(InvalidOperationException ex)

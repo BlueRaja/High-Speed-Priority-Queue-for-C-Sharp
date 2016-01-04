@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SafePriorityQueueTests.cs" />
+    <Compile Include="SimplePriorityQueueTests.cs" />
     <Compile Include="SharedPriorityQueueTests.cs" />
     <Compile Include="FastPriorityQueueTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
