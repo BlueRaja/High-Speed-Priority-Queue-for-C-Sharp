@@ -6,7 +6,7 @@ namespace Priority_Queue
 {
     public sealed class SimplePriorityQueue<T> : IPriorityQueue<T>
     {
-        private class SimpleNode : FastPriorityQueueNode
+        private class SimpleNode : StablePriorityQueueNode
         {
             public T Data { get; private set; }
 
@@ -17,11 +17,11 @@ namespace Priority_Queue
         }
 
         private const int INITIAL_QUEUE_SIZE = 10;
-        private readonly FastPriorityQueue<SimpleNode> _queue;
+        private readonly StablePriorityQueue<SimpleNode> _queue;
 
         public SimplePriorityQueue()
         {
-            _queue = new FastPriorityQueue<SimpleNode>(INITIAL_QUEUE_SIZE);
+            _queue = new StablePriorityQueue<SimpleNode>(INITIAL_QUEUE_SIZE);
         }
 
         /// <summary>
