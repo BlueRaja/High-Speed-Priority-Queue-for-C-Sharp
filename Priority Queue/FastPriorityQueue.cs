@@ -101,7 +101,7 @@ namespace Priority_Queue
         #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         #endif
-        public void Enqueue(T node, double priority)
+        public void Enqueue(T node, float priority)
         {
             #if DEBUG
             if(node == null)
@@ -312,7 +312,7 @@ namespace Priority_Queue
         #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         #endif
-        public void UpdatePriority(T node, double priority)
+        public void UpdatePriority(T node, float priority)
         {
             #if DEBUG
             if(node == null)

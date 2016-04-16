@@ -13,7 +13,7 @@ namespace Priority_Queue
         /// Enqueue a node to the priority queue.  Lower values are placed in front. Ties are broken by first-in-first-out.
         /// See implementation for how duplicates are handled.
         /// </summary>
-        void Enqueue(T node, double priority);
+        void Enqueue(T node, float priority);
 
         /// <summary>
         /// Removes the head of the queue (node with minimum priority; ties are broken by order of insertion), and returns it.
@@ -38,7 +38,7 @@ namespace Priority_Queue
         /// <summary>
         /// Call this method to change the priority of a node.  
         /// </summary>
-        void UpdatePriority(T node, double priority);
+        void UpdatePriority(T node, float priority);
 
         /// <summary>
         /// Returns the head of the queue, without removing it (use Dequeue() for that).
