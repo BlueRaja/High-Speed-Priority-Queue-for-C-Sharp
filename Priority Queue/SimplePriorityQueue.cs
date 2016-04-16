@@ -4,6 +4,11 @@ using System.Collections.Generic;
 
 namespace Priority_Queue
 {
+    /// <summary>
+    /// A simplified priority queue implementation.  Is stable, auto-resizes, and thread-safe, at the cost of being slightly slower than
+    /// FastPriorityQueue
+    /// </summary>
+    /// <typeparam name="T">The type to enqueue</typeparam>
     public sealed class SimplePriorityQueue<T> : IPriorityQueue<T>
     {
         private class SimpleNode : StablePriorityQueueNode
