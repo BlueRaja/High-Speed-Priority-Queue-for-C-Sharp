@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>OptimizedPriorityQueue</id>
-    <version>2.0.1</version>
+    <version>3.0.0</version>
     <title>Highly Optimized Priority Queue</title>
     <authors>BlueRaja</authors>
     <owners>BlueRaja</owners>
@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A highly optimized Priority Queue for path-finding and related applications</description>
-    <releaseNotes>Added a second implementation of `IPriorityQueue` which is slightly less fast, but much easier to use.</releaseNotes>
+    <releaseNotes>3.0 release!  Includes speed improvements, UWP support, and missing XML documentation</releaseNotes>
     <copyright>Copyright 2016</copyright>
     <tags>C# priority-queue pathfinding optimized</tags>
   </metadata>
@@ -21,5 +21,8 @@
     <file src="bin\Release\net45\Priority Queue.dll" target="lib\net45\Priority Queue.dll" />
     <file src="bin\Release\net45\Priority Queue.pdb" target="lib\net45\Priority Queue.pdb" />
     <file src="bin\Release\net45\Priority Queue.xml" target="lib\net45\Priority Queue.xml" />
+	<file src="..\Priority Queue UWP\bin\Release\netcore45\Priority Queue UWP.dll" target="lib\netcore45\Priority Queue.dll" />
+    <file src="..\Priority Queue UWP\bin\Release\netcore45\Priority Queue UWP.pdb" target="lib\netcore45\Priority Queue.pdb" />
+    <file src="..\Priority Queue UWP\bin\Release\netcore45\Priority Queue UWP.xml" target="lib\netcore45\Priority Queue.xml" />
   </files>
 </package>
