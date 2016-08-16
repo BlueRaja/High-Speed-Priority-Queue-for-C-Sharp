@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>OptimizedPriorityQueue</id>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
     <title>Highly Optimized Priority Queue</title>
     <authors>BlueRaja</authors>
     <owners>BlueRaja</owners>
@@ -11,13 +11,15 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A highly optimized Priority Queue for path-finding and related applications</description>
     <releaseNotes>Added a second implementation of `IPriorityQueue` which is slightly less fast, but much easier to use.</releaseNotes>
-    <copyright>Copyright 2015</copyright>
+    <copyright>Copyright 2016</copyright>
     <tags>C# priority-queue pathfinding optimized</tags>
   </metadata>
   <files>
     <file src="bin\Release\net20\Priority Queue.dll" target="lib\net20\Priority Queue.dll" />
     <file src="bin\Release\net20\Priority Queue.pdb" target="lib\net20\Priority Queue.pdb" />
+	<file src="bin\Release\net20\Priority Queue.xml" target="lib\net20\Priority Queue.xml" />
     <file src="bin\Release\net45\Priority Queue.dll" target="lib\net45\Priority Queue.dll" />
     <file src="bin\Release\net45\Priority Queue.pdb" target="lib\net45\Priority Queue.pdb" />
+    <file src="bin\Release\net45\Priority Queue.xml" target="lib\net45\Priority Queue.xml" />
   </files>
 </package>
