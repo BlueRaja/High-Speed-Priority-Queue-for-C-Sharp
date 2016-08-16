@@ -4,7 +4,7 @@ using Priority_Queue;
 
 namespace Priority_Queue_Tests
 {
-    public class Node : FastPriorityQueueNode
+    public class Node : StablePriorityQueueNode
     {
         public Node(int priority)
         {
@@ -17,11 +17,11 @@ namespace Priority_Queue_Tests
         }
     }
 
-    public abstract class SharedPriorityQueueTests<T> where T : IPriorityQueue<Node>
+    public abstract class SharedPriorityQueueTests<TQueue> where TQueue : IPriorityQueue<Node>
     {
-        protected T Queue { get; set; }
+        protected TQueue Queue { get; set; }
 
-        protected abstract T CreateQueue();
+        protected abstract TQueue CreateQueue();
         protected abstract bool IsValidQueue();
 
         protected void Enqueue(Node node)
@@ -81,7 +81,7 @@ namespace Priority_Queue_Tests
         }
 
         [Test]
-        public void TestEnQueueWorksWithTwoNodesWithSamePriority()
+        public void TestEnqueueWorksWithTwoNodesWithSamePriority()
         {
             Node node11 = new Node(1);
             Node node12 = new Node(1);
@@ -89,8 +89,11 @@ namespace Priority_Queue_Tests
             Enqueue(node11);
             Enqueue(node12);
 
-            Assert.AreEqual(node11, Dequeue());
-            Assert.AreEqual(node12, Dequeue());
+            Node firstNode = Dequeue();
+            Node secondNode = Dequeue();
+
+            //Assert we got the correct nodes, but since the queue might not be stable, the order doesn't matter
+            Assert.IsTrue((firstNode == node11 && secondNode == node12) || (firstNode == node12 && secondNode == node11));
         }
 
         [Test]
@@ -253,110 +256,6 @@ namespace Priority_Queue_Tests
             Assert.AreEqual(node3, Dequeue());
             Assert.AreEqual(node4, Dequeue());
             Assert.AreEqual(0, Queue.Count);
-        }
-
-        [Test]
-        public void TestOrderedQueue()
-        {
-            Node node1 = new Node(1);
-            Node node2 = new Node(1);
-            Node node3 = new Node(1);
-            Node node4 = new Node(1);
-            Node node5 = new Node(1);
-
-            Enqueue(node1);
-            Enqueue(node2);
-            Enqueue(node3);
-            Enqueue(node4);
-            Enqueue(node5);
-
-            Assert.AreEqual(node1, Dequeue());
-            Assert.AreEqual(node2, Dequeue());
-            Assert.AreEqual(node3, Dequeue());
-            Assert.AreEqual(node4, Dequeue());
-            Assert.AreEqual(node5, Dequeue());
-        }
-
-        [Test]
-        public void TestMoreComplicatedQueue()
-        {
-            Node node11 = new Node(1);
-            Node node12 = new Node(1);
-            Node node13 = new Node(1);
-            Node node14 = new Node(1);
-            Node node15 = new Node(1);
-            Node node21 = new Node(2);
-            Node node22 = new Node(2);
-            Node node23 = new Node(2);
-            Node node24 = new Node(2);
-            Node node25 = new Node(2);
-            Node node31 = new Node(3);
-            Node node32 = new Node(3);
-            Node node33 = new Node(3);
-            Node node34 = new Node(3);
-            Node node35 = new Node(3);
-            Node node41 = new Node(4);
-            Node node42 = new Node(4);
-            Node node43 = new Node(4);
-            Node node44 = new Node(4);
-            Node node45 = new Node(4);
-            Node node51 = new Node(5);
-            Node node52 = new Node(5);
-            Node node53 = new Node(5);
-            Node node54 = new Node(5);
-            Node node55 = new Node(5);
-
-            Enqueue(node31);
-            Enqueue(node51);
-            Enqueue(node52);
-            Enqueue(node11);
-            Enqueue(node21);
-            Enqueue(node22);
-            Enqueue(node53);
-            Enqueue(node41);
-            Enqueue(node12);
-            Enqueue(node32);
-            Enqueue(node13);
-            Enqueue(node42);
-            Enqueue(node43);
-            Enqueue(node44);
-            Enqueue(node45);
-            Enqueue(node54);
-            Enqueue(node14);
-            Enqueue(node23);
-            Enqueue(node24);
-            Enqueue(node33);
-            Enqueue(node34);
-            Enqueue(node55);
-            Enqueue(node35);
-            Enqueue(node25);
-            Enqueue(node15);
-
-            Assert.AreEqual(node11, Dequeue());
-            Assert.AreEqual(node12, Dequeue());
-            Assert.AreEqual(node13, Dequeue());
-            Assert.AreEqual(node14, Dequeue());
-            Assert.AreEqual(node15, Dequeue());
-            Assert.AreEqual(node21, Dequeue());
-            Assert.AreEqual(node22, Dequeue());
-            Assert.AreEqual(node23, Dequeue());
-            Assert.AreEqual(node24, Dequeue());
-            Assert.AreEqual(node25, Dequeue());
-            Assert.AreEqual(node31, Dequeue());
-            Assert.AreEqual(node32, Dequeue());
-            Assert.AreEqual(node33, Dequeue());
-            Assert.AreEqual(node34, Dequeue());
-            Assert.AreEqual(node35, Dequeue());
-            Assert.AreEqual(node41, Dequeue());
-            Assert.AreEqual(node42, Dequeue());
-            Assert.AreEqual(node43, Dequeue());
-            Assert.AreEqual(node44, Dequeue());
-            Assert.AreEqual(node45, Dequeue());
-            Assert.AreEqual(node51, Dequeue());
-            Assert.AreEqual(node52, Dequeue());
-            Assert.AreEqual(node53, Dequeue());
-            Assert.AreEqual(node54, Dequeue());
-            Assert.AreEqual(node55, Dequeue());
         }
     }
 }

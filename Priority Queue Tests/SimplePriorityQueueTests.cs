@@ -19,6 +19,18 @@ namespace Priority_Queue_Tests
         }
 
         [Test]
+        public void TestOrderedQueue()
+        {
+            SharedStablePriorityQueueTests.TestOrderedQueue(Enqueue, Dequeue);
+        }
+
+        [Test]
+        public void TestMoreComplicatedOrderedQueue()
+        {
+            SharedStablePriorityQueueTests.TestMoreComplicatedOrderedQueue(Enqueue, Dequeue);
+        }
+
+        [Test]
         public void TestQueueAutomaticallyResizes()
         {
             for(int i = 0; i < 1000; i++)

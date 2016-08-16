@@ -6,21 +6,23 @@ using System.Runtime.CompilerServices;
 namespace Priority_Queue
 {
     /// <summary>
-    /// An implementation of a min-Priority Queue using a heap.  Has O(1) .Contains()!
+    /// A copy of FastPriorityQueue which is also stable - that is, when two nodes are enqueued with the same priority, they
+    /// are always dequeued in the same order.
     /// See https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp/wiki/Getting-Started for more information
     /// </summary>
-    /// <typeparam name="T">The values in the queue.  Must extend the FastPriorityQueueNode class</typeparam>
-    public sealed class FastPriorityQueue<T> : IFixedSizePriorityQueue<T>
-        where T : FastPriorityQueueNode
+    /// <typeparam name="T">The values in the queue.  Must extend the StablePriorityQueueNode class</typeparam>
+    public sealed class StablePriorityQueue<T> : IFixedSizePriorityQueue<T>
+        where T : StablePriorityQueueNode
     {
         private int _numNodes;
         private T[] _nodes;
+        private long _numNodesEverEnqueued;
 
         /// <summary>
         /// Instantiate a new Priority Queue
         /// </summary>
         /// <param name="maxNodes">The max nodes ever allowed to be enqueued (going over this will cause undefined behavior)</param>
-        public FastPriorityQueue(int maxNodes)
+        public StablePriorityQueue(int maxNodes)
         {
             #if DEBUG
             if (maxNodes <= 0)
@@ -31,6 +33,7 @@ namespace Priority_Queue
 
             _numNodes = 0;
             _nodes = new T[maxNodes + 1];
+            _numNodesEverEnqueued = 0;
         }
 
         /// <summary>
@@ -122,6 +125,7 @@ namespace Priority_Queue
             _numNodes++;
             _nodes[_numNodes] = node;
             node.QueueIndex = _numNodes;
+            node.InsertionIndex = _numNodesEverEnqueued++;
             CascadeUp(_nodes[_numNodes]);
         }
 
@@ -227,11 +231,12 @@ namespace Priority_Queue
         #endif
         private bool HasHigherPriority(T higher, T lower)
         {
-            return (higher.Priority < lower.Priority);
+            return (higher.Priority < lower.Priority ||
+                (higher.Priority == lower.Priority && higher.InsertionIndex < lower.InsertionIndex));
         }
 
         /// <summary>
-        /// Removes the head of the queue and returns it.
+        /// Removes the head of the queue (node with minimum priority; ties are broken by order of insertion), and returns it.
         /// If queue is empty, result is undefined
         /// O(log n)
         /// </summary>

@@ -67,7 +67,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IFixedSizePriorityQueue.cs" />
+    <Compile Include="StablePriorityQueue.cs" />
     <Compile Include="FastPriorityQueue.cs" />
+    <Compile Include="StablePriorityQueueNode.cs" />
     <Compile Include="IPriorityQueue.cs" />
     <Compile Include="FastPriorityQueueNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
