@@ -4,6 +4,8 @@
 /Priority Queue Tests/obj
 /Priority Queue Example/bin
 /Priority Queue Example/obj
+/Priority Queue UWP/bin
+/Priority Queue UWP/obj
 *.user
 *.suo
 /packages/
