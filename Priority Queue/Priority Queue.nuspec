@@ -17,7 +17,9 @@
   <files>
     <file src="bin\Release\net20\Priority Queue.dll" target="lib\net20\Priority Queue.dll" />
     <file src="bin\Release\net20\Priority Queue.pdb" target="lib\net20\Priority Queue.pdb" />
+	<file src="bin\Release\net20\Priority Queue.xml" target="lib\net20\Priority Queue.xml" />
     <file src="bin\Release\net45\Priority Queue.dll" target="lib\net45\Priority Queue.dll" />
     <file src="bin\Release\net45\Priority Queue.pdb" target="lib\net45\Priority Queue.pdb" />
+    <file src="bin\Release\net45\Priority Queue.xml" target="lib\net45\Priority Queue.xml" />
   </files>
 </package>

@@ -48,6 +48,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <OutputPath>bin\Release\net45\</OutputPath>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <DocumentationFile>bin\Release\net45\Priority Queue.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release 2.0|AnyCPU'">
     <DebugType>pdbonly</DebugType>
@@ -58,6 +59,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <OutputPath>bin\Release\net20\</OutputPath>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <DocumentationFile>bin\Release\net20\Priority Queue.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
