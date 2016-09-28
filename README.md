@@ -7,7 +7,7 @@
 * Free for both personal and commercial use
 * Implements `IEnumerable<T>` for LINQ support!
 * Fully unit-tested
-* Has a **stable priority queue** implementation _(ie. if two items are are enqueued with the same priority, they'll be dequeued in the same order they were enqueued)_
+* Has a **stable priority queue** implementation _(ie. if two items are enqueued with the same priority, they'll be dequeued in the same order they were enqueued)_
 * Takes advantage of the new [forced inline support](http://msdn.microsoft.com/en-us/library/system.runtime.compilerservices.methodimploptions%28v=vs.110%29.aspx) when compiling under .Net 4.5, for even faster speeds
 * Published to [NuGet](https://www.nuget.org/packages/OptimizedPriorityQueue/) - can [easily be added to any project](https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp/wiki/Getting-Started)
 * Should work on .Net versions as old as .Net 2.0
