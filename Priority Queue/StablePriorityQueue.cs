@@ -11,9 +11,10 @@ namespace Priority_Queue
     /// See https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp/wiki/Getting-Started for more information
     /// </summary>
     /// <typeparam name="T">The values in the queue.  Must extend the StablePriorityQueueNode class</typeparam>
-    public sealed class StablePriorityQueue<T> : IFixedSizePriorityQueue<T>
-        where T : StablePriorityQueueNode
-    {
+    public sealed class StablePriorityQueue<T, K> : IFixedSizePriorityQueue<T, K>
+        where T : StablePriorityQueueNode<K>
+		where K : IComparable
+	{
         private int _numNodes;
         private T[] _nodes;
         private long _numNodesEverEnqueued;
@@ -104,7 +105,7 @@ namespace Priority_Queue
         #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         #endif
-        public void Enqueue(T node, float priority)
+        public void Enqueue(T node, K priority)
         {
             #if DEBUG
             if(node == null)
@@ -231,8 +232,8 @@ namespace Priority_Queue
         #endif
         private bool HasHigherPriority(T higher, T lower)
         {
-            return (higher.Priority < lower.Priority ||
-                (higher.Priority == lower.Priority && higher.InsertionIndex < lower.InsertionIndex));
+			var cmp = higher.Priority.CompareTo(lower.Priority);
+            return (cmp < 0 || (cmp == 0 && higher.InsertionIndex < lower.InsertionIndex));
         }
 
         /// <summary>
@@ -317,7 +318,7 @@ namespace Priority_Queue
         #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         #endif
-        public void UpdatePriority(T node, float priority)
+        public void UpdatePriority(T node, K priority)
         {
             #if DEBUG
             if(node == null)

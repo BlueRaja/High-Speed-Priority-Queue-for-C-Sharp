@@ -1,6 +1,6 @@
 ﻿namespace Priority_Queue
 {
-    public class StablePriorityQueueNode : FastPriorityQueueNode
+    public class StablePriorityQueueNode<K> : FastPriorityQueueNode<K>
     {
         /// <summary>
         /// Represents the order the node was inserted in

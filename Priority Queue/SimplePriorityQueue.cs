@@ -9,9 +9,10 @@ namespace Priority_Queue
     /// FastPriorityQueue
     /// </summary>
     /// <typeparam name="T">The type to enqueue</typeparam>
-    public sealed class SimplePriorityQueue<T> : IPriorityQueue<T>
+    public sealed class SimplePriorityQueue<T, K> : IPriorityQueue<T, K>
+		where K : IComparable
     {
-        private class SimpleNode : StablePriorityQueueNode
+        private class SimpleNode : StablePriorityQueueNode<K>
         {
             public T Data { get; private set; }
 
@@ -22,11 +23,11 @@ namespace Priority_Queue
         }
 
         private const int INITIAL_QUEUE_SIZE = 10;
-        private readonly StablePriorityQueue<SimpleNode> _queue;
+        private readonly StablePriorityQueue<SimpleNode, K> _queue;
 
         public SimplePriorityQueue()
         {
-            _queue = new StablePriorityQueue<SimpleNode>(INITIAL_QUEUE_SIZE);
+            _queue = new StablePriorityQueue<SimpleNode, K>(INITIAL_QUEUE_SIZE);
         }
 
         /// <summary>
@@ -140,7 +141,7 @@ namespace Priority_Queue
         /// Duplicates are allowed.
         /// O(log n)
         /// </summary>
-        public void Enqueue(T item, float priority)
+        public void Enqueue(T item, K priority)
         {
             lock(_queue)
             {
@@ -182,7 +183,7 @@ namespace Priority_Queue
         /// to update all of them, please wrap your items in a wrapper class so they can be distinguished).
         /// O(n)
         /// </summary>
-        public void UpdatePriority(T item, float priority)
+        public void UpdatePriority(T item, K priority)
         {
             lock (_queue)
             {

@@ -10,9 +10,10 @@ namespace Priority_Queue
     /// See https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp/wiki/Getting-Started for more information
     /// </summary>
     /// <typeparam name="T">The values in the queue.  Must extend the FastPriorityQueueNode class</typeparam>
-    public sealed class FastPriorityQueue<T> : IFixedSizePriorityQueue<T>
-        where T : FastPriorityQueueNode
-    {
+    public sealed class FastPriorityQueue<T, K> : IFixedSizePriorityQueue<T, K>
+        where T : FastPriorityQueueNode<K>
+		where K : IComparable
+	{
         private int _numNodes;
         private T[] _nodes;
 
@@ -101,7 +102,7 @@ namespace Priority_Queue
         #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         #endif
-        public void Enqueue(T node, float priority)
+        public void Enqueue(T node, K priority)
         {
             #if DEBUG
             if(node == null)
@@ -227,7 +228,7 @@ namespace Priority_Queue
         #endif
         private bool HasHigherPriority(T higher, T lower)
         {
-            return (higher.Priority < lower.Priority);
+            return higher.Priority.CompareTo(lower.Priority) < 0;
         }
 
         /// <summary>
@@ -312,7 +313,7 @@ namespace Priority_Queue
         #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         #endif
-        public void UpdatePriority(T node, float priority)
+        public void UpdatePriority(T node, K priority)
         {
             #if DEBUG
             if(node == null)
