@@ -12,7 +12,7 @@ namespace Priority_Queue_Example
         public static void RunExample()
         {
             //First, we create the priority queue.
-            SimplePriorityQueue<string> priorityQueue = new SimplePriorityQueue<string>();
+            SimplePriorityQueue<string, int> priorityQueue = new SimplePriorityQueue<string, int>();
 
             //Now, let's add them all to the queue (in some arbitrary order)!
             priorityQueue.Enqueue("4 - Joseph", 4);

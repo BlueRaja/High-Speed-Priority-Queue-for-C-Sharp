@@ -7,13 +7,13 @@ namespace Priority_Queue
     /// For speed purposes, it is actually recommended that you *don't* access the priority queue through this interface, since the JIT can
     /// (theoretically?) optimize method calls from concrete-types slightly better.
     /// </summary>
-    public interface IPriorityQueue<T> : IEnumerable<T>
+    public interface IPriorityQueue<T, K> : IEnumerable<T>
     {
         /// <summary>
         /// Enqueue a node to the priority queue.  Lower values are placed in front. Ties are broken by first-in-first-out.
         /// See implementation for how duplicates are handled.
         /// </summary>
-        void Enqueue(T node, float priority);
+        void Enqueue(T node, K priority);
 
         /// <summary>
         /// Removes the head of the queue (node with minimum priority; ties are broken by order of insertion), and returns it.
@@ -38,7 +38,7 @@ namespace Priority_Queue
         /// <summary>
         /// Call this method to change the priority of a node.  
         /// </summary>
-        void UpdatePriority(T node, float priority);
+        void UpdatePriority(T node, K priority);
 
         /// <summary>
         /// Returns the head of the queue, without removing it (use Dequeue() for that).

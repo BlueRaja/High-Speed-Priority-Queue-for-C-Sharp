@@ -4,9 +4,9 @@ using Priority_Queue;
 
 namespace Priority_Queue_Tests
 {
-    public class Node : StablePriorityQueueNode
+    public class Node<K> : StablePriorityQueueNode<K>
     {
-        public Node(int priority)
+        public Node(K priority)
         {
             Priority = priority;
         }
@@ -17,22 +17,22 @@ namespace Priority_Queue_Tests
         }
     }
 
-    public abstract class SharedPriorityQueueTests<TQueue> where TQueue : IPriorityQueue<Node>
+    public abstract class SharedPriorityQueueTests<TQueue> where TQueue : IPriorityQueue<Node<int>, int>
     {
         protected TQueue Queue { get; set; }
 
         protected abstract TQueue CreateQueue();
         protected abstract bool IsValidQueue();
 
-        protected void Enqueue(Node node)
+        protected void Enqueue(Node<int> node)
         {
             Queue.Enqueue(node, node.Priority);
             Assert.IsTrue(IsValidQueue());
         }
 
-        protected Node Dequeue()
+        protected Node<int> Dequeue()
         {
-            Node returnMe = Queue.Dequeue();
+            Node<int> returnMe = Queue.Dequeue();
             Assert.IsTrue(IsValidQueue());
             return returnMe;
         }
@@ -46,8 +46,8 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestSanity()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
+            Node<int> node1 = new Node<int>(1);
+            Node<int> node2 = new Node<int>(2);
 
             Assert.AreEqual(node1, node1);
             Assert.AreEqual(node2, node2);
@@ -59,7 +59,7 @@ namespace Priority_Queue_Tests
         {
             Assert.AreEqual(0, Queue.Count);
 
-            Enqueue(new Node(1));
+            Enqueue(new Node<int>(1));
             Assert.AreEqual(1, Queue.Count);
 
             Dequeue();
@@ -69,8 +69,8 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestFirst()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
+            Node<int> node1 = new Node<int>(1);
+            Node<int> node2 = new Node<int>(2);
 
             Enqueue(node1);
             Enqueue(node2);
@@ -83,14 +83,14 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestEnqueueWorksWithTwoNodesWithSamePriority()
         {
-            Node node11 = new Node(1);
-            Node node12 = new Node(1);
+            var node11 = new Node<int>(1);
+            var node12 = new Node<int>(1);
 
             Enqueue(node11);
             Enqueue(node12);
 
-            Node firstNode = Dequeue();
-            Node secondNode = Dequeue();
+            Node<int> firstNode = Dequeue();
+            Node<int> secondNode = Dequeue();
 
             //Assert we got the correct nodes, but since the queue might not be stable, the order doesn't matter
             Assert.IsTrue((firstNode == node11 && secondNode == node12) || (firstNode == node12 && secondNode == node11));
@@ -99,11 +99,11 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestSimpleQueue()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node5 = new Node(5);
+            Node<int> node1 = new Node<int>(1);
+            Node<int> node2 = new Node<int>(2);
+            Node<int> node3 = new Node<int>(3);
+            Node<int> node4 = new Node<int>(4);
+            Node<int> node5 = new Node<int>(5);
 
             Enqueue(node2);
             Enqueue(node5);
@@ -121,11 +121,11 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestForwardOrder()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node5 = new Node(5);
+            Node<int> node1 = new Node<int>(1);
+            Node<int> node2 = new Node<int>(2);
+            Node<int> node3 = new Node<int>(3);
+            Node<int> node4 = new Node<int>(4);
+            Node<int> node5 = new Node<int>(5);
 
             Enqueue(node1);
             Enqueue(node2);
@@ -143,11 +143,11 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestBackwardOrder()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node5 = new Node(5);
+            Node<int> node1 = new Node<int>(1);
+            Node<int> node2 = new Node<int>(2);
+            Node<int> node3 = new Node<int>(3);
+            Node<int> node4 = new Node<int>(4);
+            Node<int> node5 = new Node<int>(5);
 
             Enqueue(node5);
             Enqueue(node4);
@@ -165,11 +165,11 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestAddingSameNodesLater()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node5 = new Node(5);
+            Node<int> node1 = new Node<int>(1);
+            Node<int> node2 = new Node<int>(2);
+            Node<int> node3 = new Node<int>(3);
+            Node<int> node4 = new Node<int>(4);
+            Node<int> node5 = new Node<int>(5);
 
             Enqueue(node2);
             Enqueue(node5);
@@ -199,11 +199,11 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestAddingDifferentNodesLater()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node5 = new Node(5);
+            Node<int> node1 = new Node<int>(1);
+            Node<int> node2 = new Node<int>(2);
+            Node<int> node3 = new Node<int>(3);
+            Node<int> node4 = new Node<int>(4);
+            Node<int> node5 = new Node<int>(5);
 
             Enqueue(node2);
             Enqueue(node5);
@@ -217,11 +217,11 @@ namespace Priority_Queue_Tests
             Assert.AreEqual(node4, Dequeue());
             Assert.AreEqual(node5, Dequeue());
 
-            Node node6 = new Node(6);
-            Node node7 = new Node(7);
-            Node node8 = new Node(8);
-            Node node9 = new Node(9);
-            Node node10 = new Node(10);
+            Node<int> node6 = new Node<int>(6);
+            Node<int> node7 = new Node<int>(7);
+            Node<int> node8 = new Node<int>(8);
+            Node<int> node9 = new Node<int>(9);
+            Node<int> node10 = new Node<int>(10);
 
             Enqueue(node6);
             Enqueue(node7);
@@ -239,11 +239,11 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestClear()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
-            Node node4 = new Node(4);
-            Node node5 = new Node(5);
+            Node<int> node1 = new Node<int>(1);
+            Node<int> node2 = new Node<int>(2);
+            Node<int> node3 = new Node<int>(3);
+            Node<int> node4 = new Node<int>(4);
+            Node<int> node5 = new Node<int>(5);
 
             Enqueue(node2);
             Enqueue(node5);

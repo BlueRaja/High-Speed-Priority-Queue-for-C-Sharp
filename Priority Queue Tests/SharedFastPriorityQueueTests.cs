@@ -7,7 +7,7 @@ namespace Priority_Queue_Tests
 {
     [TestFixture]
     internal abstract class SharedFastPriorityQueueTests<TQueue> : SharedPriorityQueueTests<TQueue>
-        where TQueue : IFixedSizePriorityQueue<Node>
+        where TQueue : IFixedSizePriorityQueue<Node<int>, int>
     {
         [Test]
         public void TestMaxNodes()
@@ -30,8 +30,8 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestResizeCopiesNodes()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
+            var node1 = new Node<int>(1);
+            var node2 = new Node<int>(2);
 
             Enqueue(node1);
             Enqueue(node2);
@@ -47,10 +47,10 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestResizeQueueWasFull()
         {
-            List<Node> nodes = new List<Node>(Queue.MaxSize);
-            for(int i = 0; i < Queue.MaxSize; i++)
+            var nodes = new List<Node<int>>(Queue.MaxSize);
+            for (int i = 0; i < Queue.MaxSize; i++)
             {
-                Node node = new Node(i);
+                var node = new Node<int>(i);
                 Enqueue(node);
                 nodes.Insert(i, node);
             }
@@ -67,9 +67,9 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestResizeQueueBecomesFull()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
+            var node1 = new Node<int>(1);
+            var node2 = new Node<int>(2);
+            var node3 = new Node<int>(3);
 
             Enqueue(node1);
             Enqueue(node2);
@@ -93,17 +93,17 @@ namespace Priority_Queue_Tests
         {
             for(int i = 0; i < Queue.MaxSize; i++)
             {
-                Node node = new Node(i);
+                Node<int> node = new Node<int>(i);
                 Enqueue(node);
             }
 
-            Assert.Throws<InvalidOperationException>(() => Queue.Enqueue(new Node(999), 999));
+            Assert.Throws<InvalidOperationException>(() => Queue.Enqueue(new Node<int>(999), 999));
         }
 
         [Test]
         public void TestDebugEnqueueThrowsOnAlreadyEnqueuedNode()
         {
-            Node node = new Node(1);
+            Node<int> node = new Node<int>(1);
 
             Enqueue(node);
 
@@ -119,8 +119,8 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestDebugDequeueThrowsOnEmptyQueue2()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
+            var node1 = new Node<int>(1);
+            var node2 = new Node<int>(2);
 
             Enqueue(node1);
             Enqueue(node2);
@@ -140,8 +140,8 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestDebugFirstThrowsOnEmptyQueue2()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
+            var node1 = new Node<int>(1);
+            var node2 = new Node<int>(2);
 
             Enqueue(node1);
             Enqueue(node2);
@@ -155,8 +155,8 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestDebugDequeueThrowsOnCorruptedQueue()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
+            var node1 = new Node<int>(1);
+            var node2 = new Node<int>(2);
 
             Enqueue(node1);
             Enqueue(node2);
@@ -169,7 +169,7 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestDebugRemoveThrowsOnNodeNotInQueue()
         {
-            Node node = new Node(1);
+            Node<int> node = new Node<int>(1);
 
             Assert.Throws<InvalidOperationException>(() => Queue.Remove(node));
         }
@@ -177,8 +177,8 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestDebugRemoveThrowsOnNodeNotInQueue2()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
+            Node<int> node1 = new Node<int>(1);
+            Node<int> node2 = new Node<int>(2);
 
             Enqueue(node1);
 
@@ -188,7 +188,7 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestDebugRemoveThrowsOnNodeNotInQueue3()
         {
-            Node node = new Node(1);
+            Node<int> node = new Node<int>(1);
 
             Enqueue(node);
 
@@ -200,7 +200,7 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestDebugUpdatePriorityThrowsOnNodeNotInQueue()
         {
-            Node node = new Node(1);
+            Node<int> node = new Node<int>(1);
 
             Assert.Throws<InvalidOperationException>(() => Queue.UpdatePriority(node, 2));
         }
@@ -208,8 +208,8 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestDebugUpdatePriorityThrowsOnNodeNotInQueue2()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
+            Node<int> node1 = new Node<int>(1);
+            Node<int> node2 = new Node<int>(2);
 
             Enqueue(node1);
 
@@ -219,7 +219,7 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestDebugUpdatePriorityThrowsOnNodeNotInQueue3()
         {
-            Node node = new Node(1);
+            Node<int> node = new Node<int>(1);
 
             Enqueue(node);
             Dequeue();
@@ -236,9 +236,9 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestDebugResizeSizeTooSmall()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
-            Node node3 = new Node(3);
+            Node<int> node1 = new Node<int>(1);
+            Node<int> node2 = new Node<int>(2);
+            Node<int> node3 = new Node<int>(3);
 
             Enqueue(node1);
             Enqueue(node2);
@@ -259,8 +259,8 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestDebugContainsOutOfBoundsCloseTo0()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
+            Node<int> node1 = new Node<int>(1);
+            Node<int> node2 = new Node<int>(2);
 
             Enqueue(node1);
 
@@ -272,8 +272,8 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestDebugContainsOutOfBoundsVeryNegative()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
+            Node<int> node1 = new Node<int>(1);
+            Node<int> node2 = new Node<int>(2);
 
             Enqueue(node1);
 
@@ -285,8 +285,8 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestDebugContainsOutOfBoundsAboveMaxSize()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
+            Node<int> node1 = new Node<int>(1);
+            Node<int> node2 = new Node<int>(2);
 
             Enqueue(node1);
 
@@ -298,8 +298,8 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestDebugContainsOutOfBoundsVeryLarge()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
+            Node<int> node1 = new Node<int>(1);
+            Node<int> node2 = new Node<int>(2);
 
             Enqueue(node1);
 
