@@ -3,7 +3,7 @@
 ### Features ###
 * Faster (for path-finding, at least) than any other C# priority queue out there!
 * Easy to use
-* Configurable priority type (numbers, dates, whatever IComparable!)
+* Configurable priority type (numbers, dates, strings, whatever IComparable!)
 * No dependencies on third-party libraries
 * Free for both personal and commercial use
 * Implements `IEnumerable<T>` for LINQ support!

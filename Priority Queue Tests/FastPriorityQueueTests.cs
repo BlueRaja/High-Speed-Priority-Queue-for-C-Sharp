@@ -6,11 +6,11 @@ using Priority_Queue;
 namespace Priority_Queue_Tests
 {
     [TestFixture]
-    internal class FastPriorityQueueTests : SharedFastPriorityQueueTests<FastPriorityQueue<Node>>
+    internal class FastPriorityQueueTests : SharedFastPriorityQueueTests<FastPriorityQueue<Node<int>,int>>
     {
-        protected override FastPriorityQueue<Node> CreateQueue()
+        protected override FastPriorityQueue<Node<int>,int> CreateQueue()
         {
-            return new FastPriorityQueue<Node>(100);
+            return new FastPriorityQueue<Node<int>,int>(100);
         }
 
         protected override bool IsValidQueue()

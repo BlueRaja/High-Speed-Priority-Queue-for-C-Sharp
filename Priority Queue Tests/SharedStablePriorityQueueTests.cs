@@ -12,13 +12,13 @@ namespace Priority_Queue_Tests
     //require multiple inheritance..
     public static class SharedStablePriorityQueueTests
     {
-        public static void TestOrderedQueue(Action<Node> enqueue, Func<Node> dequeue)
+        public static void TestOrderedQueue(Action<Node<int>> enqueue, Func<Node<int>> dequeue)
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(1);
-            Node node3 = new Node(1);
-            Node node4 = new Node(1);
-            Node node5 = new Node(1);
+            Node<int> node1 = new Node<int>(1);
+            Node<int> node2 = new Node<int>(1);
+            Node<int> node3 = new Node<int>(1);
+            Node<int> node4 = new Node<int>(1);
+            Node<int> node5 = new Node<int>(1);
 
             enqueue(node1);
             enqueue(node2);
@@ -33,33 +33,33 @@ namespace Priority_Queue_Tests
             Assert.AreEqual(node5, dequeue());
         }
 
-        public static void TestMoreComplicatedOrderedQueue(Action<Node> enqueue, Func<Node> dequeue)
+        public static void TestMoreComplicatedOrderedQueue(Action<Node<int>> enqueue, Func<Node<int>> dequeue)
         {
-            Node node11 = new Node(1);
-            Node node12 = new Node(1);
-            Node node13 = new Node(1);
-            Node node14 = new Node(1);
-            Node node15 = new Node(1);
-            Node node21 = new Node(2);
-            Node node22 = new Node(2);
-            Node node23 = new Node(2);
-            Node node24 = new Node(2);
-            Node node25 = new Node(2);
-            Node node31 = new Node(3);
-            Node node32 = new Node(3);
-            Node node33 = new Node(3);
-            Node node34 = new Node(3);
-            Node node35 = new Node(3);
-            Node node41 = new Node(4);
-            Node node42 = new Node(4);
-            Node node43 = new Node(4);
-            Node node44 = new Node(4);
-            Node node45 = new Node(4);
-            Node node51 = new Node(5);
-            Node node52 = new Node(5);
-            Node node53 = new Node(5);
-            Node node54 = new Node(5);
-            Node node55 = new Node(5);
+            Node<int> node11 = new Node<int>(1);
+            Node<int> node12 = new Node<int>(1);
+            Node<int> node13 = new Node<int>(1);
+            Node<int> node14 = new Node<int>(1);
+            Node<int> node15 = new Node<int>(1);
+            Node<int> node21 = new Node<int>(2);
+            Node<int> node22 = new Node<int>(2);
+            Node<int> node23 = new Node<int>(2);
+            Node<int> node24 = new Node<int>(2);
+            Node<int> node25 = new Node<int>(2);
+            Node<int> node31 = new Node<int>(3);
+            Node<int> node32 = new Node<int>(3);
+            Node<int> node33 = new Node<int>(3);
+            Node<int> node34 = new Node<int>(3);
+            Node<int> node35 = new Node<int>(3);
+            Node<int> node41 = new Node<int>(4);
+            Node<int> node42 = new Node<int>(4);
+            Node<int> node43 = new Node<int>(4);
+            Node<int> node44 = new Node<int>(4);
+            Node<int> node45 = new Node<int>(4);
+            Node<int> node51 = new Node<int>(5);
+            Node<int> node52 = new Node<int>(5);
+            Node<int> node53 = new Node<int>(5);
+            Node<int> node54 = new Node<int>(5);
+            Node<int> node55 = new Node<int>(5);
 
             enqueue(node31);
             enqueue(node51);

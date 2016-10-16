@@ -10,7 +10,7 @@ namespace Priority_Queue_Example
     public static class FastPriorityQueueExample
     {
         //The class to be enqueued.
-        public class User : FastPriorityQueueNode
+        public class User : FastPriorityQueueNode<int>
         {
             public string Name { get; private set; }
             public User(string name)
@@ -24,7 +24,7 @@ namespace Priority_Queue_Example
         public static void RunExample()
         {
             //First, we create the priority queue.  We'll specify a max of 10 users in the queue
-            FastPriorityQueue<User> priorityQueue = new FastPriorityQueue<User>(MAX_USERS_IN_QUEUE);
+            FastPriorityQueue<User,int> priorityQueue = new FastPriorityQueue<User,int>(MAX_USERS_IN_QUEUE);
 
             //Next, we'll create 5 users to enqueue
             User user1 = new User("1 - Jason");

@@ -6,11 +6,11 @@ using Priority_Queue;
 namespace Priority_Queue_Tests
 {
     [TestFixture]
-    public class SimplePriorityQueueTests : SharedPriorityQueueTests<SimplePriorityQueue<Node>>
+    public class SimplePriorityQueueTests : SharedPriorityQueueTests<SimplePriorityQueue<Node<int>,int>>
     {
-        protected override SimplePriorityQueue<Node> CreateQueue()
+        protected override SimplePriorityQueue<Node<int>,int> CreateQueue()
         {
-            return new SimplePriorityQueue<Node>();
+            return new SimplePriorityQueue<Node<int>,int>();
         }
 
         protected override bool IsValidQueue()
@@ -35,13 +35,13 @@ namespace Priority_Queue_Tests
         {
             for(int i = 0; i < 1000; i++)
             {
-                Enqueue(new Node(i));
+                Enqueue(new Node<int>(i));
                 Assert.AreEqual(i + 1, Queue.Count);
             }
 
             for(int i = 0; i < 1000; i++)
             {
-                Node node = Dequeue();
+                var node = Dequeue();
                 Assert.AreEqual(i, node.Priority);
             }
         }
@@ -55,8 +55,8 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestDequeueThrowsOnEmptyQueue2()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
+            Node<int> node1 = new Node<int>(1);
+            Node<int> node2 = new Node<int>(2);
 
             Enqueue(node1);
             Enqueue(node2);
@@ -76,8 +76,8 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestFirstThrowsOnEmptyQueue2()
         {
-            Node node1 = new Node(1);
-            Node node2 = new Node(2);
+            Node<int> node1 = new Node<int>(1);
+            Node<int> node2 = new Node<int>(2);
 
             Enqueue(node1);
             Enqueue(node2);
@@ -91,7 +91,7 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestEnqueueRemovesOneCopyOfItem()
         {
-            Node node = new Node(1);
+            Node<int> node = new Node<int>(1);
 
             Enqueue(node);
             Enqueue(node);
@@ -113,8 +113,8 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestEnqueueRemovesFirstCopyOfItem()
         {
-            Node node11 = new Node(1);
-            Node node12 = new Node(1);
+            Node<int> node11 = new Node<int>(1);
+            Node<int> node12 = new Node<int>(1);
 
             Enqueue(node11);
             Enqueue(node12);
@@ -132,10 +132,10 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestMultipleCopiesOfSameItem()
         {
-            Node node1 = new Node(1);
-            Node node21 = new Node(2);
-            Node node22 = new Node(2);
-            Node node3 = new Node(3);
+            Node<int> node1 = new Node<int>(1);
+            Node<int> node21 = new Node<int>(2);
+            Node<int> node22 = new Node<int>(2);
+            Node<int> node3 = new Node<int>(3);
 
             Enqueue(node1);
             Enqueue(node21);
@@ -163,7 +163,7 @@ namespace Priority_Queue_Tests
             Assert.AreEqual(1, Queue.Count);
             Assert.AreEqual(null, Queue.First);
             Assert.IsTrue(Queue.Contains(null));
-            Assert.IsFalse(Queue.Contains(new Node(1)));
+            Assert.IsFalse(Queue.Contains(new Node<int>(1)));
 
             Assert.AreEqual(null, Dequeue());
 
@@ -174,7 +174,7 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestRemoveThrowsOnNodeNotInQueue()
         {
-            Node node = new Node(1);
+            Node<int> node = new Node<int>(1);
 
             Assert.Throws<InvalidOperationException>(() => Queue.Remove(node));
         }
@@ -182,7 +182,7 @@ namespace Priority_Queue_Tests
         [Test]
         public void TestUpdatePriorityThrowsOnNodeNotInQueue()
         {
-            Node node = new Node(1);
+            Node<int> node = new Node<int>(1);
 
             Assert.Throws<InvalidOperationException>(() => Queue.UpdatePriority(node, 2));
         }
