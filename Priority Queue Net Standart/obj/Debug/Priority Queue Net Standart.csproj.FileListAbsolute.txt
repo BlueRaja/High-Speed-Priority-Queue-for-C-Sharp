@@ -1,5 +1,0 @@
-C:\Work\Forks\High-Speed-Priority-Queue-for-C-Sharp\Priority Queue Net Standart\bin\Debug\Priority Queue Net Standart.dll
-C:\Work\Forks\High-Speed-Priority-Queue-for-C-Sharp\Priority Queue Net Standart\bin\Debug\Priority Queue Net Standart.pdb
-C:\Work\Forks\High-Speed-Priority-Queue-for-C-Sharp\Priority Queue Net Standart\obj\Debug\Priority Queue Net Standart.csprojResolveAssemblyReference.cache
-C:\Work\Forks\High-Speed-Priority-Queue-for-C-Sharp\Priority Queue Net Standart\obj\Debug\Priority Queue Net Standart.dll
-C:\Work\Forks\High-Speed-Priority-Queue-for-C-Sharp\Priority Queue Net Standart\obj\Debug\Priority Queue Net Standart.pdb

@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Priority Queue Example", "P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Priority Queue UWP", "Priority Queue UWP\Priority Queue UWP.csproj", "{D67E8454-9163-4767-A5A7-7CE5CF664F05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Priority Queue Net Standart", "Priority Queue Net Standart\Priority Queue Net Standart.csproj", "{655DF5CE-486A-4310-9B51-DA843A55960F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Priority Queue Net Standart", "Priority Queue\Priority Queue Net Standart.csproj", "{655DF5CE-486A-4310-9B51-DA843A55960F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
