@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>OptimizedPriorityQueue</id>
-    <version>3.0.0</version>
+    <version>4.0.0</version>
     <title>Highly Optimized Priority Queue</title>
     <authors>BlueRaja</authors>
     <owners>BlueRaja</owners>
@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A highly optimized Priority Queue for path-finding and related applications</description>
-    <releaseNotes>3.0 release!  Includes speed improvements, UWP support, and missing XML documentation</releaseNotes>
+    <releaseNotes>4.0 release!  Added generic priority-types for SimplePriorityQueue</releaseNotes>
     <copyright>Copyright 2016</copyright>
     <tags>C# priority-queue pathfinding optimized</tags>
   </metadata>

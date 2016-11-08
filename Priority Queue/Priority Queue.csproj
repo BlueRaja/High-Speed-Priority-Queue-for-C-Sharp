@@ -67,6 +67,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GenericPriorityQueue.cs" />
+    <Compile Include="GenericPriorityQueueNode.cs" />
     <Compile Include="IFixedSizePriorityQueue.cs" />
     <Compile Include="StablePriorityQueue.cs" />
     <Compile Include="FastPriorityQueue.cs" />

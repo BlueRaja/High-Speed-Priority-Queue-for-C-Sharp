@@ -11,7 +11,7 @@ namespace Priority_Queue
     /// See https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp/wiki/Getting-Started for more information
     /// </summary>
     /// <typeparam name="T">The values in the queue.  Must extend the StablePriorityQueueNode class</typeparam>
-    public sealed class StablePriorityQueue<T> : IFixedSizePriorityQueue<T>
+    public sealed class StablePriorityQueue<T> : IFixedSizePriorityQueue<T, float>
         where T : StablePriorityQueueNode
     {
         private int _numNodes;

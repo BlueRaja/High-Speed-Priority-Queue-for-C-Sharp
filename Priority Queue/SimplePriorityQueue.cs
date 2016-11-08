@@ -8,33 +8,35 @@ namespace Priority_Queue
     /// A simplified priority queue implementation.  Is stable, auto-resizes, and thread-safe, at the cost of being slightly slower than
     /// FastPriorityQueue
     /// </summary>
-    /// <typeparam name="T">The type to enqueue</typeparam>
-    public sealed class SimplePriorityQueue<T> : IPriorityQueue<T>
+    /// <typeparam name="TItem">The type to enqueue</typeparam>
+    /// <typeparam name="TPriority">The priority-type to use for nodes.  Must extend IComparable&lt;TPriority&gt;</typeparam>
+    public class SimplePriorityQueue<TItem, TPriority> : IPriorityQueue<TItem, TPriority>
+        where TPriority : IComparable<TPriority>
     {
-        private class SimpleNode : StablePriorityQueueNode
+        private class SimpleNode : GenericPriorityQueueNode<TPriority>
         {
-            public T Data { get; private set; }
+            public TItem Data { get; private set; }
 
-            public SimpleNode(T data)
+            public SimpleNode(TItem data)
             {
                 Data = data;
             }
         }
 
         private const int INITIAL_QUEUE_SIZE = 10;
-        private readonly StablePriorityQueue<SimpleNode> _queue;
+        private readonly GenericPriorityQueue<SimpleNode, TPriority> _queue;
 
         public SimplePriorityQueue()
         {
-            _queue = new StablePriorityQueue<SimpleNode>(INITIAL_QUEUE_SIZE);
+            _queue = new GenericPriorityQueue<SimpleNode, TPriority>(INITIAL_QUEUE_SIZE);
         }
 
         /// <summary>
         /// Given an item of type T, returns the exist SimpleNode in the queue
         /// </summary>
-        private SimpleNode GetExistingNode(T item)
+        private SimpleNode GetExistingNode(TItem item)
         {
-            var comparer = EqualityComparer<T>.Default;
+            var comparer = EqualityComparer<TItem>.Default;
             foreach(var node in _queue)
             {
                 if(comparer.Equals(node.Data, item))
@@ -66,7 +68,7 @@ namespace Priority_Queue
         /// Throws an exception when the queue is empty.
         /// O(1)
         /// </summary>
-        public T First
+        public TItem First
         {
             get
             {
@@ -78,7 +80,7 @@ namespace Priority_Queue
                     }
 
                     SimpleNode first = _queue.First;
-                    return (first != null ? first.Data : default(T));
+                    return (first != null ? first.Data : default(TItem));
                 }
             }
         }
@@ -99,11 +101,11 @@ namespace Priority_Queue
         /// Returns whether the given item is in the queue.
         /// O(n)
         /// </summary>
-        public bool Contains(T item)
+        public bool Contains(TItem item)
         {
             lock(_queue)
             {
-                var comparer = EqualityComparer<T>.Default;
+                var comparer = EqualityComparer<TItem>.Default;
                 foreach (var node in _queue)
                 {
                     if (comparer.Equals(node.Data, item))
@@ -120,7 +122,7 @@ namespace Priority_Queue
         /// If queue is empty, throws an exception
         /// O(log n)
         /// </summary>
-        public T Dequeue()
+        public TItem Dequeue()
         {
             lock(_queue)
             {
@@ -140,7 +142,7 @@ namespace Priority_Queue
         /// Duplicates are allowed.
         /// O(log n)
         /// </summary>
-        public void Enqueue(T item, float priority)
+        public void Enqueue(TItem item, TPriority priority)
         {
             lock(_queue)
             {
@@ -159,7 +161,7 @@ namespace Priority_Queue
         /// If multiple copies of the item are enqueued, only the first one is removed. 
         /// O(n)
         /// </summary>
-        public void Remove(T item)
+        public void Remove(TItem item)
         {
             lock(_queue)
             {
@@ -182,7 +184,7 @@ namespace Priority_Queue
         /// to update all of them, please wrap your items in a wrapper class so they can be distinguished).
         /// O(n)
         /// </summary>
-        public void UpdatePriority(T item, float priority)
+        public void UpdatePriority(TItem item, TPriority priority)
         {
             lock (_queue)
             {
@@ -198,9 +200,9 @@ namespace Priority_Queue
             }
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public IEnumerator<TItem> GetEnumerator()
         {
-            List<T> queueData = new List<T>();
+            List<TItem> queueData = new List<TItem>();
             lock (_queue)
             {
                 //Copy to a separate list because we don't want to 'yield return' inside a lock
@@ -226,4 +228,12 @@ namespace Priority_Queue
             }
         }
     }
+
+    /// <summary>
+    /// A simplified priority queue implementation.  Is stable, auto-resizes, and thread-safe, at the cost of being slightly slower than
+    /// FastPriorityQueue
+    /// This class is kept here for backwards compatibility.  It's recommended you use Simple
+    /// </summary>
+    /// <typeparam name="TItem">The type to enqueue</typeparam>
+    public class SimplePriorityQueue<TItem> : SimplePriorityQueue<TItem, float> { }
 }

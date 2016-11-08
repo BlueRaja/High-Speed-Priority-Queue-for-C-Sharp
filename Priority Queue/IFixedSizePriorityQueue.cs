@@ -7,7 +7,8 @@ namespace Priority_Queue
     /// <summary>
     /// A helper-interface only needed to make writing unit tests a bit easier (hence the 'internal' access modifier)
     /// </summary>
-    internal interface IFixedSizePriorityQueue<TItem> : IPriorityQueue<TItem>
+    internal interface IFixedSizePriorityQueue<TItem, in TPriority> : IPriorityQueue<TItem, TPriority>
+        where TPriority : IComparable<TPriority>
     {
         /// <summary>
         /// Resize the queue so it can accept more nodes.  All currently enqueued nodes are remain.

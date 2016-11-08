@@ -6,31 +6,34 @@ using System.Runtime.CompilerServices;
 namespace Priority_Queue
 {
     /// <summary>
-    /// An implementation of a min-Priority Queue using a heap.  Has O(1) .Contains()!
-    /// See https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp/wiki/Getting-Started for more information
+    /// A copy of StablePriorityQueue which also has generic priority-type
     /// </summary>
-    /// <typeparam name="T">The values in the queue.  Must extend the FastPriorityQueueNode class</typeparam>
-    public sealed class FastPriorityQueue<T> : IFixedSizePriorityQueue<T, float>
-        where T : FastPriorityQueueNode
+    /// <typeparam name="TItem">The values in the queue.  Must extend the GenericPriorityQueue class</typeparam>
+    /// <typeparam name="TPriority">The priority-type.  Must extend IComparable&lt;TPriority&gt;</typeparam>
+    public sealed class GenericPriorityQueue<TItem, TPriority> : IFixedSizePriorityQueue<TItem, TPriority>
+        where TItem : GenericPriorityQueueNode<TPriority>
+        where TPriority : IComparable<TPriority>
     {
         private int _numNodes;
-        private T[] _nodes;
+        private TItem[] _nodes;
+        private long _numNodesEverEnqueued;
 
         /// <summary>
         /// Instantiate a new Priority Queue
         /// </summary>
         /// <param name="maxNodes">The max nodes ever allowed to be enqueued (going over this will cause undefined behavior)</param>
-        public FastPriorityQueue(int maxNodes)
+        public GenericPriorityQueue(int maxNodes)
         {
-            #if DEBUG
+#if DEBUG
             if (maxNodes <= 0)
             {
                 throw new InvalidOperationException("New queue size cannot be smaller than 1");
             }
-            #endif
+#endif
 
             _numNodes = 0;
-            _nodes = new T[maxNodes + 1];
+            _nodes = new TItem[maxNodes + 1];
+            _numNodesEverEnqueued = 0;
         }
 
         /// <summary>
@@ -61,9 +64,9 @@ namespace Priority_Queue
         /// Removes every node from the queue.
         /// O(n) (So, don't do this often!)
         /// </summary>
-        #if NET_VERSION_4_5
+#if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        #endif
+#endif
         public void Clear()
         {
             Array.Clear(_nodes, 1, _numNodes);
@@ -73,12 +76,12 @@ namespace Priority_Queue
         /// <summary>
         /// Returns (in O(1)!) whether the given node is in the queue.  O(1)
         /// </summary>
-        #if NET_VERSION_4_5
+#if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        #endif
-        public bool Contains(T node)
+#endif
+        public bool Contains(TItem node)
         {
-            #if DEBUG
+#if DEBUG
             if(node == null)
             {
                 throw new ArgumentNullException("node");
@@ -87,7 +90,7 @@ namespace Priority_Queue
             {
                 throw new InvalidOperationException("node.QueueIndex has been corrupted. Did you change it manually? Or add this node to another queue?");
             }
-            #endif
+#endif
 
             return (_nodes[node.QueueIndex] == node);
         }
@@ -98,12 +101,12 @@ namespace Priority_Queue
         /// If the node is already enqueued, the result is undefined.
         /// O(log n)
         /// </summary>
-        #if NET_VERSION_4_5
+#if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        #endif
-        public void Enqueue(T node, float priority)
+#endif
+        public void Enqueue(TItem node, TPriority priority)
         {
-            #if DEBUG
+#if DEBUG
             if(node == null)
             {
                 throw new ArgumentNullException("node");
@@ -116,19 +119,20 @@ namespace Priority_Queue
             {
                 throw new InvalidOperationException("Node is already enqueued: " + node);
             }
-            #endif
+#endif
 
             node.Priority = priority;
             _numNodes++;
             _nodes[_numNodes] = node;
             node.QueueIndex = _numNodes;
+            node.InsertionIndex = _numNodesEverEnqueued++;
             CascadeUp(_nodes[_numNodes]);
         }
 
-        #if NET_VERSION_4_5
+#if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        #endif
-        private void Swap(T node1, T node2)
+#endif
+        private void Swap(TItem node1, TItem node2)
         {
             //Swap the nodes
             _nodes[node1.QueueIndex] = node2;
@@ -141,13 +145,13 @@ namespace Priority_Queue
         }
 
         //Performance appears to be slightly better when this is NOT inlined o_O
-        private void CascadeUp(T node)
+        private void CascadeUp(TItem node)
         {
             //aka Heapify-up
             int parent = node.QueueIndex / 2;
             while(parent >= 1)
             {
-                T parentNode = _nodes[parent];
+                TItem parentNode = _nodes[parent];
                 if(HasHigherPriority(parentNode, node))
                     break;
 
@@ -158,13 +162,13 @@ namespace Priority_Queue
             }
         }
 
-        #if NET_VERSION_4_5
+#if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        #endif
-        private void CascadeDown(T node)
+#endif
+        private void CascadeDown(TItem node)
         {
             //aka Heapify-down
-            T newParent;
+            TItem newParent;
             int finalQueueIndex = node.QueueIndex;
             while(true)
             {
@@ -180,7 +184,7 @@ namespace Priority_Queue
                     break;
                 }
 
-                T childLeft = _nodes[childLeftIndex];
+                TItem childLeft = _nodes[childLeftIndex];
                 if(HasHigherPriority(childLeft, newParent))
                 {
                     newParent = childLeft;
@@ -190,7 +194,7 @@ namespace Priority_Queue
                 int childRightIndex = childLeftIndex + 1;
                 if(childRightIndex <= _numNodes)
                 {
-                    T childRight = _nodes[childRightIndex];
+                    TItem childRight = _nodes[childRightIndex];
                     if(HasHigherPriority(childRight, newParent))
                     {
                         newParent = childRight;
@@ -222,22 +226,23 @@ namespace Priority_Queue
         /// Returns true if 'higher' has higher priority than 'lower', false otherwise.
         /// Note that calling HasHigherPriority(node, node) (ie. both arguments the same node) will return false
         /// </summary>
-        #if NET_VERSION_4_5
+#if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        #endif
-        private bool HasHigherPriority(T higher, T lower)
+#endif
+        private bool HasHigherPriority(TItem higher, TItem lower)
         {
-            return (higher.Priority < lower.Priority);
+            var cmp = higher.Priority.CompareTo(lower.Priority);
+            return (cmp < 0 || (cmp == 0 && higher.InsertionIndex < lower.InsertionIndex));
         }
 
         /// <summary>
-        /// Removes the head of the queue and returns it.
+        /// Removes the head of the queue (node with minimum priority; ties are broken by order of insertion), and returns it.
         /// If queue is empty, result is undefined
         /// O(log n)
         /// </summary>
-        public T Dequeue()
+        public TItem Dequeue()
         {
-            #if DEBUG
+#if DEBUG
             if(_numNodes <= 0)
             {
                 throw new InvalidOperationException("Cannot call Dequeue() on an empty queue");
@@ -248,9 +253,9 @@ namespace Priority_Queue
                 throw new InvalidOperationException("Queue has been corrupted (Did you update a node priority manually instead of calling UpdatePriority()?" +
                                                     "Or add the same node to two different queues?)");
             }
-            #endif
+#endif
 
-            T returnMe = _nodes[1];
+            TItem returnMe = _nodes[1];
             Remove(returnMe);
             return returnMe;
         }
@@ -262,7 +267,7 @@ namespace Priority_Queue
         /// </summary>
         public void Resize(int maxNodes)
         {
-            #if DEBUG
+#if DEBUG
             if (maxNodes <= 0)
             {
                 throw new InvalidOperationException("Queue size cannot be smaller than 1");
@@ -272,11 +277,11 @@ namespace Priority_Queue
             {
                 throw new InvalidOperationException("Called Resize(" + maxNodes + "), but current queue contains " + _numNodes + " nodes");
             }
-            #endif
+#endif
 
-            T[] newArray = new T[maxNodes + 1];
+            TItem[] newArray = new TItem[maxNodes + 1];
             int highestIndexToCopy = Math.Min(maxNodes, _numNodes);
-            for (int i = 1; i <= highestIndexToCopy; i++)
+            for(int i = 1; i <= highestIndexToCopy; i++)
             {
                 newArray[i] = _nodes[i];
             }
@@ -288,16 +293,16 @@ namespace Priority_Queue
         /// If the queue is empty, behavior is undefined.
         /// O(1)
         /// </summary>
-        public T First
+        public TItem First
         {
             get
             {
-                #if DEBUG
+#if DEBUG
                 if(_numNodes <= 0)
                 {
                     throw new InvalidOperationException("Cannot call .First on an empty queue");
                 }
-                #endif
+#endif
 
                 return _nodes[1];
             }
@@ -309,12 +314,12 @@ namespace Priority_Queue
         /// Calling this method on a node not in the queue results in undefined behavior
         /// O(log n)
         /// </summary>
-        #if NET_VERSION_4_5
+#if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        #endif
-        public void UpdatePriority(T node, float priority)
+#endif
+        public void UpdatePriority(TItem node, TPriority priority)
         {
-            #if DEBUG
+#if DEBUG
             if(node == null)
             {
                 throw new ArgumentNullException("node");
@@ -323,17 +328,17 @@ namespace Priority_Queue
             {
                 throw new InvalidOperationException("Cannot call UpdatePriority() on a node which is not enqueued: " + node);
             }
-            #endif
+#endif
 
             node.Priority = priority;
             OnNodeUpdated(node);
         }
 
-        private void OnNodeUpdated(T node)
+        private void OnNodeUpdated(TItem node)
         {
             //Bubble the updated node up or down as appropriate
             int parentIndex = node.QueueIndex / 2;
-            T parentNode = _nodes[parentIndex];
+            TItem parentNode = _nodes[parentIndex];
 
             if(parentIndex > 0 && HasHigherPriority(node, parentNode))
             {
@@ -351,9 +356,9 @@ namespace Priority_Queue
         /// If the node is not in the queue, the result is undefined.  If unsure, check Contains() first
         /// O(log n)
         /// </summary>
-        public void Remove(T node)
+        public void Remove(TItem node)
         {
-            #if DEBUG
+#if DEBUG
             if(node == null)
             {
                 throw new ArgumentNullException("node");
@@ -362,7 +367,7 @@ namespace Priority_Queue
             {
                 throw new InvalidOperationException("Cannot call Remove() on a node which is not enqueued: " + node);
             }
-            #endif
+#endif
 
             //If the node is already the last node, we can remove it immediately
             if(node.QueueIndex == _numNodes)
@@ -373,7 +378,7 @@ namespace Priority_Queue
             }
 
             //Swap the node with the last node
-            T formerLastNode = _nodes[_numNodes];
+            TItem formerLastNode = _nodes[_numNodes];
             Swap(node, formerLastNode);
             _nodes[_numNodes] = null;
             _numNodes--;
@@ -382,7 +387,7 @@ namespace Priority_Queue
             OnNodeUpdated(formerLastNode);
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public IEnumerator<TItem> GetEnumerator()
         {
             for(int i = 1; i <= _numNodes; i++)
                 yield return _nodes[i];

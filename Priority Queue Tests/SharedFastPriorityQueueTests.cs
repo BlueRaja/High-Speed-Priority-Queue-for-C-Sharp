@@ -7,7 +7,7 @@ namespace Priority_Queue_Tests
 {
     [TestFixture]
     internal abstract class SharedFastPriorityQueueTests<TQueue> : SharedPriorityQueueTests<TQueue>
-        where TQueue : IFixedSizePriorityQueue<Node>
+        where TQueue : IFixedSizePriorityQueue<Node, float>
     {
         [Test]
         public void TestMaxNodes()

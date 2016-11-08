@@ -17,7 +17,7 @@ namespace Priority_Queue_Tests
         }
     }
 
-    public abstract class SharedPriorityQueueTests<TQueue> where TQueue : IPriorityQueue<Node>
+    public abstract class SharedPriorityQueueTests<TQueue> where TQueue : IPriorityQueue<Node, float>
     {
         protected TQueue Queue { get; set; }
 

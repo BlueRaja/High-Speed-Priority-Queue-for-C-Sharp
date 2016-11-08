@@ -44,6 +44,12 @@
     <Compile Include="..\Priority Queue\FastPriorityQueueNode.cs">
       <Link>FastPriorityQueueNode.cs</Link>
     </Compile>
+    <Compile Include="..\Priority Queue\GenericPriorityQueue.cs">
+      <Link>GenericPriorityQueue.cs</Link>
+    </Compile>
+    <Compile Include="..\Priority Queue\GenericPriorityQueueNode.cs">
+      <Link>GenericPriorityQueueNode.cs</Link>
+    </Compile>
     <Compile Include="..\Priority Queue\IFixedSizePriorityQueue.cs">
       <Link>IFixedSizePriorityQueue.cs</Link>
     </Compile>
