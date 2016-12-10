@@ -10,3 +10,4 @@
 *.suo
 /packages/
 /Priority Queue/*.nupkg
+.vs/
