@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Priority Queue Example", "P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Priority Queue UWP", "Priority Queue UWP\Priority Queue UWP.csproj", "{D67E8454-9163-4767-A5A7-7CE5CF664F05}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Priority Queue PCL", "Priority Queue PCL\Priority Queue PCL.csproj", "{BB31B500-D012-40E1-AC35-0C74C09B269F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,14 @@ Global
 		{D67E8454-9163-4767-A5A7-7CE5CF664F05}.Release 4.5|Any CPU.Build.0 = Release|Any CPU
 		{D67E8454-9163-4767-A5A7-7CE5CF664F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D67E8454-9163-4767-A5A7-7CE5CF664F05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB31B500-D012-40E1-AC35-0C74C09B269F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB31B500-D012-40E1-AC35-0C74C09B269F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB31B500-D012-40E1-AC35-0C74C09B269F}.Release 2.0|Any CPU.ActiveCfg = Release|Any CPU
+		{BB31B500-D012-40E1-AC35-0C74C09B269F}.Release 2.0|Any CPU.Build.0 = Release|Any CPU
+		{BB31B500-D012-40E1-AC35-0C74C09B269F}.Release 4.5|Any CPU.ActiveCfg = Release|Any CPU
+		{BB31B500-D012-40E1-AC35-0C74C09B269F}.Release 4.5|Any CPU.Build.0 = Release|Any CPU
+		{BB31B500-D012-40E1-AC35-0C74C09B269F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB31B500-D012-40E1-AC35-0C74C09B269F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

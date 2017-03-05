@@ -6,7 +6,10 @@
 /Priority Queue Example/obj
 /Priority Queue UWP/bin
 /Priority Queue UWP/obj
+/Priority Queue PCL/bin
+/Priority Queue PCL/obj
 *.user
 *.suo
 /packages/
 /Priority Queue/*.nupkg
+project.lock.json
