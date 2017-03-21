@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>OptimizedPriorityQueue</id>
-    <version>4.0.3</version>
+    <version>4.0.4</version>
     <title>Highly Optimized Priority Queue</title>
     <authors>BlueRaja</authors>
     <owners>BlueRaja</owners>
@@ -23,12 +23,12 @@
     <file src="bin\Release\net45\Priority Queue.pdb" target="lib\net45\Priority Queue.pdb" />
     <file src="bin\Release\net45\Priority Queue.xml" target="lib\net45\Priority Queue.xml" />
     
-    <file src="..\Priority Queue UWP\bin\Release\netcore45\Priority Queue UWP.dll" target="lib\netstandard1.0\Priority Queue.dll" />
-    <file src="..\Priority Queue UWP\bin\Release\netcore45\Priority Queue UWP.pdb" target="lib\netstandard1.0\Priority Queue.pdb" />
-    <file src="..\Priority Queue UWP\bin\Release\netcore45\Priority Queue UWP.xml" target="lib\netstandard1.0\Priority Queue.xml" />
+    <file src="..\Priority Queue UWP\bin\Release\netcore45\Priority Queue.dll" target="lib\netstandard1.0\Priority Queue.dll" />
+    <file src="..\Priority Queue UWP\bin\Release\netcore45\Priority Queue.pdb" target="lib\netstandard1.0\Priority Queue.pdb" />
+    <file src="..\Priority Queue UWP\bin\Release\netcore45\Priority Queue.xml" target="lib\netstandard1.0\Priority Queue.xml" />
     
-    <file src="..\Priority Queue PCL\bin\Release\Priority Queue PCL.dll" target="lib\portable-net40+sl5+win8+wpa81+wp8\Priority Queue.dll" />
-    <file src="..\Priority Queue PCL\bin\Release\Priority Queue PCL.pdb" target="lib\portable-net40+sl5+win8+wpa81+wp8\Priority Queue.pdb" />
-    <file src="..\Priority Queue PCL\bin\Release\Priority Queue PCL.xml" target="lib\portable-net40+sl5+win8+wpa81+wp8\Priority Queue.xml" />
+    <file src="..\Priority Queue PCL\bin\Release\Priority Queue.dll" target="lib\portable-net40+sl5+win8+wpa81+wp8\Priority Queue.dll" />
+    <file src="..\Priority Queue PCL\bin\Release\Priority Queue.pdb" target="lib\portable-net40+sl5+win8+wpa81+wp8\Priority Queue.pdb" />
+    <file src="..\Priority Queue PCL\bin\Release\Priority Queue.xml" target="lib\portable-net40+sl5+win8+wpa81+wp8\Priority Queue.xml" />
   </files>
 </package>
