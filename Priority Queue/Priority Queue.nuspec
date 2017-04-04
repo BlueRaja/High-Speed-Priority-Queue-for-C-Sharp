@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A highly optimized Priority Queue for path-finding and related applications</description>
-    <releaseNotes>Corrected a small versioning mistake</releaseNotes>
+    <releaseNotes>Small bugfix for UWP</releaseNotes>
     <copyright>Copyright 2016</copyright>
     <tags>C# priority-queue pathfinding optimized</tags>
   </metadata>
