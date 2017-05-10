@@ -204,5 +204,21 @@ namespace Priority_Queue_Tests
             Assert.AreEqual(node2, Dequeue());
             Assert.AreEqual(node1, Dequeue());
         }
+
+        [Test]
+        public void TestGetPriority()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+
+            Enqueue(node1);
+            Enqueue(node2);
+            Enqueue(node3);
+
+            Assert.AreEqual(1, Queue.GetPriority(node1));
+            Assert.AreEqual(2, Queue.GetPriority(node2));
+            Assert.AreEqual(3, Queue.GetPriority(node3));
+        }
     }
 }

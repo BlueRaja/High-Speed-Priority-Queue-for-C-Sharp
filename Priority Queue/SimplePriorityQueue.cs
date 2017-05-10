@@ -215,6 +215,22 @@ namespace Priority_Queue
             }
         }
 
+        /// <summary>
+        /// Returns the priority of the given item.
+        /// Calling this method on a item not in the queue will throw an exception.
+        /// If the item is enqueued multiple times, only the priority of the first will be returned.
+        /// (If your requirements are complex enough that you need to enqueue the same item multiple times <i>and</i> be able
+        /// to query all their priorities, please wrap your items in a wrapper class so they can be distinguished).
+        /// O(n) (O(1) if item == queue.First)
+        /// </summary>
+        public TPriority GetPriority(TItem item)
+        {
+            lock (_queue)
+            {
+                return GetExistingNode(item).Priority;
+            }
+        }
+
         public IEnumerator<TItem> GetEnumerator()
         {
             List<TItem> queueData = new List<TItem>();
