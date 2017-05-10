@@ -26,9 +26,24 @@ namespace Priority_Queue
         private const int INITIAL_QUEUE_SIZE = 10;
         private readonly GenericPriorityQueue<SimpleNode, TPriority> _queue;
 
-        public SimplePriorityQueue()
+        /// <summary>
+        /// Instantiate a new Priority Queue
+        /// </summary>
+        public SimplePriorityQueue() : this(Comparer<TPriority>.Default) { }
+
+        /// <summary>
+        /// Instantiate a new Priority Queue
+        /// </summary>
+        /// <param name="comparer">The comparer used to compare TPriority values.  Defaults to Comparer&lt;TPriority&gt;.default</param>
+        public SimplePriorityQueue(IComparer<TPriority> comparer) : this(comparer.Compare) { }
+
+        /// <summary>
+        /// Instantiate a new Priority Queue
+        /// </summary>
+        /// <param name="comparer">The comparison function to use to compare TPriority values</param>
+        public SimplePriorityQueue(Comparison<TPriority> comparer)
         {
-            _queue = new GenericPriorityQueue<SimpleNode, TPriority>(INITIAL_QUEUE_SIZE);
+            _queue = new GenericPriorityQueue<SimpleNode, TPriority>(INITIAL_QUEUE_SIZE, comparer);
         }
 
         /// <summary>
@@ -232,8 +247,26 @@ namespace Priority_Queue
     /// <summary>
     /// A simplified priority queue implementation.  Is stable, auto-resizes, and thread-safe, at the cost of being slightly slower than
     /// FastPriorityQueue
-    /// This class is kept here for backwards compatibility.  It's recommended you use Simple
+    /// This class is kept here for backwards compatibility.  It's recommended you use SimplePriorityQueue&lt;TItem, TPriority&gt;
     /// </summary>
     /// <typeparam name="TItem">The type to enqueue</typeparam>
-    public class SimplePriorityQueue<TItem> : SimplePriorityQueue<TItem, float> { }
+    public class SimplePriorityQueue<TItem> : SimplePriorityQueue<TItem, float>
+    {
+        /// <summary>
+        /// Instantiate a new Priority Queue
+        /// </summary>
+        public SimplePriorityQueue() { }
+
+        /// <summary>
+        /// Instantiate a new Priority Queue
+        /// </summary>
+        /// <param name="comparer">The comparer used to compare priority values.  Defaults to Comparer&lt;float&gt;.default</param>
+        public SimplePriorityQueue(IComparer<float> comparer) : base(comparer) { }
+
+        /// <summary>
+        /// Instantiate a new Priority Queue
+        /// </summary>
+        /// <param name="comparer">The comparison function to use to compare priority values</param>
+        public SimplePriorityQueue(Comparison<float> comparer) : base(comparer) { }
+    }
 }

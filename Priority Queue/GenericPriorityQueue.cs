@@ -17,12 +17,27 @@ namespace Priority_Queue
         private int _numNodes;
         private TItem[] _nodes;
         private long _numNodesEverEnqueued;
+        private readonly Comparison<TPriority> _comparer;
 
         /// <summary>
         /// Instantiate a new Priority Queue
         /// </summary>
         /// <param name="maxNodes">The max nodes ever allowed to be enqueued (going over this will cause undefined behavior)</param>
-        public GenericPriorityQueue(int maxNodes)
+        public GenericPriorityQueue(int maxNodes) : this(maxNodes, Comparer<TPriority>.Default) { }
+
+        /// <summary>
+        /// Instantiate a new Priority Queue
+        /// </summary>
+        /// <param name="maxNodes">The max nodes ever allowed to be enqueued (going over this will cause undefined behavior)</param>
+        /// <param name="comparer">The comparer used to compare TPriority values.</param>
+        public GenericPriorityQueue(int maxNodes, IComparer<TPriority> comparer) : this(maxNodes, comparer.Compare) { }
+
+        /// <summary>
+        /// Instantiate a new Priority Queue
+        /// </summary>
+        /// <param name="maxNodes">The max nodes ever allowed to be enqueued (going over this will cause undefined behavior)</param>
+        /// <param name="comparer">The comparison function to use to compare TPriority values</param>
+        public GenericPriorityQueue(int maxNodes, Comparison<TPriority> comparer)
         {
 #if DEBUG
             if (maxNodes <= 0)
@@ -34,6 +49,7 @@ namespace Priority_Queue
             _numNodes = 0;
             _nodes = new TItem[maxNodes + 1];
             _numNodesEverEnqueued = 0;
+            _comparer = comparer;
         }
 
         /// <summary>
@@ -231,7 +247,7 @@ namespace Priority_Queue
 #endif
         private bool HasHigherPriority(TItem higher, TItem lower)
         {
-            var cmp = higher.Priority.CompareTo(lower.Priority);
+            var cmp = _comparer(higher.Priority, lower.Priority);
             return (cmp < 0 || (cmp == 0 && higher.InsertionIndex < lower.InsertionIndex));
         }
 

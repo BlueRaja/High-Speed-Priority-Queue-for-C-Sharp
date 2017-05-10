@@ -186,5 +186,23 @@ namespace Priority_Queue_Tests
 
             Assert.Throws<InvalidOperationException>(() => Queue.UpdatePriority(node, 2));
         }
+
+        [Test]
+        public void TestCanSortInOppositeDirection()
+        {
+            Queue = new SimplePriorityQueue<Node>((x, y) => y.CompareTo(x));
+
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+
+            Enqueue(node1);
+            Enqueue(node2);
+            Enqueue(node3);
+
+            Assert.AreEqual(node3, Dequeue());
+            Assert.AreEqual(node2, Dequeue());
+            Assert.AreEqual(node1, Dequeue());
+        }
     }
 }
