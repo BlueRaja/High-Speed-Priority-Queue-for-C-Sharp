@@ -59,7 +59,7 @@ namespace Priority_Queue
                     return node;
                 }
             }
-            throw new InvalidOperationException("Item cannot be found in queue: " + item);
+            return null;
         }
 
         /// <summary>
@@ -94,8 +94,7 @@ namespace Priority_Queue
                         throw new InvalidOperationException("Cannot call .First on an empty queue");
                     }
 
-                    SimpleNode first = _queue.First;
-                    return (first != null ? first.Data : default(TItem));
+                    return _queue.First.Data;
                 }
             }
         }
@@ -120,15 +119,7 @@ namespace Priority_Queue
         {
             lock(_queue)
             {
-                var comparer = EqualityComparer<TItem>.Default;
-                foreach (var node in _queue)
-                {
-                    if (comparer.Equals(node.Data, item))
-                    {
-                        return true;
-                    }
-                }
-                return false;
+                return GetExistingNode(item) != null;
             }
         }
 
@@ -152,6 +143,19 @@ namespace Priority_Queue
         }
 
         /// <summary>
+        /// Enqueue the item with the given priority, without calling lock(_queue)
+        /// </summary>
+        private void EnqueueNoLock(TItem item, TPriority priority)
+        {
+            SimpleNode node = new SimpleNode(item);
+            if(_queue.Count == _queue.MaxSize)
+            {
+                _queue.Resize(_queue.MaxSize * 2 + 1);
+            }
+            _queue.Enqueue(node, priority);
+        }
+
+        /// <summary>
         /// Enqueue a node to the priority queue.  Lower values are placed in front. Ties are broken by first-in-first-out.
         /// This queue automatically resizes itself, so there's no concern of the queue becoming 'full'.
         /// Duplicates are allowed.
@@ -161,12 +165,26 @@ namespace Priority_Queue
         {
             lock(_queue)
             {
-                SimpleNode node = new SimpleNode(item);
-                if(_queue.Count == _queue.MaxSize)
+                EnqueueNoLock(item, priority);
+            }
+        }
+
+        /// <summary>
+        /// Enqueue a node to the priority queue if it doesn't already exist.  Lower values are placed in front. Ties are broken by first-in-first-out.
+        /// This queue automatically resizes itself, so there's no concern of the queue becoming 'full'.
+        /// Returns true if the node was successfully enqueued; false if it already exists
+        /// O(n)
+        /// </summary>
+        public bool EnqueueWithoutDuplicates(TItem item, TPriority priority)
+        {
+            lock(_queue)
+            {
+                if(this.Contains(item))
                 {
-                    _queue.Resize(_queue.MaxSize*2 + 1);
+                    return false;
                 }
-                _queue.Enqueue(node, priority);
+                EnqueueNoLock(item, priority);
+                return true;
             }
         }
 
@@ -180,14 +198,12 @@ namespace Priority_Queue
         {
             lock(_queue)
             {
-                try
+                SimpleNode removeMe = GetExistingNode(item);
+                if (removeMe == null)
                 {
-                    _queue.Remove(GetExistingNode(item));
+                    throw new InvalidOperationException("Cannot call Remove() on a node which is not enqueued: " + item);
                 }
-                catch(InvalidOperationException ex)
-                {
-                    throw new InvalidOperationException("Cannot call Remove() on a node which is not enqueued: " + item, ex);
-                }
+                _queue.Remove(removeMe);
             }
         }
 
@@ -203,15 +219,12 @@ namespace Priority_Queue
         {
             lock (_queue)
             {
-                try
+                SimpleNode updateMe = GetExistingNode(item);
+                if (updateMe == null)
                 {
-                    SimpleNode updateMe = GetExistingNode(item);
-                    _queue.UpdatePriority(updateMe, priority);
+                    throw new InvalidOperationException("Cannot call UpdatePriority() on a node which is not enqueued: " + item);
                 }
-                catch(InvalidOperationException ex)
-                {
-                    throw new InvalidOperationException("Cannot call UpdatePriority() on a node which is not enqueued: " + item, ex);
-                }
+                _queue.UpdatePriority(updateMe, priority);
             }
         }
 
@@ -227,9 +240,125 @@ namespace Priority_Queue
         {
             lock (_queue)
             {
-                return GetExistingNode(item).Priority;
+                SimpleNode findMe = GetExistingNode(item);
+                if(findMe == null)
+                {
+                    throw new InvalidOperationException("Cannot call GetPriority() on a node which is not enqueued: " + item);
+                }
+                return findMe.Priority;
             }
         }
+
+        #region Try* methods for multithreading
+        /// Get the head of the queue, without removing it (use TryDequeue() for that).
+        /// Useful for multi-threading, where the queue may become empty between calls to Contains() and First
+        /// Returns true if successful, false otherwise
+        /// O(1)
+        public bool TryFirst(out TItem first)
+        {
+            lock(_queue)
+            {
+                if(_queue.Count <= 0)
+                {
+                    first = default(TItem);
+                    return false;
+                }
+
+                first = _queue.First.Data;
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Removes the head of the queue (node with minimum priority; ties are broken by order of insertion), and sets it to first.
+        /// Useful for multi-threading, where the queue may become empty between calls to Contains() and Dequeue()
+        /// Returns true if successful; false if queue was empty
+        /// O(log n)
+        /// </summary>
+        public bool TryDequeue(out TItem first)
+        {
+            lock(_queue)
+            {
+                if(_queue.Count <= 0)
+                {
+                    first = default(TItem);
+                    return false;
+                }
+
+                SimpleNode node = _queue.Dequeue();
+                first = node.Data;
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Attempts to remove an item from the queue.  The item does not need to be the head of the queue.  
+        /// Useful for multi-threading, where the queue may become empty between calls to Contains() and Remove()
+        /// Returns true if the item was successfully removed, false if it wasn't in the queue.
+        /// If multiple copies of the item are enqueued, only the first one is removed. 
+        /// O(n)
+        /// </summary>
+        public bool TryRemove(TItem item)
+        {
+            lock(_queue)
+            {
+                SimpleNode removeMe = GetExistingNode(item);
+                if(removeMe == null)
+                {
+                    return false;
+                }
+                _queue.Remove(removeMe);
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Call this method to change the priority of an item.
+        /// Useful for multi-threading, where the queue may become empty between calls to Contains() and UpdatePriority()
+        /// If the item is enqueued multiple times, only the first one will be updated.
+        /// (If your requirements are complex enough that you need to enqueue the same item multiple times <i>and</i> be able
+        /// to update all of them, please wrap your items in a wrapper class so they can be distinguished).
+        /// Returns true if the item priority was updated, false otherwise.
+        /// O(n)
+        /// </summary>
+        public bool TryUpdatePriority(TItem item, TPriority priority)
+        {
+            lock(_queue)
+            {
+                SimpleNode updateMe = GetExistingNode(item);
+                if(updateMe == null)
+                {
+                    return false;
+                }
+                _queue.UpdatePriority(updateMe, priority);
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Attempt to get the priority of the given item.
+        /// Useful for multi-threading, where the queue may become empty between calls to Contains() and GetPriority()
+        /// If the item is enqueued multiple times, only the priority of the first will be returned.
+        /// (If your requirements are complex enough that you need to enqueue the same item multiple times <i>and</i> be able
+        /// to query all their priorities, please wrap your items in a wrapper class so they can be distinguished).
+        /// Returns true if the item was found in the queue, false otherwise
+        /// O(n) (O(1) if item == queue.First)
+        /// </summary>
+        public bool TryGetPriority(TItem item, out TPriority priority)
+        {
+            lock(_queue)
+            {
+                SimpleNode findMe = GetExistingNode(item);
+                if(findMe == null)
+                {
+                    priority = default(TPriority);
+                    return false;
+                }
+                priority = findMe.Priority;
+                return true;
+            }
+        }
+        #endregion
 
         public IEnumerator<TItem> GetEnumerator()
         {

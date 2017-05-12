@@ -18,6 +18,12 @@ namespace Priority_Queue_Tests
             return Queue.IsValidQueue();
         }
 
+        protected void EnqueueWithoutDuplicates(Node node)
+        {
+            Queue.EnqueueWithoutDuplicates(node, node.Priority);
+            Assert.IsTrue(IsValidQueue());
+        }
+
         [Test]
         public void TestOrderedQueue()
         {
@@ -219,6 +225,223 @@ namespace Priority_Queue_Tests
             Assert.AreEqual(1, Queue.GetPriority(node1));
             Assert.AreEqual(2, Queue.GetPriority(node2));
             Assert.AreEqual(3, Queue.GetPriority(node3));
+        }
+
+        [Test]
+        public void TestEnqueueWithoutDuplicatesNormal()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+
+            EnqueueWithoutDuplicates(node1);
+            EnqueueWithoutDuplicates(node2);
+            EnqueueWithoutDuplicates(node3);
+
+            Assert.AreEqual(node1, Dequeue());
+            Assert.AreEqual(node2, Dequeue());
+            Assert.AreEqual(node3, Dequeue());
+        }
+
+        [Test]
+        public void TestEnqueueWithoutDuplicatesWithDuplicates()
+        {
+            Node node = new Node(1);
+
+            EnqueueWithoutDuplicates(node);
+            EnqueueWithoutDuplicates(node);
+            EnqueueWithoutDuplicates(node);
+
+            Assert.AreEqual(1, Queue.Count);
+            Assert.AreEqual(node, Dequeue());
+        }
+
+        [Test]
+        public void TestEnqueueWithoutDuplicatesWithDuplicatesMoreComplicated()
+        {
+            Node node11 = new Node(1);
+            Node node12 = new Node(1);
+            Node node2 = new Node(2);
+
+            EnqueueWithoutDuplicates(node11);
+            EnqueueWithoutDuplicates(node12);
+            EnqueueWithoutDuplicates(node12);
+            EnqueueWithoutDuplicates(node2);
+            EnqueueWithoutDuplicates(node11);
+
+            Assert.AreEqual(3, Queue.Count);
+            Assert.AreEqual(node11, Dequeue());
+            Assert.AreEqual(node12, Dequeue());
+            Assert.AreEqual(node2, Dequeue());
+        }
+
+        [Test]
+        public void TestTryFirstEmptyQueue()
+        {
+            Node first;
+            Assert.IsFalse(Queue.TryFirst(out first));
+            Assert.IsNull(first);
+        }
+
+        [Test]
+        public void TestTryFirstWithItems()
+        {
+            Node node = new Node(1);
+            Node first;
+
+            Enqueue(node);
+
+            Assert.IsTrue(Queue.TryFirst(out first));
+            Assert.AreEqual(node, first);
+            Assert.AreEqual(1, Queue.Count);
+        }
+
+        [Test]
+        public void TestTryDequeueEmptyQueue()
+        {
+            Node first;
+            Assert.IsFalse(Queue.TryDequeue(out first));
+            Assert.IsNull(first);
+        }
+
+        [Test]
+        public void TestTryDequeueWithItems()
+        {
+            Node node = new Node(1);
+            Node first;
+
+            Enqueue(node);
+
+            Assert.IsTrue(Queue.TryDequeue(out first));
+            Assert.AreEqual(node, first);
+            Assert.AreEqual(0, Queue.Count);
+        }
+
+        [Test]
+        public void TestTryRemoveEmptyQueue()
+        {
+            Node node = new Node(1);
+
+            Assert.IsFalse(Queue.TryRemove(node));
+        }
+
+        [Test]
+        public void TestTryRemoveItemInQueue()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+
+            Enqueue(node1);
+            Enqueue(node2);
+            Enqueue(node3);
+
+            Assert.IsTrue(Queue.Contains(node2));
+            Assert.IsTrue(Queue.TryRemove(node2));
+            Assert.IsFalse(Queue.Contains(node2));
+            Assert.IsFalse(Queue.TryRemove(node2));
+
+            Assert.IsTrue(Queue.Contains(node3));
+            Assert.IsTrue(Queue.TryRemove(node3));
+            Assert.IsFalse(Queue.Contains(node3));
+            Assert.IsFalse(Queue.TryRemove(node3));
+
+            Assert.IsTrue(Queue.Contains(node1));
+            Assert.IsTrue(Queue.TryRemove(node1));
+            Assert.IsFalse(Queue.Contains(node1));
+            Assert.IsFalse(Queue.TryRemove(node1));
+        }
+
+        [Test]
+        public void TestTryRemoveItemNotInQueue()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+
+            Enqueue(node1);
+            Enqueue(node2);
+
+            Assert.IsFalse(Queue.TryRemove(node3));
+        }
+
+        [Test]
+        public void TestTryUpdatePriorityEmptyQueue()
+        {
+            Node node = new Node(1);
+
+            Assert.IsFalse(Queue.TryUpdatePriority(node, 2));
+        }
+
+        [Test]
+        public void TestTryUpdatePriorityItemInQueue()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+
+            Enqueue(node1);
+            Enqueue(node2);
+            Enqueue(node3);
+
+            Assert.IsTrue(Queue.TryUpdatePriority(node2, 0));
+
+            Assert.AreEqual(3, Queue.Count);
+            Assert.AreEqual(node2, Dequeue());
+        }
+
+        [Test]
+        public void TestTryUpdatePriorityItemNotInQueue()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+
+            Enqueue(node1);
+            Enqueue(node2);
+
+            Assert.IsFalse(Queue.TryUpdatePriority(node3, 0));
+        }
+
+        [Test]
+        public void TestTryGetPriorityEmptyQueue()
+        {
+            Node node = new Node(1);
+            float priority;
+
+            Assert.IsFalse(Queue.TryGetPriority(node, out priority));
+            Assert.AreEqual(0, priority);
+        }
+
+        [Test]
+        public void TestTryGetPriorityItemInQueue()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            float priority;
+
+            Enqueue(node1);
+            Enqueue(node2);
+            Enqueue(node3);
+
+            Assert.IsTrue(Queue.TryGetPriority(node2, out priority));
+            Assert.AreEqual(2, priority);
+        }
+
+        [Test]
+        public void TestTryGetPriorityItemNotInQueue()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+            float priority;
+
+            Enqueue(node1);
+            Enqueue(node2);
+
+            Assert.IsFalse(Queue.TryGetPriority(node3, out priority));
+            Assert.AreEqual(0, priority);
         }
     }
 }
