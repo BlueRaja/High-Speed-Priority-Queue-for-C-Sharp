@@ -7,6 +7,7 @@ namespace Priority_Queue
     /// <summary>
     /// A simplified priority queue implementation.  Is stable, auto-resizes, and thread-safe, at the cost of being slightly slower than
     /// FastPriorityQueue
+    /// Methods tagged as O(1) or O(log n) are assuming there are no duplicates.  Duplicates may increase the algorithmic complexity.
     /// </summary>
     /// <typeparam name="TItem">The type to enqueue</typeparam>
     /// <typeparam name="TPriority">The priority-type to use for nodes.  Must extend IComparable&lt;TPriority&gt;</typeparam>
@@ -25,6 +26,8 @@ namespace Priority_Queue
 
         private const int INITIAL_QUEUE_SIZE = 10;
         private readonly GenericPriorityQueue<SimpleNode, TPriority> _queue;
+        private readonly Dictionary<TItem, IList<SimpleNode>> _itemToNodesCache;
+        private readonly IList<SimpleNode> _nullNodesCache;
 
         /// <summary>
         /// Instantiate a new Priority Queue
@@ -44,6 +47,8 @@ namespace Priority_Queue
         public SimplePriorityQueue(Comparison<TPriority> comparer)
         {
             _queue = new GenericPriorityQueue<SimpleNode, TPriority>(INITIAL_QUEUE_SIZE, comparer);
+            _itemToNodesCache = new Dictionary<TItem, IList<SimpleNode>>();
+            _nullNodesCache = new List<SimpleNode>();
         }
 
         /// <summary>
@@ -51,15 +56,57 @@ namespace Priority_Queue
         /// </summary>
         private SimpleNode GetExistingNode(TItem item)
         {
-            var comparer = EqualityComparer<TItem>.Default;
-            foreach(var node in _queue)
+            if (item == null)
             {
-                if(comparer.Equals(node.Data, item))
-                {
-                    return node;
-                }
+                return _nullNodesCache.Count > 0 ? _nullNodesCache[0] : null;
             }
-            return null;
+
+            if (!_itemToNodesCache.ContainsKey(item))
+            {
+                return null;
+            }
+            IList<SimpleNode> nodes = _itemToNodesCache[item];
+            return nodes.Count > 0 ? nodes[0] : null;
+        }
+
+        /// <summary>
+        /// Adds an item to the Node-cache to allow for many methods to be O(1) or O(log n)
+        /// </summary>
+        private void AddToNodeCache(SimpleNode node)
+        {
+            if (node.Data == null)
+            {
+                _nullNodesCache.Add(node);
+                return;
+            }
+
+            if (!_itemToNodesCache.ContainsKey(node.Data))
+            {
+                _itemToNodesCache[node.Data] = new List<SimpleNode>();
+            }
+            _itemToNodesCache[node.Data].Add(node);
+        }
+
+        /// <summary>
+        /// Removes an item to the Node-cache to allow for many methods to be O(1) or O(log n) (assuming no duplicates)
+        /// </summary>
+        private void RemoveFromNodeCache(SimpleNode node)
+        {
+            if (node.Data == null)
+            {
+                _nullNodesCache.Remove(node);
+                return;
+            }
+
+            if (!_itemToNodesCache.ContainsKey(node.Data))
+            {
+                return;
+            }
+            _itemToNodesCache[node.Data].Remove(node);
+            if (_itemToNodesCache[node.Data].Count == 0)
+            {
+                _itemToNodesCache.Remove(node.Data);
+            }
         }
 
         /// <summary>
@@ -108,12 +155,13 @@ namespace Priority_Queue
             lock(_queue)
             {
                 _queue.Clear();
+                _itemToNodesCache.Clear();
             }
         }
 
         /// <summary>
         /// Returns whether the given item is in the queue.
-        /// O(n)
+        /// O(1)
         /// </summary>
         public bool Contains(TItem item)
         {
@@ -138,6 +186,7 @@ namespace Priority_Queue
                 }
 
                 SimpleNode node =_queue.Dequeue();
+                RemoveFromNodeCache(node);
                 return node.Data;
             }
         }
@@ -153,12 +202,13 @@ namespace Priority_Queue
                 _queue.Resize(_queue.MaxSize * 2 + 1);
             }
             _queue.Enqueue(node, priority);
+            AddToNodeCache(node);
         }
 
         /// <summary>
         /// Enqueue a node to the priority queue.  Lower values are placed in front. Ties are broken by first-in-first-out.
         /// This queue automatically resizes itself, so there's no concern of the queue becoming 'full'.
-        /// Duplicates are allowed.
+        /// Duplicates and null-values are allowed.
         /// O(log n)
         /// </summary>
         public void Enqueue(TItem item, TPriority priority)
@@ -171,9 +221,9 @@ namespace Priority_Queue
 
         /// <summary>
         /// Enqueue a node to the priority queue if it doesn't already exist.  Lower values are placed in front. Ties are broken by first-in-first-out.
-        /// This queue automatically resizes itself, so there's no concern of the queue becoming 'full'.
-        /// Returns true if the node was successfully enqueued; false if it already exists
-        /// O(n)
+        /// This queue automatically resizes itself, so there's no concern of the queue becoming 'full'.  Null values are allowed.
+        /// Returns true if the node was successfully enqueued; false if it already exists.
+        /// O(log n)
         /// </summary>
         public bool EnqueueWithoutDuplicates(TItem item, TPriority priority)
         {
@@ -192,7 +242,7 @@ namespace Priority_Queue
         /// Removes an item from the queue.  The item does not need to be the head of the queue.  
         /// If the item is not in the queue, an exception is thrown.  If unsure, check Contains() first.
         /// If multiple copies of the item are enqueued, only the first one is removed. 
-        /// O(n)
+        /// O(log n)
         /// </summary>
         public void Remove(TItem item)
         {
@@ -204,6 +254,7 @@ namespace Priority_Queue
                     throw new InvalidOperationException("Cannot call Remove() on a node which is not enqueued: " + item);
                 }
                 _queue.Remove(removeMe);
+                RemoveFromNodeCache(removeMe);
             }
         }
 
@@ -213,7 +264,7 @@ namespace Priority_Queue
         /// If the item is enqueued multiple times, only the first one will be updated.
         /// (If your requirements are complex enough that you need to enqueue the same item multiple times <i>and</i> be able
         /// to update all of them, please wrap your items in a wrapper class so they can be distinguished).
-        /// O(n)
+        /// O(log n)
         /// </summary>
         public void UpdatePriority(TItem item, TPriority priority)
         {
@@ -234,7 +285,7 @@ namespace Priority_Queue
         /// If the item is enqueued multiple times, only the priority of the first will be returned.
         /// (If your requirements are complex enough that you need to enqueue the same item multiple times <i>and</i> be able
         /// to query all their priorities, please wrap your items in a wrapper class so they can be distinguished).
-        /// O(n) (O(1) if item == queue.First)
+        /// O(1)
         /// </summary>
         public TPriority GetPriority(TItem item)
         {
@@ -287,6 +338,7 @@ namespace Priority_Queue
 
                 SimpleNode node = _queue.Dequeue();
                 first = node.Data;
+                RemoveFromNodeCache(node);
                 return true;
             }
         }
@@ -296,7 +348,7 @@ namespace Priority_Queue
         /// Useful for multi-threading, where the queue may become empty between calls to Contains() and Remove()
         /// Returns true if the item was successfully removed, false if it wasn't in the queue.
         /// If multiple copies of the item are enqueued, only the first one is removed. 
-        /// O(n)
+        /// O(log n)
         /// </summary>
         public bool TryRemove(TItem item)
         {
@@ -308,6 +360,7 @@ namespace Priority_Queue
                     return false;
                 }
                 _queue.Remove(removeMe);
+                RemoveFromNodeCache(removeMe);
                 return true;
             }
         }
@@ -319,7 +372,7 @@ namespace Priority_Queue
         /// (If your requirements are complex enough that you need to enqueue the same item multiple times <i>and</i> be able
         /// to update all of them, please wrap your items in a wrapper class so they can be distinguished).
         /// Returns true if the item priority was updated, false otherwise.
-        /// O(n)
+        /// O(log n)
         /// </summary>
         public bool TryUpdatePriority(TItem item, TPriority priority)
         {
@@ -342,7 +395,7 @@ namespace Priority_Queue
         /// (If your requirements are complex enough that you need to enqueue the same item multiple times <i>and</i> be able
         /// to query all their priorities, please wrap your items in a wrapper class so they can be distinguished).
         /// Returns true if the item was found in the queue, false otherwise
-        /// O(n) (O(1) if item == queue.First)
+        /// O(1)
         /// </summary>
         public bool TryGetPriority(TItem item, out TPriority priority)
         {
@@ -384,6 +437,28 @@ namespace Priority_Queue
         {
             lock(_queue)
             {
+                // Check all items in cache are in the queue
+                foreach (IList<SimpleNode> nodes in _itemToNodesCache.Values)
+                {
+                    foreach (SimpleNode node in nodes)
+                    {
+                        if (!_queue.Contains(node))
+                        {
+                            return false;
+                        }
+                    }
+                }
+
+                // Check all items in queue are in cache
+                foreach (SimpleNode node in _queue)
+                {
+                    if (GetExistingNode(node.Data) == null)
+                    {
+                        return false;
+                    }
+                }
+
+                // Check queue structure itself
                 return _queue.IsValidQueue();
             }
         }

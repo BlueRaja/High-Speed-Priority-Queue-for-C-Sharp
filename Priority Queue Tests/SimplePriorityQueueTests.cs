@@ -178,6 +178,29 @@ namespace Priority_Queue_Tests
         }
 
         [Test]
+        public void TestEnqueuingDuplicateNulls()
+        {
+            Node node = new Node(2);
+            Queue.Enqueue(null, 1);
+            Queue.Enqueue(node, 2);
+            Queue.Enqueue(null, 3);
+
+            Assert.AreEqual(3, Queue.Count);
+            Assert.IsTrue(Queue.Contains(null));
+
+            Assert.AreEqual(null, Dequeue());
+            Assert.AreEqual(node, Dequeue());
+
+            Assert.IsTrue(Queue.Contains(null));
+
+            Assert.AreEqual(null, Dequeue());
+            Assert.AreEqual(0, Queue.Count);
+
+            Assert.IsFalse(Queue.Contains(node));
+            Assert.IsFalse(Queue.Contains(null));
+        }
+
+        [Test]
         public void TestRemoveThrowsOnNodeNotInQueue()
         {
             Node node = new Node(1);
