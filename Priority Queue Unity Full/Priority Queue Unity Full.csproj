@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CD185A26-FCA6-45B8-922C-98F66D20C2B6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Priority_Queue</RootNamespace>
+    <AssemblyName>Priority Queue</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Priority Queue.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Priority Queue\FastPriorityQueue.cs">
+      <Link>FastPriorityQueue.cs</Link>
+    </Compile>
+    <Compile Include="..\Priority Queue\FastPriorityQueueNode.cs">
+      <Link>FastPriorityQueueNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Priority Queue\GenericPriorityQueue.cs">
+      <Link>GenericPriorityQueue.cs</Link>
+    </Compile>
+    <Compile Include="..\Priority Queue\GenericPriorityQueueNode.cs">
+      <Link>GenericPriorityQueueNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Priority Queue\IFixedSizePriorityQueue.cs">
+      <Link>IFixedSizePriorityQueue.cs</Link>
+    </Compile>
+    <Compile Include="..\Priority Queue\IPriorityQueue.cs">
+      <Link>IPriorityQueue.cs</Link>
+    </Compile>
+    <Compile Include="..\Priority Queue\SimplePriorityQueue.cs">
+      <Link>SimplePriorityQueue.cs</Link>
+    </Compile>
+    <Compile Include="..\Priority Queue\StablePriorityQueue.cs">
+      <Link>StablePriorityQueue.cs</Link>
+    </Compile>
+    <Compile Include="..\Priority Queue\StablePriorityQueueNode.cs">
+      <Link>StablePriorityQueueNode.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

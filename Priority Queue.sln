@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Priority Queue UWP", "Prior
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Priority Queue PCL", "Priority Queue PCL\Priority Queue PCL.csproj", "{BB31B500-D012-40E1-AC35-0C74C09B269F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Priority Queue Unity Full", "Priority Queue Unity Full\Priority Queue Unity Full.csproj", "{CD185A26-FCA6-45B8-922C-98F66D20C2B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Priority Queue Unity Subset", "Priority Queue Unity Subset\Priority Queue Unity Subset.csproj", "{5A81939B-66C1-4DF7-9D25-BA6A814CEC83}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +65,22 @@ Global
 		{BB31B500-D012-40E1-AC35-0C74C09B269F}.Release 4.5|Any CPU.Build.0 = Release|Any CPU
 		{BB31B500-D012-40E1-AC35-0C74C09B269F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB31B500-D012-40E1-AC35-0C74C09B269F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD185A26-FCA6-45B8-922C-98F66D20C2B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD185A26-FCA6-45B8-922C-98F66D20C2B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD185A26-FCA6-45B8-922C-98F66D20C2B6}.Release 2.0|Any CPU.ActiveCfg = Release|Any CPU
+		{CD185A26-FCA6-45B8-922C-98F66D20C2B6}.Release 2.0|Any CPU.Build.0 = Release|Any CPU
+		{CD185A26-FCA6-45B8-922C-98F66D20C2B6}.Release 4.5|Any CPU.ActiveCfg = Release|Any CPU
+		{CD185A26-FCA6-45B8-922C-98F66D20C2B6}.Release 4.5|Any CPU.Build.0 = Release|Any CPU
+		{CD185A26-FCA6-45B8-922C-98F66D20C2B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD185A26-FCA6-45B8-922C-98F66D20C2B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A81939B-66C1-4DF7-9D25-BA6A814CEC83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A81939B-66C1-4DF7-9D25-BA6A814CEC83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A81939B-66C1-4DF7-9D25-BA6A814CEC83}.Release 2.0|Any CPU.ActiveCfg = Release|Any CPU
+		{5A81939B-66C1-4DF7-9D25-BA6A814CEC83}.Release 2.0|Any CPU.Build.0 = Release|Any CPU
+		{5A81939B-66C1-4DF7-9D25-BA6A814CEC83}.Release 4.5|Any CPU.ActiveCfg = Release|Any CPU
+		{5A81939B-66C1-4DF7-9D25-BA6A814CEC83}.Release 4.5|Any CPU.Build.0 = Release|Any CPU
+		{5A81939B-66C1-4DF7-9D25-BA6A814CEC83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A81939B-66C1-4DF7-9D25-BA6A814CEC83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

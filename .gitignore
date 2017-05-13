@@ -8,6 +8,10 @@
 /Priority Queue UWP/obj
 /Priority Queue PCL/bin
 /Priority Queue PCL/obj
+/Priority Queue Unity Full/bin
+/Priority Queue Unity Full/obj
+/Priority Queue Unity Subset/bin
+/Priority Queue Unity Subset/obj
 *.user
 *.suo
 /packages/
