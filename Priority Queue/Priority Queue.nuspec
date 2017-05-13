@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>OptimizedPriorityQueue</id>
-    <version>4.0.4</version>
+    <version>4.1.1</version>
     <title>Highly Optimized Priority Queue</title>
     <authors>BlueRaja</authors>
     <owners>BlueRaja</owners>
@@ -10,8 +10,8 @@
     <projectUrl>https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A highly optimized Priority Queue for path-finding and related applications</description>
-    <releaseNotes>Small bugfix for UWP</releaseNotes>
-    <copyright>Copyright 2016</copyright>
+    <releaseNotes>Better multithreaded support; Unity3D support</releaseNotes>
+    <copyright>Copyright 2017</copyright>
     <tags>C# priority-queue pathfinding optimized</tags>
   </metadata>
   <files>
@@ -30,5 +30,13 @@
     <file src="..\Priority Queue PCL\bin\Release\Priority Queue.dll" target="lib\portable-net40+sl5+win8+wpa81+wp8\Priority Queue.dll" />
     <file src="..\Priority Queue PCL\bin\Release\Priority Queue.pdb" target="lib\portable-net40+sl5+win8+wpa81+wp8\Priority Queue.pdb" />
     <file src="..\Priority Queue PCL\bin\Release\Priority Queue.xml" target="lib\portable-net40+sl5+win8+wpa81+wp8\Priority Queue.xml" />
+    
+    <file src="..\Priority Queue Unity Full\bin\Release\Priority Queue.dll" target="lib\net35-unity full v3.5\Priority Queue.dll" />
+    <file src="..\Priority Queue Unity Full\bin\Release\Priority Queue.pdb" target="lib\net35-unity full v3.5\Priority Queue.pdb" />
+    <file src="..\Priority Queue Unity Full\bin\Release\Priority Queue.xml" target="lib\net35-unity full v3.5\Priority Queue.xml" />
+    
+    <file src="..\Priority Queue Unity Subset\bin\Release\Priority Queue.dll" target="lib\net35-unity subset v3.5\Priority Queue.dll" />
+    <file src="..\Priority Queue Unity Subset\bin\Release\Priority Queue.pdb" target="lib\net35-unity subset v3.5\Priority Queue.pdb" />
+    <file src="..\Priority Queue Unity Subset\bin\Release\Priority Queue.xml" target="lib\net35-unity subset v3.5\Priority Queue.xml" />
   </files>
 </package>
