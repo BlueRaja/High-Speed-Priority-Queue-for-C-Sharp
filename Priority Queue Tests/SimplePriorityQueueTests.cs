@@ -74,6 +74,104 @@ namespace Priority_Queue_Tests
         }
 
         [Test]
+        public void TestClearWithDuplicates()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+
+            Enqueue(node1);
+            Enqueue(node1);
+            Enqueue(node2);
+            Queue.Clear();
+            Enqueue(node2);
+            Enqueue(node3);
+            Enqueue(node3);
+
+            Assert.AreEqual(3, Queue.Count);
+            Assert.IsFalse(Queue.Contains(node1));
+            Assert.IsTrue(Queue.Contains(node2));
+            Assert.IsTrue(Queue.Contains(node3));
+
+            Assert.AreEqual(node2, Dequeue());
+            Assert.AreEqual(node3, Dequeue());
+            Assert.AreEqual(node3, Dequeue());
+
+            Assert.AreEqual(0, Queue.Count);
+            Assert.IsFalse(Queue.Contains(node1));
+            Assert.IsFalse(Queue.Contains(node2));
+            Assert.IsFalse(Queue.Contains(node3));
+        }
+
+        [Test]
+        public void TestClearWithNull()
+        {
+            Queue.Enqueue(null, 1);
+            Queue.Clear();
+
+            Assert.AreEqual(0, Queue.Count);
+            Assert.IsFalse(Queue.Contains(null));
+        }
+
+        [Test]
+        public void TestClearWithNullDuplicates()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+
+            Enqueue(node1);
+            Enqueue(node1);
+            Enqueue(node2);
+            Queue.Clear();
+            Enqueue(node2);
+            Queue.Enqueue(null, 3);
+            Queue.Enqueue(null, 3);
+
+            Assert.AreEqual(3, Queue.Count);
+            Assert.IsFalse(Queue.Contains(node1));
+            Assert.IsTrue(Queue.Contains(node2));
+            Assert.IsTrue(Queue.Contains(null));
+
+            Assert.AreEqual(node2, Dequeue());
+            Assert.AreEqual(null, Dequeue());
+            Assert.AreEqual(null, Dequeue());
+
+            Assert.AreEqual(0, Queue.Count);
+            Assert.IsFalse(Queue.Contains(node1));
+            Assert.IsFalse(Queue.Contains(node2));
+            Assert.IsFalse(Queue.Contains(null));
+        }
+
+        [Test]
+        public void TestClearWithNullDuplicates2()
+        {
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+
+            Queue.Enqueue(null, 1);
+            Queue.Enqueue(null, 1);
+            Enqueue(node2);
+            Queue.Clear();
+            Enqueue(node2);
+            Enqueue(node3);
+            Enqueue(node3);
+
+            Assert.AreEqual(3, Queue.Count);
+            Assert.IsFalse(Queue.Contains(null));
+            Assert.IsTrue(Queue.Contains(node2));
+            Assert.IsTrue(Queue.Contains(node3));
+
+            Assert.AreEqual(node2, Dequeue());
+            Assert.AreEqual(node3, Dequeue());
+            Assert.AreEqual(node3, Dequeue());
+
+            Assert.AreEqual(0, Queue.Count);
+            Assert.IsFalse(Queue.Contains(null));
+            Assert.IsFalse(Queue.Contains(node2));
+            Assert.IsFalse(Queue.Contains(node3));
+        }
+
+        [Test]
         public void TestFirstThrowsOnEmptyQueue()
         {
             Assert.Throws<InvalidOperationException>(() => { var a = Queue.First; });

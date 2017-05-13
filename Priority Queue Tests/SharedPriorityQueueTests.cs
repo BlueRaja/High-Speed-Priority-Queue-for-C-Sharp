@@ -252,10 +252,23 @@ namespace Priority_Queue_Tests
             Enqueue(node3);
             Enqueue(node4);
 
+            Assert.AreEqual(3, Queue.Count);
+            Assert.IsTrue(Queue.Contains(node1));
+            Assert.IsFalse(Queue.Contains(node2));
+            Assert.IsTrue(Queue.Contains(node3));
+            Assert.IsTrue(Queue.Contains(node4));
+            Assert.IsFalse(Queue.Contains(node5));
+
             Assert.AreEqual(node1, Dequeue());
             Assert.AreEqual(node3, Dequeue());
             Assert.AreEqual(node4, Dequeue());
+
             Assert.AreEqual(0, Queue.Count);
+            Assert.IsFalse(Queue.Contains(node1));
+            Assert.IsFalse(Queue.Contains(node2));
+            Assert.IsFalse(Queue.Contains(node3));
+            Assert.IsFalse(Queue.Contains(node4));
+            Assert.IsFalse(Queue.Contains(node5));
         }
     }
 }

@@ -156,6 +156,7 @@ namespace Priority_Queue
             {
                 _queue.Clear();
                 _itemToNodesCache.Clear();
+                _nullNodesCache.Clear();
             }
         }
 
