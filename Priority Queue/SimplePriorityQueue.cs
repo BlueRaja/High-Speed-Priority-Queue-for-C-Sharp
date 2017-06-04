@@ -171,7 +171,11 @@ namespace Priority_Queue
         {
             lock(_queue)
             {
-                return GetExistingNode(item) != null;
+                if (item == null)
+                {
+                    return _nullNodesCache.Count > 0;
+                }
+                return _itemToNodesCache.ContainsKey(item);
             }
         }
 
