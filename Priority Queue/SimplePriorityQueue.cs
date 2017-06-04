@@ -61,11 +61,11 @@ namespace Priority_Queue
                 return _nullNodesCache.Count > 0 ? _nullNodesCache[0] : null;
             }
 
-            if (!_itemToNodesCache.ContainsKey(item))
+            IList<SimpleNode> nodes;
+            if (!_itemToNodesCache.TryGetValue(item, out nodes))
             {
                 return null;
             }
-            IList<SimpleNode> nodes = _itemToNodesCache[item];
             return nodes.Count > 0 ? nodes[0] : null;
         }
 
@@ -80,11 +80,13 @@ namespace Priority_Queue
                 return;
             }
 
-            if (!_itemToNodesCache.ContainsKey(node.Data))
+            IList<SimpleNode> nodes;
+            if (!_itemToNodesCache.TryGetValue(node.Data, out nodes))
             {
-                _itemToNodesCache[node.Data] = new List<SimpleNode>();
+                nodes = new List<SimpleNode>();
+                _itemToNodesCache[node.Data] = nodes;
             }
-            _itemToNodesCache[node.Data].Add(node);
+            nodes.Add(node);
         }
 
         /// <summary>
@@ -98,12 +100,13 @@ namespace Priority_Queue
                 return;
             }
 
-            if (!_itemToNodesCache.ContainsKey(node.Data))
+            IList<SimpleNode> nodes;
+            if (!_itemToNodesCache.TryGetValue(node.Data, out nodes))
             {
                 return;
             }
-            _itemToNodesCache[node.Data].Remove(node);
-            if (_itemToNodesCache[node.Data].Count == 0)
+            nodes.Remove(node);
+            if (nodes.Count == 0)
             {
                 _itemToNodesCache.Remove(node.Data);
             }
