@@ -240,7 +240,18 @@ namespace Priority_Queue
         {
             lock(_queue)
             {
-                EnqueueNoLock(item, priority);
+                IList<SimpleNode> nodes;
+                if (item == null)
+                {
+                    nodes = _nullNodesCache;
+                }
+                else if (!_itemToNodesCache.TryGetValue(item, out nodes))
+                {
+                    nodes = new List<SimpleNode>();
+                    _itemToNodesCache[item] = nodes;
+                }
+                SimpleNode node = EnqueueNoLockOrCache(item, priority);
+                nodes.Add(node);
             }
         }
 
@@ -301,12 +312,12 @@ namespace Priority_Queue
                 }
                 else
                 {
-                    if (!_itemToNodesCache.TryGetValue(item, out nodes) || nodes.Count == 0)
+                    if (!_itemToNodesCache.TryGetValue(item, out nodes))
                     {
                         throw new InvalidOperationException("Cannot call Remove() on a node which is not enqueued: " + item);
                     }
                     removeMe = nodes[0];
-                    if (nodes.Count == 0)
+                    if (nodes.Count == 1)
                     {
                         _itemToNodesCache.Remove(item);
                     }
