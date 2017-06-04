@@ -200,6 +200,23 @@ namespace Priority_Queue
         }
 
         /// <summary>
+        /// Enqueue the item with the given priority, without calling lock(_queue) or AddToNodeCache(node)
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="priority"></param>
+        /// <returns></returns>
+        private SimpleNode EnqueueNoLockOrCache(TItem item, TPriority priority)
+        {
+            SimpleNode node = new SimpleNode(item);
+            if (_queue.Count == _queue.MaxSize)
+            {
+                _queue.Resize(_queue.MaxSize * 2 + 1);
+            }
+            _queue.Enqueue(node, priority);
+            return node;
+        }
+
+        /// <summary>
         /// Enqueue the item with the given priority, without calling lock(_queue)
         /// </summary>
         private void EnqueueNoLock(TItem item, TPriority priority)
@@ -237,11 +254,26 @@ namespace Priority_Queue
         {
             lock(_queue)
             {
-                if(this.Contains(item))
+                IList<SimpleNode> nodes;
+                if (item == null)
+                {
+                    if (_nullNodesCache.Count > 0)
+                    {
+                        return false;
+                    }
+                    nodes = _nullNodesCache;
+                }
+                else if (_itemToNodesCache.ContainsKey(item))
                 {
                     return false;
                 }
-                EnqueueNoLock(item, priority);
+                else
+                {
+                    nodes = new List<SimpleNode>();
+                    _itemToNodesCache[item] = nodes;
+                }
+                SimpleNode node = EnqueueNoLockOrCache(item, priority);
+                nodes.Add(node);
                 return true;
             }
         }
