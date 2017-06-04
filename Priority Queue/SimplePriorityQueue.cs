@@ -288,13 +288,31 @@ namespace Priority_Queue
         {
             lock(_queue)
             {
-                SimpleNode removeMe = GetExistingNode(item);
-                if (removeMe == null)
+                SimpleNode removeMe;
+                IList<SimpleNode> nodes;
+                if (item == null)
                 {
-                    throw new InvalidOperationException("Cannot call Remove() on a node which is not enqueued: " + item);
+                    if (_nullNodesCache.Count == 0)
+                    {
+                        throw new InvalidOperationException("Cannot call Remove() on a node which is not enqueued: " + item);
+                    }
+                    removeMe = _nullNodesCache[0];
+                    nodes = _nullNodesCache;
+                }
+                else
+                {
+                    if (!_itemToNodesCache.TryGetValue(item, out nodes) || nodes.Count == 0)
+                    {
+                        throw new InvalidOperationException("Cannot call Remove() on a node which is not enqueued: " + item);
+                    }
+                    removeMe = nodes[0];
+                    if (nodes.Count == 0)
+                    {
+                        _itemToNodesCache.Remove(item);
+                    }
                 }
                 _queue.Remove(removeMe);
-                RemoveFromNodeCache(removeMe);
+                nodes.Remove(removeMe);
             }
         }
 
