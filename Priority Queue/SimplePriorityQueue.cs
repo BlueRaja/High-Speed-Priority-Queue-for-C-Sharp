@@ -217,20 +217,6 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Enqueue the item with the given priority, without calling lock(_queue)
-        /// </summary>
-        private void EnqueueNoLock(TItem item, TPriority priority)
-        {
-            SimpleNode node = new SimpleNode(item);
-            if(_queue.Count == _queue.MaxSize)
-            {
-                _queue.Resize(_queue.MaxSize * 2 + 1);
-            }
-            _queue.Enqueue(node, priority);
-            AddToNodeCache(node);
-        }
-
-        /// <summary>
         /// Enqueue a node to the priority queue.  Lower values are placed in front. Ties are broken by first-in-first-out.
         /// This queue automatically resizes itself, so there's no concern of the queue becoming 'full'.
         /// Duplicates and null-values are allowed.
@@ -423,13 +409,31 @@ namespace Priority_Queue
         {
             lock(_queue)
             {
-                SimpleNode removeMe = GetExistingNode(item);
-                if(removeMe == null)
+                SimpleNode removeMe;
+                IList<SimpleNode> nodes;
+                if (item == null)
                 {
-                    return false;
+                    if (_nullNodesCache.Count == 0)
+                    {
+                        return false;
+                    }
+                    removeMe = _nullNodesCache[0];
+                    nodes = _nullNodesCache;
+                }
+                else
+                {
+                    if (!_itemToNodesCache.TryGetValue(item, out nodes))
+                    {
+                        return false;
+                    }
+                    removeMe = nodes[0];
+                    if (nodes.Count == 1)
+                    {
+                        _itemToNodesCache.Remove(item);
+                    }
                 }
                 _queue.Remove(removeMe);
-                RemoveFromNodeCache(removeMe);
+                nodes.Remove(removeMe);
                 return true;
             }
         }
