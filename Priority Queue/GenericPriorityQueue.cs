@@ -142,7 +142,7 @@ namespace Priority_Queue
             _nodes[_numNodes] = node;
             node.QueueIndex = _numNodes;
             node.InsertionIndex = _numNodesEverEnqueued++;
-            CascadeUp(_nodes[_numNodes]);
+            CascadeUp(node);
         }
 
 #if NET_VERSION_4_5
@@ -150,32 +150,44 @@ namespace Priority_Queue
 #endif
         private void Swap(TItem node1, TItem node2)
         {
+            // Cache to local for faster repeated access
+            int index1 = node1.QueueIndex;
+            int index2 = node2.QueueIndex;
+
             //Swap the nodes
-            _nodes[node1.QueueIndex] = node2;
-            _nodes[node2.QueueIndex] = node1;
+            _nodes[index1] = node2;
+            _nodes[index2] = node1;
 
             //Swap their indicies
-            int temp = node1.QueueIndex;
-            node1.QueueIndex = node2.QueueIndex;
-            node2.QueueIndex = temp;
+            node1.QueueIndex = index2;
+            node2.QueueIndex = index1;
         }
 
         //Performance appears to be slightly better when this is NOT inlined o_O
         private void CascadeUp(TItem node)
         {
             //aka Heapify-up
-            int parent = node.QueueIndex / 2;
-            while(parent >= 1)
+            int nodeIndex = node.QueueIndex;
+            int parentIndex = nodeIndex >> 1;
+            TPriority nodePriority = node.Priority;
+            long nodeInsertionIndex = node.InsertionIndex;
+            while(parentIndex >= 1)
             {
-                TItem parentNode = _nodes[parent];
-                if(HasHigherPriority(parentNode, node))
+                TItem parent = _nodes[parentIndex];
+                // Inline to replace repeated property reads with local variable reads
+                var cmp = _comparer(parent.Priority, nodePriority);
+                if (cmp < 0 || (cmp == 0 && parent.InsertionIndex < nodeInsertionIndex))
                     break;
 
-                //Node has lower priority value, so move it up the heap
-                Swap(node, parentNode); //For some reason, this is faster with Swap() rather than (less..?) individual operations, like in CascadeDown()
+                //Node has lower priority value, so move parent down the heap to make room
+                _nodes[nodeIndex] = parent;
+                parent.QueueIndex = nodeIndex;
 
-                parent = node.QueueIndex / 2;
+                nodeIndex = parentIndex;
+                parentIndex >>= 1;
             }
+            _nodes[nodeIndex] = node;
+            node.QueueIndex = nodeIndex;
         }
 
 #if NET_VERSION_4_5
@@ -184,56 +196,74 @@ namespace Priority_Queue
         private void CascadeDown(TItem node)
         {
             //aka Heapify-down
-            TItem newParent;
             int finalQueueIndex = node.QueueIndex;
             while(true)
             {
-                newParent = node;
                 int childLeftIndex = 2 * finalQueueIndex;
 
-                //Check if the left-child is higher-priority than the current node
-                if(childLeftIndex > _numNodes)
+                // If leaf node, we're done
+                if (childLeftIndex > _numNodes)
                 {
-                    //This could be placed outside the loop, but then we'd have to check newParent != node twice
                     node.QueueIndex = finalQueueIndex;
                     _nodes[finalQueueIndex] = node;
                     break;
                 }
 
-                TItem childLeft = _nodes[childLeftIndex];
-                if(HasHigherPriority(childLeft, newParent))
-                {
-                    newParent = childLeft;
-                }
-
-                //Check if the right-child is higher-priority than either the current node or the left child
+                // Check if the left-child is higher-priority than the current node
                 int childRightIndex = childLeftIndex + 1;
-                if(childRightIndex <= _numNodes)
+                TItem childLeft = _nodes[childLeftIndex];
+                if (HasHigherPriority(childLeft, node))
                 {
-                    TItem childRight = _nodes[childRightIndex];
-                    if(HasHigherPriority(childRight, newParent))
+                    // Check if there is a right child. If not, swap and finish.
+                    if (childRightIndex > _numNodes)
                     {
-                        newParent = childRight;
+                        node.QueueIndex = childLeftIndex;
+                        childLeft.QueueIndex = finalQueueIndex;
+                        _nodes[finalQueueIndex] = childLeft;
+                        _nodes[childLeftIndex] = node;
+                        break;
+                    }
+                    // Check if the left-child is higher-priority than the right-child
+                    TItem childRight = _nodes[childRightIndex];
+                    if (HasHigherPriority(childLeft, childRight))
+                    {
+                        // left is highest, move it up and continue
+                        childLeft.QueueIndex = finalQueueIndex;
+                        _nodes[finalQueueIndex] = childLeft;
+                        finalQueueIndex = childLeftIndex;
+                    }
+                    else
+                    {
+                        // right is even higher, move it up and continue
+                        childRight.QueueIndex = finalQueueIndex;
+                        _nodes[finalQueueIndex] = childRight;
+                        finalQueueIndex = childRightIndex;
                     }
                 }
-
-                //If either of the children has higher (smaller) priority, swap and continue cascading
-                if(newParent != node)
+                // Not swapping with left-child, does right-child exist?
+                else if (childRightIndex > _numNodes)
                 {
-                    //Move new parent to its new index.  node will be moved once, at the end
-                    //Doing it this way is one less assignment operation than calling Swap()
-                    _nodes[finalQueueIndex] = newParent;
-
-                    int temp = newParent.QueueIndex;
-                    newParent.QueueIndex = finalQueueIndex;
-                    finalQueueIndex = temp;
+                    node.QueueIndex = finalQueueIndex;
+                    _nodes[finalQueueIndex] = node;
+                    break;
                 }
                 else
                 {
-                    //See note above
-                    node.QueueIndex = finalQueueIndex;
-                    _nodes[finalQueueIndex] = node;
-                    break;
+                    // Check if the right-child is higher-priority than the current node
+                    TItem childRight = _nodes[childRightIndex];
+                    if (HasHigherPriority(childRight, node))
+                    {
+                        childRight.QueueIndex = finalQueueIndex;
+                        _nodes[finalQueueIndex] = childRight;
+                        finalQueueIndex = childRightIndex;
+                    }
+                    // Neither child is higher-priority than current, so finish and stop.
+                    else
+                    {
+                        node.QueueIndex = finalQueueIndex;
+                        _nodes[finalQueueIndex] = node;
+                        break;
+                    }
                 }
             }
         }
@@ -256,6 +286,9 @@ namespace Priority_Queue
         /// If queue is empty, result is undefined
         /// O(log n)
         /// </summary>
+#if NET_VERSION_4_5
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public TItem Dequeue()
         {
 #if DEBUG
@@ -272,7 +305,23 @@ namespace Priority_Queue
 #endif
 
             TItem returnMe = _nodes[1];
-            Remove(returnMe);
+            //If the node is already the last node, we can remove it immediately
+            if (1 == _numNodes)
+            {
+                _nodes[_numNodes] = null;
+                _numNodes = 0;
+                return returnMe;
+            }
+
+            //Swap the node with the last node
+            TItem formerLastNode = _nodes[_numNodes];
+            _nodes[1] = formerLastNode;
+            formerLastNode.QueueIndex = 1;
+            _nodes[_numNodes] = null;
+            _numNodes--;
+
+            //Now bubble formerLastNode (which is no longer the last node) down
+            CascadeDown(formerLastNode);
             return returnMe;
         }
 
@@ -297,10 +346,7 @@ namespace Priority_Queue
 
             TItem[] newArray = new TItem[maxNodes + 1];
             int highestIndexToCopy = Math.Min(maxNodes, _numNodes);
-            for(int i = 1; i <= highestIndexToCopy; i++)
-            {
-                newArray[i] = _nodes[i];
-            }
+            Array.Copy(_nodes, newArray, highestIndexToCopy + 1);
             _nodes = newArray;
         }
 
@@ -353,10 +399,9 @@ namespace Priority_Queue
         private void OnNodeUpdated(TItem node)
         {
             //Bubble the updated node up or down as appropriate
-            int parentIndex = node.QueueIndex / 2;
-            TItem parentNode = _nodes[parentIndex];
+            int parentIndex = node.QueueIndex >> 1;
 
-            if(parentIndex > 0 && HasHigherPriority(node, parentNode))
+            if(parentIndex > 0 && HasHigherPriority(node, _nodes[parentIndex]))
             {
                 CascadeUp(node);
             }
@@ -386,7 +431,8 @@ namespace Priority_Queue
 #endif
 
             //If the node is already the last node, we can remove it immediately
-            if(node.QueueIndex == _numNodes)
+            int index = node.QueueIndex;
+            if(index == _numNodes)
             {
                 _nodes[_numNodes] = null;
                 _numNodes--;
@@ -395,7 +441,8 @@ namespace Priority_Queue
 
             //Swap the node with the last node
             TItem formerLastNode = _nodes[_numNodes];
-            Swap(node, formerLastNode);
+            _nodes[index] = formerLastNode;
+            formerLastNode.QueueIndex = index;
             _nodes[_numNodes] = null;
             _numNodes--;
 

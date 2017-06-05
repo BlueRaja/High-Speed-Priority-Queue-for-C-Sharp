@@ -262,7 +262,9 @@ namespace Priority_Queue
         /// If queue is empty, result is undefined
         /// O(log n)
         /// </summary>
+        #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        #endif
         public T Dequeue()
         {
             #if DEBUG
@@ -283,7 +285,7 @@ namespace Priority_Queue
             if (1 == _numNodes)
             {
                 _nodes[_numNodes] = null;
-                _numNodes--;
+                _numNodes = 0;
                 return returnMe;
             }
 
