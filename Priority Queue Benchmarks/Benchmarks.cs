@@ -14,86 +14,77 @@ namespace Priority_Queue_Benchmarks
         [Params(1, 100, 10000)]
         public int QueueSize;
 
+        public FastPriorityQueueNode[] Nodes;
+
         private FastPriorityQueue<FastPriorityQueueNode> Queue;
 
         [GlobalSetup]
         public void GlobalSetup()
         {
-            Queue = new FastPriorityQueue<FastPriorityQueueNode>(QueueSize * 2);
+            Queue = new FastPriorityQueue<FastPriorityQueueNode>(QueueSize);
+            Nodes = new FastPriorityQueueNode[QueueSize];
+            for(int i = 0; i < QueueSize; i++)
+            {
+                Nodes[i] = new FastPriorityQueueNode();
+            }
         }
 
-        [IterationSetup]
-        public void IterationSetup()
+        [IterationCleanup]
+        public void IterationCleanup()
         {
             Queue.Clear();
-            for (int i = 0; i < QueueSize; i++)
+        }
+
+        [Benchmark]
+        public void Enqueue()
+        {
+            Queue.Clear();
+            for(int i = 0; i < QueueSize; i++)
             {
-                Queue.Enqueue(new FastPriorityQueueNode(), i);
+                Queue.Enqueue(Nodes[i], i);
             }
         }
 
         [Benchmark]
-        public void Dequeue()
+        public void EnqueueBackwards()
         {
-            // Bugfix: https://github.com/dotnet/BenchmarkDotNet/issues/470
-            if(Queue.Count != QueueSize)
+            Queue.Clear();
+            for(int i = QueueSize - 1; i >= 0; i--)
             {
-                return;
+                Queue.Enqueue(Nodes[i], i);
             }
+        }
 
-            for (int i = 0; i <= QueueSize / 2; i++)
+        [Benchmark]
+        public void EnqueueDequeue()
+        {
+            Enqueue();
+
+            for(int i = 0; i < QueueSize; i++)
             {
                 Queue.Dequeue();
             }
         }
 
         [Benchmark]
-        public void Enqueue()
+        public void EnqueueUpdatePriority()
         {
-            if(Queue.Count != QueueSize)
-            {
-                return;
-            }
+            Enqueue();
 
-            for(int i = 0; i <= QueueSize / 2; i++)
-            {
-                Queue.Enqueue(new FastPriorityQueueNode(), i);
-            }
-        }
-
-        [Benchmark]
-        public bool ContainsFirst()
-        {
-            if(Queue.Count != QueueSize)
-            {
-                return true;
-            }
-
-            return Queue.Contains(Queue.First);
-        }
-
-        [Benchmark]
-        public void Clear()
-        {
-            if(Queue.Count != QueueSize)
-            {
-                return;
-            }
-
-            Queue.Clear();
-        }
-
-        [Benchmark]
-        public void UpdatePriority()
-        {
-            if(Queue.Count != QueueSize)
-            {
-                return;
-            }
-
-            for(int i = 0; i <= QueueSize; i++)
+            for(int i = 0; i < QueueSize; i++)
             {
                 Queue.UpdatePriority(Queue.First, QueueSize-i);
+            }
+        }
+
+        [Benchmark]
+        public void EnqueueContains()
+        {
+            Enqueue();
+
+            for(int i = 0; i < QueueSize; i++)
+            {
+                Queue.Contains(Nodes[i]);
             }
         }
     }
