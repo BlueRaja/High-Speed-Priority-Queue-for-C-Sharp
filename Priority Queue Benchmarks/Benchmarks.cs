@@ -75,6 +75,28 @@ namespace Priority_Queue_Benchmarks
         [Benchmark]
         public void EnqueueDequeue()
         {
+            Enqueue();
+
+            for(int i = 0; i < QueueSize; i++)
+            {
+                Queue.Dequeue();
+            }
+        }
+
+        [Benchmark]
+        public void EnqueueBackwardsDequeue()
+        {
+            EnqueueBackwards();
+
+            for(int i = 0; i < QueueSize; i++)
+            {
+                Queue.Dequeue();
+            }
+        }
+
+        [Benchmark]
+        public void EnqueueRandomDequeue()
+        {
             EnqueueRandom();
 
             for(int i = 0; i < QueueSize; i++)
@@ -85,6 +107,28 @@ namespace Priority_Queue_Benchmarks
 
         [Benchmark]
         public void EnqueueUpdatePriority()
+        {
+            Enqueue();
+
+            for(int i = 0; i < QueueSize; i++)
+            {
+                Queue.UpdatePriority(Nodes[i], QueueSize - i);
+            }
+        }
+
+        [Benchmark]
+        public void EnqueueBackwardsUpdatePriority()
+        {
+            EnqueueBackwards();
+
+            for(int i = 0; i < QueueSize; i++)
+            {
+                Queue.UpdatePriority(Nodes[i], QueueSize - i);
+            }
+        }
+
+        [Benchmark]
+        public void EnqueueRandomUpdatePriority()
         {
             EnqueueRandom();
 
@@ -97,7 +141,7 @@ namespace Priority_Queue_Benchmarks
         [Benchmark]
         public bool EnqueueContains()
         {
-            EnqueueRandom();
+            Enqueue();
             bool ret = true; // to ensure the compiler doesn't optimize the contains calls out of existence
 
             for(int i = 0; i < QueueSize; i++)
