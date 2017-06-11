@@ -15,6 +15,8 @@ namespace Priority_Queue_Benchmarks
         public int QueueSize;
 
         public FastPriorityQueueNode[] Nodes;
+        public int[] RandomPriorities;
+        public int[] RandomUpdatePriorities;
 
         private FastPriorityQueue<FastPriorityQueueNode> Queue;
 
@@ -23,9 +25,14 @@ namespace Priority_Queue_Benchmarks
         {
             Queue = new FastPriorityQueue<FastPriorityQueueNode>(QueueSize);
             Nodes = new FastPriorityQueueNode[QueueSize];
+            RandomPriorities = new int[QueueSize];
+            RandomUpdatePriorities = new int[QueueSize];
+            Random rand = new Random(34829061);
             for(int i = 0; i < QueueSize; i++)
             {
                 Nodes[i] = new FastPriorityQueueNode();
+                RandomPriorities[i] = rand.Next(16777216); // constrain to range float can hold with no rounding
+                RandomUpdatePriorities[i] = rand.Next(16777216); // constrain to range float can hold with no rounding
             }
         }
 
@@ -56,9 +63,19 @@ namespace Priority_Queue_Benchmarks
         }
 
         [Benchmark]
+        public void EnqueueRandom()
+        {
+            Queue.Clear();
+            for(int i = 0; i < QueueSize; i++)
+            {
+                Queue.Enqueue(Nodes[i], RandomPriorities[i]);
+            }
+        }
+
+        [Benchmark]
         public void EnqueueDequeue()
         {
-            Enqueue();
+            EnqueueRandom();
 
             for(int i = 0; i < QueueSize; i++)
             {
@@ -69,23 +86,25 @@ namespace Priority_Queue_Benchmarks
         [Benchmark]
         public void EnqueueUpdatePriority()
         {
-            Enqueue();
+            EnqueueRandom();
 
             for(int i = 0; i < QueueSize; i++)
             {
-                Queue.UpdatePriority(Queue.First, QueueSize-i);
+                Queue.UpdatePriority(Nodes[i], RandomUpdatePriorities[i]);
             }
         }
 
         [Benchmark]
-        public void EnqueueContains()
+        public bool EnqueueContains()
         {
-            Enqueue();
+            EnqueueRandom();
+            bool ret = true; // to ensure the compiler doesn't optimize the contains calls out of existence
 
             for(int i = 0; i < QueueSize; i++)
             {
-                Queue.Contains(Nodes[i]);
+                ret &= Queue.Contains(Nodes[i]);
             }
+            return ret;
         }
     }
 }
