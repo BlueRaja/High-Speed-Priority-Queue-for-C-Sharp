@@ -1,17 +1,5 @@
-/Priority Queue/bin
-/Priority Queue/obj
-/Priority Queue Tests/bin
-/Priority Queue Tests/obj
-/Priority Queue Example/bin
-/Priority Queue Example/obj
-/Priority Queue UWP/bin
-/Priority Queue UWP/obj
-/Priority Queue PCL/bin
-/Priority Queue PCL/obj
-/Priority Queue Unity Full/bin
-/Priority Queue Unity Full/obj
-/Priority Queue Unity Subset/bin
-/Priority Queue Unity Subset/obj
+*/bin/
+*/obj/
 *.user
 *.suo
 /packages/

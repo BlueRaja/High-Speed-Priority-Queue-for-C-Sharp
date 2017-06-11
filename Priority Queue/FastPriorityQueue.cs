@@ -93,7 +93,7 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Enqueue a node to the priority queue.  Lower values are placed in front. Ties are broken by first-in-first-out.
+        /// Enqueue a node to the priority queue.  Lower values are placed in front. Ties are broken arbitrarily.
         /// If the queue is full, the result is undefined.
         /// If the node is already enqueued, the result is undefined.
         /// O(log n)
