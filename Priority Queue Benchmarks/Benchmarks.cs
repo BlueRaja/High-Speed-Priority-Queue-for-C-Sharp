@@ -150,5 +150,19 @@ namespace Priority_Queue_Benchmarks
             }
             return ret;
         }
+
+        [Benchmark]
+        public float EnqueueEnumerator()
+        {
+            Enqueue();
+            float prioritySum = 0;
+
+            foreach(FastPriorityQueueNode node in Queue)
+            {
+                prioritySum += node.Priority;
+            }
+
+            return prioritySum;
+        }
     }
 }
