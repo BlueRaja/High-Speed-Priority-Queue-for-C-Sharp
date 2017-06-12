@@ -66,7 +66,7 @@ namespace Priority_Queue
             {
                 return null;
             }
-            return nodes.Count > 0 ? nodes[0] : null;
+            return nodes[0];
         }
 
         /// <summary>
