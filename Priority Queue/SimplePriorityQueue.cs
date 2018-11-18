@@ -52,7 +52,7 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Given an item of type T, returns the exist SimpleNode in the queue
+        /// Given an item of type T, returns the existing SimpleNode in the queue
         /// </summary>
         private SimpleNode GetExistingNode(TItem item)
         {
@@ -126,7 +126,6 @@ namespace Priority_Queue
                 }
             }
         }
-
 
         /// <summary>
         /// Returns the head of the queue, without removing it (use Dequeue() for that).

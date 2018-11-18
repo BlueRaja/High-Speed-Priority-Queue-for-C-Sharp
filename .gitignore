@@ -5,3 +5,4 @@
 /packages/
 /Priority Queue/*.nupkg
 project.lock.json
+/.vs/
