@@ -270,6 +270,64 @@ namespace Priority_Queue_Tests
             Assert.IsFalse(Queue.Contains(node4));
             Assert.IsFalse(Queue.Contains(node5));
         }
+
+        [Test]
+        public void TestRemoveOneItem()
+        {
+            Node node = new Node(1);
+
+            Enqueue(node);
+            Queue.Remove(node);
+
+            Assert.AreEqual(0, Queue.Count);
+            Assert.IsFalse(Queue.Contains(node));
+        }
+
+        [Test]
+        public void TestRemoveMultipleItems()
+        {
+            Node node1 = new Node(1);
+            Node node2 = new Node(2);
+            Node node3 = new Node(3);
+
+            Enqueue(node1);
+            Enqueue(node2);
+            Enqueue(node3);
+
+            Queue.Remove(node3);
+
+            Assert.AreEqual(2, Queue.Count);
+            Assert.IsTrue(Queue.Contains(node1));
+            Assert.IsTrue(Queue.Contains(node2));
+            Assert.IsFalse(Queue.Contains(node3));
+
+            Queue.Remove(node1);
+
+            Assert.AreEqual(1, Queue.Count);
+            Assert.IsFalse(Queue.Contains(node1));
+            Assert.IsTrue(Queue.Contains(node2));
+            Assert.IsFalse(Queue.Contains(node3));
+
+            Queue.Remove(node2);
+
+            Assert.AreEqual(0, Queue.Count);
+            Assert.IsFalse(Queue.Contains(node1));
+            Assert.IsFalse(Queue.Contains(node2));
+            Assert.IsFalse(Queue.Contains(node3));
+        }
+
+        [Test]
+        public void TestContainsWorksOnNonResetNodeForSameQueue()
+        {
+            Node node = new Node(1);
+            Assert.IsFalse(Queue.Contains(node));
+
+            Enqueue(node);
+            Assert.IsTrue(Queue.Contains(node));
+
+            Dequeue();
+            Assert.IsFalse(Queue.Contains(node));
+        }
     }
 }
 

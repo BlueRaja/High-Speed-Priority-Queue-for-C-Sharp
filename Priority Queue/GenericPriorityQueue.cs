@@ -90,7 +90,9 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Returns (in O(1)!) whether the given node is in the queue.  O(1)
+        /// Returns (in O(1)!) whether the given node is in the queue.
+        /// If node is or has been previously added to another queue, the result is undefined unless oldQueue.ResetNode(node) has been called
+        /// O(1)
         /// </summary>
 #if NET_VERSION_4_5
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -102,9 +104,13 @@ namespace Priority_Queue
             {
                 throw new ArgumentNullException("node");
             }
-            if(node.QueueIndex < 0 || node.QueueIndex >= _nodes.Length)
+            if (node.Queue != null && !Equals(node.Queue))
             {
-                throw new InvalidOperationException("node.QueueIndex has been corrupted. Did you change it manually? Or add this node to another queue?");
+                throw new InvalidOperationException("node.Contains was called on a node from another queue.  Please call originalQueue.ResetNode() first");
+            }
+            if (node.QueueIndex < 0 || node.QueueIndex >= _nodes.Length)
+            {
+                throw new InvalidOperationException("node.QueueIndex has been corrupted. Did you change it manually?");
             }
 #endif
 
@@ -115,6 +121,7 @@ namespace Priority_Queue
         /// Enqueue a node to the priority queue.  Lower values are placed in front. Ties are broken by first-in-first-out.
         /// If the queue is full, the result is undefined.
         /// If the node is already enqueued, the result is undefined.
+        /// If node is or has been previously added to another queue, the result is undefined unless oldQueue.ResetNode(node) has been called
         /// O(log n)
         /// </summary>
 #if NET_VERSION_4_5
@@ -131,10 +138,15 @@ namespace Priority_Queue
             {
                 throw new InvalidOperationException("Queue is full - node cannot be added: " + node);
             }
-            if(Contains(node))
+            if (node.Queue != null && !Equals(node.Queue))
+            {
+                throw new InvalidOperationException("node.Enqueue was called on a node from another queue.  Please call originalQueue.ResetNode() first");
+            }
+            if (Contains(node))
             {
                 throw new InvalidOperationException("Node is already enqueued: " + node);
             }
+            node.Queue = this;
 #endif
 
             node.Priority = priority;
@@ -442,7 +454,11 @@ namespace Priority_Queue
             {
                 throw new ArgumentNullException("node");
             }
-            if(!Contains(node))
+            if (node.Queue != null && !Equals(node.Queue))
+            {
+                throw new InvalidOperationException("node.UpdatePriority was called on a node from another queue");
+            }
+            if (!Contains(node))
             {
                 throw new InvalidOperationException("Cannot call UpdatePriority() on a node which is not enqueued: " + node);
             }
@@ -486,7 +502,11 @@ namespace Priority_Queue
             {
                 throw new ArgumentNullException("node");
             }
-            if(!Contains(node))
+            if (node.Queue != null && !Equals(node.Queue))
+            {
+                throw new InvalidOperationException("node.Remove was called on a node from another queue");
+            }
+            if (!Contains(node))
             {
                 throw new InvalidOperationException("Cannot call Remove() on a node which is not enqueued: " + node);
             }
@@ -510,6 +530,36 @@ namespace Priority_Queue
             //Now bubble formerLastNode (which is no longer the last node) up or down as appropriate
             OnNodeUpdated(formerLastNode);
         }
+
+        /// <summary>
+        /// By default, nodes that have been previously added to one queue cannot be added to another queue.
+        /// If you need to do this, please call originalQueue.ResetNode(node) before attempting to add it in the new queue
+        /// </summary>
+#if NET_VERSION_4_5
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+        public void ResetNode(TItem node)
+        {
+#if DEBUG
+            if (node == null)
+            {
+                throw new ArgumentNullException("node");
+            }
+            if (node.Queue != null && !Equals(node.Queue))
+            {
+                throw new InvalidOperationException("node.ResetNode was called on a node from another queue");
+            }
+            if (Contains(node))
+            {
+                throw new InvalidOperationException("node.ResetNode was called on a node that is still in the queue");
+            }
+
+            node.Queue = null;
+#endif
+
+            node.QueueIndex = 0;
+        }
+
 
         public IEnumerator<TItem> GetEnumerator()
         {

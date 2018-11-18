@@ -86,6 +86,21 @@ namespace Priority_Queue_Tests
             Assert.AreEqual(0, Queue.Count);
         }
 
+        [Test]
+        public void TestContainsWorksOnResetNode()
+        {
+            TQueue queue2 = CreateQueue();
+            Node node = new Node(1);
+            queue2.Enqueue(node, 1);
+            queue2.Dequeue();
+            queue2.ResetNode(node);
+
+            Assert.IsFalse(Queue.Contains(node));
+
+            Enqueue(node);
+            Assert.IsTrue(Queue.Contains(node));
+        }
+
         #region Debug build only tests
         #if DEBUG
         [Test]
@@ -108,6 +123,42 @@ namespace Priority_Queue_Tests
             Enqueue(node);
 
             Assert.Throws<InvalidOperationException>(() => Queue.Enqueue(node, 1));
+        }
+
+        [Test]
+        public void TestDebugEnqueueThrowsOnCurrentlyUsedNode()
+        {
+            TQueue queue2 = CreateQueue();
+            Node node = new Node(1);
+            queue2.Enqueue(node, 1);
+
+            Assert.Throws<InvalidOperationException>(() => Enqueue(node));
+        }
+
+        [Test]
+        public void TestDebugEnqueueThrowsOnReusedNode()
+        {
+            TQueue queue2 = CreateQueue();
+            Node node = new Node(1);
+            queue2.Enqueue(node, 1);
+            queue2.Dequeue();
+
+            Assert.Throws<InvalidOperationException>(() => Enqueue(node));
+        }
+
+        [Test]
+        public void TestDebugEnqueueWorksOnResetNode()
+        {
+            TQueue queue2 = CreateQueue();
+            Node node = new Node(1);
+            queue2.Enqueue(node, 1);
+            queue2.Dequeue();
+            queue2.ResetNode(node);
+
+            Enqueue(node);
+
+            Assert.AreEqual(1, Queue.Count);
+            Assert.IsTrue(Queue.Contains(node));
         }
 
         [Test]
@@ -198,6 +249,43 @@ namespace Priority_Queue_Tests
         }
 
         [Test]
+        public void TestDebugRemoveThrowsOnCurrentlyUsedNode()
+        {
+            TQueue queue2 = CreateQueue();
+            Node node = new Node(1);
+            queue2.Enqueue(node, 1);
+
+            Assert.Throws<InvalidOperationException>(() => Queue.Remove(node));
+        }
+
+        [Test]
+        public void TestDebugRemoveThrowsOnReusedNode()
+        {
+            TQueue queue2 = CreateQueue();
+            Node node = new Node(1);
+            queue2.Enqueue(node, 1);
+            queue2.Dequeue();
+
+            Assert.Throws<InvalidOperationException>(() => Queue.Remove(node));
+        }
+
+        [Test]
+        public void TestDebugRemoveWorksOnResetNode()
+        {
+            TQueue queue2 = CreateQueue();
+            Node node = new Node(1);
+            queue2.Enqueue(node, 1);
+            queue2.Dequeue();
+            queue2.ResetNode(node);
+
+            Enqueue(node);
+            Queue.Remove(node);
+
+            Assert.AreEqual(0, Queue.Count);
+            Assert.IsFalse(Queue.Contains(node));
+        }
+
+        [Test]
         public void TestDebugUpdatePriorityThrowsOnNodeNotInQueue()
         {
             Node node = new Node(1);
@@ -225,6 +313,43 @@ namespace Priority_Queue_Tests
             Dequeue();
 
             Assert.Throws<InvalidOperationException>(() => Queue.UpdatePriority(node, 2));
+        }
+
+        [Test]
+        public void TestDebugUpdatePriorityThrowsOnCurrentlyUsedNode()
+        {
+            TQueue queue2 = CreateQueue();
+            Node node = new Node(1);
+            queue2.Enqueue(node, 1);
+
+            Assert.Throws<InvalidOperationException>(() => Queue.UpdatePriority(node, 2));
+        }
+
+        [Test]
+        public void TestDebugUpdatePriorityThrowsOnReusedNode()
+        {
+            TQueue queue2 = CreateQueue();
+            Node node = new Node(1);
+            queue2.Enqueue(node, 1);
+            queue2.Dequeue();
+
+            Assert.Throws<InvalidOperationException>(() => Queue.UpdatePriority(node, 2));
+        }
+
+        [Test]
+        public void TestDebugUpdatePriorityWorksOnResetNode()
+        {
+            TQueue queue2 = CreateQueue();
+            Node node = new Node(1);
+            queue2.Enqueue(node, 1);
+            queue2.Dequeue();
+            queue2.ResetNode(node);
+
+            Enqueue(node);
+            Queue.UpdatePriority(node, 2);
+
+            Assert.AreEqual(1, Queue.Count);
+            Assert.IsTrue(Queue.Contains(node));
         }
 
         [Test]
@@ -306,6 +431,79 @@ namespace Priority_Queue_Tests
             node1.QueueIndex = node2.QueueIndex = int.MaxValue;
             Assert.Throws<InvalidOperationException>(() => Queue.Contains(node1));
             Assert.Throws<InvalidOperationException>(() => Queue.Contains(node2));
+        }
+
+        [Test]
+        public void TestDebugContainsThrowsOnCurrentlyUsedNode()
+        {
+            TQueue queue2 = CreateQueue();
+            Node node = new Node(1);
+            queue2.Enqueue(node, 1);
+
+            Assert.Throws<InvalidOperationException>(() => Queue.Contains(node));
+        }
+
+        [Test]
+        public void TestDebugContainsThrowsOnReusedNode()
+        {
+            TQueue queue2 = CreateQueue();
+            Node node = new Node(1);
+            queue2.Enqueue(node, 1);
+            queue2.Dequeue();
+
+            Assert.Throws<InvalidOperationException>(() => Queue.Contains(node));
+        }
+
+        [Test]
+        public void TestDebugResetNodeThrowsOnNodeInOtherQueue()
+        {
+            TQueue queue2 = CreateQueue();
+            Node node = new Node(1);
+            queue2.Enqueue(node, 1);
+
+            Assert.Throws<InvalidOperationException>(() => Queue.ResetNode(node));
+        }
+
+        [Test]
+        public void TestDebugResetNodeThrowsOnNodeInCurrentQueue()
+        {
+            Node node = new Node(1);
+            Enqueue(node);
+
+            Assert.Throws<InvalidOperationException>(() => Queue.ResetNode(node));
+        }
+
+        [Test]
+        public void TestDebugResetNodeThrowsOnWrongQueue()
+        {
+            TQueue queue2 = CreateQueue();
+            Node node = new Node(1);
+            queue2.Enqueue(node, 1);
+            queue2.Dequeue();
+
+            Assert.Throws<InvalidOperationException>(() => Queue.ResetNode(node));
+        }
+
+        [Test]
+        public void TestResetNodeWorks()
+        {
+            Node node = new Node(1);
+            Enqueue(node);
+            Dequeue();
+            Queue.ResetNode(node);
+
+            Assert.IsTrue(node.Queue == null);
+            Assert.AreEqual(node.QueueIndex, 0);
+        }
+
+        [Test]
+        public void TestResetNodeWorksOnUnclaimedNode()
+        {
+            Node node = new Node(1);
+            Queue.ResetNode(node);
+
+            Assert.IsTrue(node.Queue == null);
+            Assert.AreEqual(node.QueueIndex, 0);
         }
         #endif
         #endregion

@@ -144,10 +144,14 @@ namespace Priority_Queue_Benchmarks
             Enqueue();
             bool ret = true; // to ensure the compiler doesn't optimize the contains calls out of existence
 
-            for(int i = 0; i < QueueSize; i++)
+            for (int i = 0; i < 100; i++)
             {
-                ret &= Queue.Contains(Nodes[i]);
+                for (int j = 0; j < QueueSize; j++)
+                {
+                    ret &= Queue.Contains(Nodes[j]);
+                }
             }
+            
             return ret;
         }
 
