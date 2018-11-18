@@ -29,27 +29,49 @@ namespace Priority_Queue
         private readonly Dictionary<TItem, IList<SimpleNode>> _itemToNodesCache;
         private readonly IList<SimpleNode> _nullNodesCache;
 
+        #region Constructors
         /// <summary>
         /// Instantiate a new Priority Queue
         /// </summary>
-        public SimplePriorityQueue() : this(Comparer<TPriority>.Default) { }
+        public SimplePriorityQueue() : this(Comparer<TPriority>.Default, EqualityComparer<TItem>.Default) { }
 
         /// <summary>
         /// Instantiate a new Priority Queue
         /// </summary>
-        /// <param name="comparer">The comparer used to compare TPriority values.  Defaults to Comparer&lt;TPriority&gt;.default</param>
-        public SimplePriorityQueue(IComparer<TPriority> comparer) : this(comparer.Compare) { }
+        /// <param name="priorityComparer">The comparer used to compare TPriority values.  Defaults to Comparer&lt;TPriority&gt;.default</param>
+        public SimplePriorityQueue(IComparer<TPriority> priorityComparer) : this(priorityComparer.Compare, EqualityComparer<TItem>.Default) { }
 
         /// <summary>
         /// Instantiate a new Priority Queue
         /// </summary>
-        /// <param name="comparer">The comparison function to use to compare TPriority values</param>
-        public SimplePriorityQueue(Comparison<TPriority> comparer)
+        /// <param name="priorityComparer">The comparison function to use to compare TPriority values</param>
+        public SimplePriorityQueue(Comparison<TPriority> priorityComparer) : this(priorityComparer, EqualityComparer<TItem>.Default) { }
+
+        /// <summary>
+        /// Instantiate a new Priority Queue       
+        /// </summary>
+        /// <param name="itemEquality">The equality comparison function to use to compare TItem values</param>
+        public SimplePriorityQueue(IEqualityComparer<TItem> itemEquality) : this(Comparer<TPriority>.Default, itemEquality) { }
+
+        /// <summary>
+        /// Instantiate a new Priority Queue
+        /// </summary>
+        /// <param name="priorityComparer">The comparer used to compare TPriority values.  Defaults to Comparer&lt;TPriority&gt;.default</param>
+        /// <param name="itemEquality">The equality comparison function to use to compare TItem values</param>
+        public SimplePriorityQueue(IComparer<TPriority> priorityComparer, IEqualityComparer<TItem> itemEquality) : this(priorityComparer.Compare, itemEquality) { }
+
+        /// <summary>
+        /// Instantiate a new Priority Queue
+        /// </summary>
+        /// <param name="priorityComparer">The comparison function to use to compare TPriority values</param>
+        /// <param name="itemEquality">The equality comparison function to use to compare TItem values</param>
+        public SimplePriorityQueue(Comparison<TPriority> priorityComparer, IEqualityComparer<TItem> itemEquality)
         {
-            _queue = new GenericPriorityQueue<SimpleNode, TPriority>(INITIAL_QUEUE_SIZE, comparer);
-            _itemToNodesCache = new Dictionary<TItem, IList<SimpleNode>>();
+            _queue = new GenericPriorityQueue<SimpleNode, TPriority>(INITIAL_QUEUE_SIZE, priorityComparer);
+            _itemToNodesCache = new Dictionary<TItem, IList<SimpleNode>>(itemEquality);
             _nullNodesCache = new List<SimpleNode>();
         }
+        #endregion
 
         /// <summary>
         /// Given an item of type T, returns the existing SimpleNode in the queue
