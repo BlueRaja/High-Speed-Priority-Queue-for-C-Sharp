@@ -170,11 +170,7 @@ namespace Priority_Queue
         {
             lock(_queue)
             {
-                if (item == null)
-                {
-                    return _nullNodesCache.Count > 0;
-                }
-                return _itemToNodesCache.ContainsKey(item);
+                return item == null ? _nullNodesCache.Count > 0 : _itemToNodesCache.ContainsKey(item);
             }
         }
 
@@ -361,17 +357,20 @@ namespace Priority_Queue
         /// O(1)
         public bool TryFirst(out TItem first)
         {
-            lock(_queue)
+            if (_queue.Count > 0)
             {
-                if(_queue.Count <= 0)
+                lock (_queue)
                 {
-                    first = default(TItem);
-                    return false;
+                    if (_queue.Count > 0)
+                    {
+                        first = _queue.First.Data;
+                        return true;
+                    }
                 }
-
-                first = _queue.First.Data;
-                return true;
             }
+
+            first = default(TItem);
+            return false;
         }
 
         /// <summary>
@@ -382,19 +381,22 @@ namespace Priority_Queue
         /// </summary>
         public bool TryDequeue(out TItem first)
         {
-            lock(_queue)
+            if (_queue.Count > 0)
             {
-                if(_queue.Count <= 0)
+                lock (_queue)
                 {
-                    first = default(TItem);
-                    return false;
+                    if (_queue.Count > 0)
+                    {
+                        SimpleNode node = _queue.Dequeue();
+                        first = node.Data;
+                        RemoveFromNodeCache(node);
+                        return true;
+                    }
                 }
-
-                SimpleNode node = _queue.Dequeue();
-                first = node.Data;
-                RemoveFromNodeCache(node);
-                return true;
             }
+            
+            first = default(TItem);
+            return false;
         }
 
         /// <summary>
