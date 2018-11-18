@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>OptimizedPriorityQueue</id>
-    <version>4.1.1</version>
+    <version>4.2.0</version>
     <title>Highly Optimized Priority Queue</title>
     <authors>BlueRaja</authors>
     <owners>BlueRaja</owners>
@@ -10,8 +10,8 @@
     <projectUrl>https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A highly optimized Priority Queue for path-finding and related applications</description>
-    <releaseNotes>Better multithreaded support; Unity3D support</releaseNotes>
-    <copyright>Copyright 2017</copyright>
+    <releaseNotes>Speed improvements; added ResetNode(); included IEqualityComparer in SimplePriorityQueue to avoid boxing</releaseNotes>
+    <copyright>Copyright 2018</copyright>
     <tags>C# priority-queue pathfinding optimized</tags>
   </metadata>
   <files>
