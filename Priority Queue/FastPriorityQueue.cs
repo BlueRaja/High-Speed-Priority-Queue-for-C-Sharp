@@ -385,6 +385,52 @@ namespace Priority_Queue
         }
 
         /// <summary>
+        /// Removes the minimum priority items of the queue and returns them.
+        /// O(m log n) where m is the number of items to be returned
+        /// </summary>
+#if NET_VERSION_4_5
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+        public List<T> DequeueMinPriorityItems()
+        {
+#if DEBUG
+            if(_numNodes <= 0)
+            {
+                throw new InvalidOperationException("Cannot call Dequeue() on an empty queue");
+            }
+
+            if(!IsValidQueue())
+            {
+                throw new InvalidOperationException("Queue has been corrupted (Did you update a node priority manually instead of calling UpdatePriority()?" +
+                                                    "Or add the same node to two different queues?)");
+            }
+#endif
+            var Result = new List<T>();
+            if (_numNodes == 0)
+                return Result;
+
+            T first = _nodes[1];
+            var MinPriority = first.Priority;
+
+            do
+            {
+                Result.Add(first);
+
+                //Swap the node with the last node
+                first = _nodes[_numNodes];
+                _nodes[1] = first;
+                first.QueueIndex = 1;
+                _nodes[_numNodes] = null;
+                _numNodes--;
+
+                //Now bubble formerLastNode (which is no longer the last node) down
+                CascadeDown(first);
+            } while (_numNodes != 0 && first.Priority.CompareTo(MinPriority) == 0);
+
+            return Result;
+        }
+
+        /// <summary>
         /// Resize the queue so it can accept more nodes.  All currently enqueued nodes are remain.
         /// Attempting to decrease the queue size to a size too small to hold the existing nodes results in undefined behavior
         /// O(n)

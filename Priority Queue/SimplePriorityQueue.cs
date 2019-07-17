@@ -217,6 +217,34 @@ namespace Priority_Queue
         }
 
         /// <summary>
+        /// Removes the minimum priority items of the queue (node with minimum priority; ties are broken by order of insertion), and returns it.
+        /// If queue is empty, throws an exception
+        /// O(m log n) where m is the number of items to return
+        /// </summary>
+        public List<TItem> DequeueMinPriorityItems()
+        {
+            lock (_queue)
+            {
+                if (_queue.Count <= 0)
+                {
+                    throw new InvalidOperationException("Cannot call Dequeue() on an empty queue");
+                }
+
+                var MinPriority = _queue.First.Priority;
+                var Result = new List<TItem>();
+
+                do
+                {
+                    SimpleNode node = _queue.Dequeue();
+                    RemoveFromNodeCache(node);
+                    Result.Add(node.Data);
+                } while (_queue.Count > 0 && _queue.First.Priority.CompareTo(MinPriority) == 0);
+                
+                return Result;
+            }
+        }
+
+        /// <summary>
         /// Enqueue the item with the given priority, without calling lock(_queue) or AddToNodeCache(node)
         /// </summary>
         /// <param name="item"></param>
