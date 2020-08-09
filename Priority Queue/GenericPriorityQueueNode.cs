@@ -3,8 +3,8 @@
     public class GenericPriorityQueueNode<TPriority>
     {
         /// <summary>
-        /// The Priority to insert this node at.  Must be set BEFORE adding a node to the queue (ideally just once, in the node's constructor).
-        /// Should not be manually edited once the node has been enqueued - use queue.UpdatePriority() instead
+        /// The Priority to insert this node at.
+        /// Cannot be manually edited - see queue.Enqueue() and queue.UpdatePriority() instead
         /// </summary>
         public TPriority Priority { get; protected internal set; }
 
