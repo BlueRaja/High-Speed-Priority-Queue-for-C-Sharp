@@ -10,8 +10,8 @@
     <projectUrl>https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A highly optimized Priority Queue for path-finding and related applications</description>
-    <releaseNotes>Removed space from assembly name for OSes that don't support them</releaseNotes>
-    <copyright>Copyright 2018</copyright>
+    <releaseNotes>Added SourceLinks and latest compiler flags for .Net Standard; Removed space from assembly name for OSes that don't support them</releaseNotes>
+    <copyright>Copyright 2020</copyright>
     <tags>C# priority-queue pathfinding optimized</tags>
   </metadata>
   <files>
@@ -23,9 +23,9 @@
     <file src="bin\Release\net45\PriorityQueue.pdb" target="lib\net45\PriorityQueue.pdb" />
     <file src="bin\Release\net45\PriorityQueue.xml" target="lib\net45\PriorityQueue.xml" />
     
-    <file src="..\Priority Queue UWP\bin\Release\netcore45\PriorityQueue.dll" target="lib\netstandard1.0\PriorityQueue.dll" />
-    <file src="..\Priority Queue UWP\bin\Release\netcore45\PriorityQueue.pdb" target="lib\netstandard1.0\PriorityQueue.pdb" />
-    <file src="..\Priority Queue UWP\bin\Release\netcore45\PriorityQueue.xml" target="lib\netstandard1.0\PriorityQueue.xml" />
+    <file src="..\Priority Queue Net Standard\bin\Release\netstandard1.0\PriorityQueue.dll" target="lib\netstandard1.0\PriorityQueue.dll" />
+    <file src="..\Priority Queue Net Standard\bin\Release\netstandard1.0\PriorityQueue.pdb" target="lib\netstandard1.0\PriorityQueue.pdb" />
+    <file src="..\Priority Queue Net Standard\bin\Release\netstandard1.0\PriorityQueue.xml" target="lib\netstandard1.0\PriorityQueue.xml" />
     
     <file src="..\Priority Queue PCL\bin\Release\PriorityQueue.dll" target="lib\portable-net40+sl5+win8+wpa81+wp8\PriorityQueue.dll" />
     <file src="..\Priority Queue PCL\bin\Release\PriorityQueue.pdb" target="lib\portable-net40+sl5+win8+wpa81+wp8\PriorityQueue.pdb" />

@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.0</TargetFramework>
+    <RootNamespace>Priority_Queue</RootNamespace>
+    <PackageId>OptimizedPriorityQueue</PackageId>
+    <Version>5.0.0</Version>
+    <Authors>BlueRaja</Authors>
+    <Company />
+    <Product>Highly Optimized Priority Queue</Product>
+    <Description>A highly optimized Priority Queue for path-finding and related applications</Description>
+    <Copyright>Copyright 2020</Copyright>
+    <PackageProjectUrl>https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp</RepositoryUrl>
+    <AssemblyName>PriorityQueue</AssemblyName>
+	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	<IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	<Deterministic>true</Deterministic>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard1.0\PriorityQueue.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Priority Queue\FastPriorityQueue.cs" Link="FastPriorityQueue.cs" />
+    <Compile Include="..\Priority Queue\FastPriorityQueueNode.cs" Link="FastPriorityQueueNode.cs" />
+    <Compile Include="..\Priority Queue\GenericPriorityQueue.cs" Link="GenericPriorityQueue.cs" />
+    <Compile Include="..\Priority Queue\GenericPriorityQueueNode.cs" Link="GenericPriorityQueueNode.cs" />
+    <Compile Include="..\Priority Queue\IFixedSizePriorityQueue.cs" Link="IFixedSizePriorityQueue.cs" />
+    <Compile Include="..\Priority Queue\IPriorityQueue.cs" Link="IPriorityQueue.cs" />
+    <Compile Include="..\Priority Queue\SimplePriorityQueue.cs" Link="SimplePriorityQueue.cs" />
+    <Compile Include="..\Priority Queue\StablePriorityQueue.cs" Link="StablePriorityQueue.cs" />
+    <Compile Include="..\Priority Queue\StablePriorityQueueNode.cs" Link="StablePriorityQueueNode.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+  </ItemGroup>
+
+</Project>
