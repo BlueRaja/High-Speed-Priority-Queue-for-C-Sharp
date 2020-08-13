@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Priority_Queue</RootNamespace>
-    <AssemblyName>Priority Queue</AssemblyName>
+    <AssemblyName>PriorityQueue</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <CustomConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.5' ">NET_VERSION_4_5</CustomConstants>
@@ -48,7 +48,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <OutputPath>bin\Release\net45\</OutputPath>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <DocumentationFile>bin\Release\net45\Priority Queue.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\net45\PriorityQueue.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release 2.0|AnyCPU'">
     <DebugType>pdbonly</DebugType>
@@ -59,7 +59,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <OutputPath>bin\Release\net20\</OutputPath>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
-    <DocumentationFile>bin\Release\net20\Priority Queue.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\net20\PriorityQueue.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
