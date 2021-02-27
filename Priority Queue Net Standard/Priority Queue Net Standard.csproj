@@ -4,12 +4,12 @@
     <TargetFramework>netstandard1.0</TargetFramework>
     <RootNamespace>Priority_Queue</RootNamespace>
     <PackageId>OptimizedPriorityQueue</PackageId>
-    <Version>5.0.0</Version>
+    <Version>5.1.0</Version>
     <Authors>BlueRaja</Authors>
     <Company />
     <Product>Highly Optimized Priority Queue</Product>
     <Description>A highly optimized Priority Queue for path-finding and related applications</Description>
-    <Copyright>Copyright 2020</Copyright>
+    <Copyright>Copyright 2021</Copyright>
     <PackageProjectUrl>https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp</RepositoryUrl>
     <AssemblyName>PriorityQueue</AssemblyName>
