@@ -34,8 +34,15 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\PriorityQueue.xml</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Priority Queue.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <None Include="Priority Queue.snk" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Priority Queue\FastPriorityQueue.cs">

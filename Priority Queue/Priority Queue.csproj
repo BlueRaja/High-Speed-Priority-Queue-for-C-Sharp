@@ -61,6 +61,12 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <DocumentationFile>bin\Release\net20\PriorityQueue.xml</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Priority Queue.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -77,6 +83,9 @@
     <Compile Include="FastPriorityQueueNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimplePriorityQueue.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Priority Queue.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
