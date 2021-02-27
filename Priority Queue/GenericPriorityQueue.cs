@@ -12,7 +12,6 @@ namespace Priority_Queue
     /// <typeparam name="TPriority">The priority-type.  Must extend IComparable&lt;TPriority&gt;</typeparam>
     public sealed class GenericPriorityQueue<TItem, TPriority> : IFixedSizePriorityQueue<TItem, TPriority>
         where TItem : GenericPriorityQueueNode<TPriority>
-        where TPriority : IComparable<TPriority>
     {
         private int _numNodes;
         private TItem[] _nodes;

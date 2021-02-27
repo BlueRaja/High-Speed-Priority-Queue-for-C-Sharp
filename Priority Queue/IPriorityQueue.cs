@@ -9,7 +9,6 @@ namespace Priority_Queue
     /// (theoretically?) optimize method calls from concrete-types slightly better.
     /// </summary>
     public interface IPriorityQueue<TItem, in TPriority> : IEnumerable<TItem>
-        where TPriority : IComparable<TPriority>
     {
         /// <summary>
         /// Enqueue a node to the priority queue.  Lower values are placed in front. Ties are broken by first-in-first-out.
