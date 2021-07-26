@@ -397,6 +397,32 @@ namespace Priority_Queue
         }
 
         /// <summary>
+        /// Get the head of the queue, without removing it (use TryDequeue() for that) as well as its priority.
+        /// Useful for multi-threading, where the queue may become empty between calls to Contains(), First and GetPriority()
+        /// Returns true if successful, false otherwise
+        /// O(1)
+        /// </summary>
+        public bool TryFirst(out TItem first, out TPriority firstPriority)
+        {
+            if (_queue.Count > 0)
+            {
+                lock (_queue)
+                {
+                    if (_queue.Count > 0)
+                    {
+                        first = _queue.First.Data;
+                        firstPriority = _queue.First.Priority;
+                        return true;
+                    }
+                }
+            }
+
+            first = default(TItem);
+            firstPriority = default(TPriority);
+            return false;
+        }
+
+        /// <summary>
         /// Removes the head of the queue (node with minimum priority; ties are broken by order of insertion), and sets it to first.
         /// Useful for multi-threading, where the queue may become empty between calls to Contains() and Dequeue()
         /// Returns true if successful; false if queue was empty
