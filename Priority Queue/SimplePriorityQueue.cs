@@ -423,7 +423,36 @@ namespace Priority_Queue
         }
 
         /// <summary>
-        /// Attempts to remove an item from the queue.  The item does not need to be the head of the queue.  
+        /// Removes the head of the queue (node with minimum priority; ties are broken by order of insertion), 
+        /// and sets it to first along with its priority.
+        /// Useful for multi-threading, where the queue may become empty between calls to Contains(), GetPriority() and Dequeue()
+        /// Returns true if successful; false if queue was empty
+        /// O(log n)
+        /// </summary>
+        public bool TryDequeue(out TItem first, out TPriority firstPriority)
+        {
+            if (_queue.Count > 0)
+            {
+                lock (_queue)
+                {
+                    if (_queue.Count > 0)
+                    {
+                        SimpleNode node = _queue.Dequeue();
+                        first = node.Data;
+                        firstPriority = node.Priority;
+                        RemoveFromNodeCache(node);
+                        return true;
+                    }
+                }
+            }
+
+            first = default(TItem);
+            firstPriority = default(TPriority);
+            return false;
+        }
+
+        /// <summary>
+        /// Attempts to remove an item from the queue. The item does not need to be the head of the queue.  
         /// Useful for multi-threading, where the queue may become empty between calls to Contains() and Remove()
         /// Returns true if the item was successfully removed, false if it wasn't in the queue.
         /// If multiple copies of the item are enqueued, only the first one is removed. 
@@ -458,6 +487,50 @@ namespace Priority_Queue
                 }
                 _queue.Remove(removeMe);
                 nodes.Remove(removeMe);
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Attempts to remove an item from the queue. The item does not need to be the head of the queue.
+        /// Useful for multi-threading, where the queue may become empty between calls to Contains(), GetPriority() and Remove()
+        /// Returns true if the item was successfully removed, false if it wasn't in the queue.
+        /// Assigns priority to priority of removed item if successfully removed.
+        /// If multiple copies of the item are enqueued, only the first one is removed. 
+        /// O(log n)
+        /// </summary>
+        public bool TryRemove(TItem item, out TPriority priority)
+        {
+            lock (_queue)
+            {
+                SimpleNode removeMe;
+                IList<SimpleNode> nodes;
+                if (item == null)
+                {
+                    if (_nullNodesCache.Count == 0)
+                    {
+                        priority = default(TPriority);
+                        return false;
+                    }
+                    removeMe = _nullNodesCache[0];
+                    nodes = _nullNodesCache;
+                }
+                else
+                {
+                    if (!_itemToNodesCache.TryGetValue(item, out nodes))
+                    {
+                        priority = default(TPriority);
+                        return false;
+                    }
+                    removeMe = nodes[0];
+                    if (nodes.Count == 1)
+                    {
+                        _itemToNodesCache.Remove(item);
+                    }
+                }
+                _queue.Remove(removeMe);
+                nodes.Remove(removeMe);
+                priority = removeMe.Priority;
                 return true;
             }
         }
