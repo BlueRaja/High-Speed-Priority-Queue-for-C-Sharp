@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Priority_Queue;
@@ -426,6 +426,16 @@ namespace Priority_Queue_Tests
         }
 
         [Test]
+        public void TestTryDequeueEmptyQueueWithPriorityOut()
+        {
+            Node first;
+            float firstPriority;
+            Assert.IsFalse(Queue.TryDequeue(out first, out firstPriority));
+            Assert.IsNull(first);
+            Assert.AreEqual(0, firstPriority);
+        }
+
+        [Test]
         public void TestTryDequeueWithItems()
         {
             Node node = new Node(1);
@@ -436,6 +446,21 @@ namespace Priority_Queue_Tests
             Assert.IsTrue(Queue.TryDequeue(out first));
             Assert.AreEqual(node, first);
             Assert.AreEqual(0, Queue.Count);
+        }
+
+        [Test]
+        public void TestTryDequeueWithItemsWithPriorityOut()
+        {
+            Node node = new Node(1);
+            Node first;
+            float firstPriority;
+
+            Enqueue(node);
+
+            Assert.IsTrue(Queue.TryDequeue(out first, out firstPriority));
+            Assert.AreEqual(node, first);
+            Assert.AreEqual(0, Queue.Count);
+            Assert.AreEqual(node.Priority, firstPriority);
         }
 
         [Test]
