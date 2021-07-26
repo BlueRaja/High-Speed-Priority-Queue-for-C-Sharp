@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -372,10 +372,12 @@ namespace Priority_Queue
         }
 
         #region Try* methods for multithreading
+        /// <summary>
         /// Get the head of the queue, without removing it (use TryDequeue() for that).
         /// Useful for multi-threading, where the queue may become empty between calls to Contains() and First
         /// Returns true if successful, false otherwise
         /// O(1)
+        /// </summary>
         public bool TryFirst(out TItem first)
         {
             if (_queue.Count > 0)
